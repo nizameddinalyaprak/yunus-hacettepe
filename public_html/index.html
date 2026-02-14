@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Nizameddin Alyaprak | Hacettepe Üniversitesi</title>
+    <title>Arş. Gör. Nizameddin ALYAPRAK | Hacettepe Üniversitesi</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #a31f37; /* Hacettepe Red */
+            --primary-color: #a31f37;
+            /* Hacettepe Red */
             --secondary-color: #2c3e50;
             --text-color: #333;
             --bg-color: #f8f9fa;
             --white: #ffffff;
+            --accent-color: #e67e22;
         }
 
         * {
@@ -30,8 +33,8 @@
 
         header {
             background-color: var(--white);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.2rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -51,55 +54,77 @@
 
         .logo {
             font-weight: 600;
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             color: var(--primary-color);
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .hero {
-            padding: 5rem 0;
-            background: linear-gradient(135deg, #fff 0%, #f1f1f1 100%);
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #fff 0%, #f4f4f4 100%);
             border-bottom: 1px solid #eee;
         }
 
         .hero-content {
             display: flex;
             align-items: center;
-            gap: 3rem;
+            gap: 4rem;
+        }
+
+        .profile-img {
+            width: 220px;
+            height: 220px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 4px solid white;
         }
 
         .hero-text h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
             color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .hero-text .subtitle {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-weight: 400;
         }
 
         .hero-text p {
-            font-size: 1.1rem;
-            color: #666;
+            font-size: 1.05rem;
+            color: #555;
             max-width: 600px;
+            margin-bottom: 1rem;
         }
 
         .badge {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background-color: var(--primary-color);
-            color: var(--white);
+            padding: 0.3rem 1rem;
+            background-color: #eee;
+            color: #555;
             border-radius: 50px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             margin-bottom: 1rem;
         }
 
         section {
-            padding: 4rem 0;
+            padding: 5rem 0;
         }
 
         h2 {
-            font-size: 1.75rem;
-            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            margin-bottom: 2.5rem;
             position: relative;
-            padding-bottom: 0.5rem;
+            padding-bottom: 0.8rem;
+            color: var(--secondary-color);
         }
 
         h2::after {
@@ -107,113 +132,171 @@
             position: absolute;
             left: 0;
             bottom: 0;
-            width: 50px;
-            height: 3px;
+            width: 60px;
+            height: 4px;
             background-color: var(--primary-color);
         }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 2.5rem;
         }
 
         .card {
             background: var(--white);
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+            border: 1px solid #f0f0f0;
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h3 {
+            margin-bottom: 1.2rem;
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 15px;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .info-list li::before {
+            content: '•';
+            color: var(--primary-color);
+            font-weight: bold;
         }
 
         footer {
             background-color: var(--secondary-color);
             color: var(--white);
-            padding: 3rem 0;
+            padding: 4rem 0;
             text-align: center;
+        }
+
+        .footer-text {
+            opacity: 0.7;
             font-size: 0.9rem;
+            margin-bottom: 1.5rem;
         }
 
         .contact-links {
-            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
         }
 
         .contact-links a {
             color: var(--white);
-            margin: 0 1rem;
             text-decoration: none;
-            opacity: 0.8;
-            transition: opacity 0.3s;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            transition: all 0.3s;
         }
 
         .contact-links a:hover {
-            opacity: 1;
+            background-color: var(--white);
+            color: var(--secondary-color);
         }
 
         @media (max-width: 768px) {
             .hero-content {
                 flex-direction: column;
                 text-align: center;
+                gap: 2rem;
             }
+
             .hero-text h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
+
 <body>
 
-<header>
-    <div class="container">
-        <nav class="nav-content">
-            <a href="#" class="logo">Hacettepe Üniversitesi</a>
-        </nav>
-    </div>
-</header>
-
-<main>
-    <section class="hero">
+    <header>
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <span class="badge">Akademik Personel</span>
-                    <h1>Dr. Nizameddin Alyaprak</h1>
-                    <p>Hacettepe Üniversitesi bünyesinde akademik çalışmalarını sürdürmektedir. Araştırma alanları ve projeleri hakkında bilgilere buradan ulaşabilirsiniz.</p>
+            <nav class="nav-content">
+                <a href="#" class="logo">
+                    Hacettepe Üniversitesi
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <img src="https://fs.hacettepe.edu.tr/isletme/dosyalar/Fotograflar/ArastirmaGorevlileri/1001.jpg"
+                        alt="Nizameddin ALYAPRAK" class="profile-img">
+                    <div class="hero-text">
+                        <span class="badge">Akademik Kadro</span>
+                        <h1>Nizameddin ALYAPRAK</h1>
+                        <div class="subtitle">Araştırma Görevlisi</div>
+                        <p>Hacettepe Üniversitesi İşletme Bölümü, Sayısal Yöntemler Anabilim Dalı'nda akademik
+                            çalışmalarına devam etmektedir.</p>
+                        <p><strong>Görevler:</strong> Sınav Programı Koordinatörlüğü, Web Sitesi/Duyuru Sorumluluğu</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="about">
-        <div class="container">
-            <h2>Hakkında</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Araştırma Alanları</h3>
-                    <p>Çalışma alanları ve akademik ilgi çekicikleri buraya eklenecektir.</p>
-                </div>
-                <div class="card">
-                    <h3>Eğitim</h3>
-                    <p>Akademik geçmiş ve mezuniyet bilgileri buraya eklenecektir.</p>
+        <section id="details">
+            <div class="container">
+                <div class="grid">
+                    <div class="card">
+                        <h3>Eğitim Bilgileri</h3>
+                        <ul class="info-list">
+                            <li><strong>Yüksek Lisans:</strong> Hacettepe Üniversitesi, Üretim Yönetimi ve Sayısal
+                                Yöntemler (Tezli)</li>
+                            <li><strong>Lisans:</strong> Hacettepe Üniversitesi, İşletme Bölümü (2018)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Araştırma Alanları</h3>
+                        <ul class="info-list">
+                            <li>Sayısal Yöntemler & Yöneylem Araştırması</li>
+                            <li>Ekonometri</li>
+                            <li>Algoritmalar & Bilgisayar Bilimleri</li>
+                            <li>Çizelgeleme Problemleri</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-</main>
+        </section>
+    </main>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2024 Dr. Nizameddin Alyaprak. Tüm hakları saklıdır.</p>
-        <div class="contact-links">
-            <a href="mailto:nizameddin.alyaprak@hacettepe.edu.tr">E-posta</a>
-            <a href="https://github.com/nizameddin-alyaprak">GitHub</a>
+    <footer>
+        <div class="container">
+            <p class="footer-text">© 2024 Arş. Gör. Nizameddin ALYAPRAK. Tüm hakları saklıdır.</p>
+            <div class="contact-links">
+                <a href="mailto:nizameddin.alyaprak@hacettepe.edu.tr">E-posta</a>
+                <a href="https://avesis.hacettepe.edu.tr/nizameddin.alyaprak" target="_blank">AVESİS Profili</a>
+                <a href="https://github.com/nizameddin-alyaprak">GitHub</a>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
 </body>
+
 </html>
