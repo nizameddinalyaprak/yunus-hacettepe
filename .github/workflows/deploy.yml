@@ -1,0 +1,24 @@
+name: Hacettepe Web Deploy
+
+on:
+  push:
+    branches:
+      - main  # Veya ana branşınızın adı neyse (master/main)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Sync FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: yunus.hacettepe.edu.tr
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./public_html/
+          server-dir: ./public_html/
+          protocol: ftp
+          port: 21
