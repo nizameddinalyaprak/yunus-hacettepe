@@ -5,227 +5,971 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arş. Gör. Nizameddin ALYAPRAK | Hacettepe Üniversitesi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="description"
+        content="Hacettepe Üniversitesi İşletme Bölümü Araştırma Görevlisi Nizameddin Alyaprak'ın kişisel akademik sayfası.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* ========== CSS Variables ========== */
         :root {
-            --primary-color: #a31f37;
-            /* Hacettepe Red */
-            --secondary-color: #2c3e50;
-            --text-color: #333;
-            --bg-color: #f8f9fa;
-            --white: #ffffff;
-            --accent-color: #e67e22;
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --bg-card-hover: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(255, 255, 255, 0.15);
+            --text-primary: #e8e8ec;
+            --text-secondary: #9a9ab0;
+            --text-muted: #5a5a72;
+            --accent: #c9303e;
+            --accent-light: #e8485a;
+            --accent-glow: rgba(201, 48, 62, 0.25);
+            --accent-subtle: rgba(201, 48, 62, 0.08);
+            --gradient-1: #c9303e;
+            --gradient-2: #e67e22;
+            --gradient-3: #8e44ad;
         }
 
-        * {
+        /* ========== Reset & Base ========== */
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
+            line-height: 1.7;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        header {
-            background-color: var(--white);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 1.2rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Outfit', sans-serif;
         }
 
+        ::selection {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* ========== Scrollbar ========== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        /* ========== Layout ========== */
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 2rem;
         }
 
-        .nav-content {
+        section {
+            padding: 7rem 0;
+            position: relative;
+        }
+
+        /* ========== Navigation ========== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0.7rem 0;
+        }
+
+        .nav-inner {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
+        .nav-brand {
+            font-family: 'Outfit', sans-serif;
             font-weight: 600;
             font-size: 1.1rem;
-            color: var(--primary-color);
+            color: var(--text-primary);
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.6rem;
         }
 
+        .nav-logo {
+            height: 32px;
+            width: auto;
+            filter: brightness(0) invert(1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-brand:hover .nav-logo {
+            filter: brightness(0) invert(1) drop-shadow(0 0 6px var(--accent-glow));
+        }
+
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.3rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 22px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* ========== Hero Section ========== */
         .hero {
-            padding: 6rem 0;
-            background: linear-gradient(135deg, #fff 0%, #f4f4f4 100%);
-            border-bottom: 1px solid #eee;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 5rem;
+        }
+
+        #particles-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-gradient {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.12;
+            z-index: 0;
+        }
+
+        .hero-gradient-1 {
+            background: var(--gradient-1);
+            top: -200px;
+            right: -100px;
+        }
+
+        .hero-gradient-2 {
+            background: var(--gradient-3);
+            bottom: -300px;
+            left: -200px;
+            opacity: 0.08;
         }
 
         .hero-content {
+            position: relative;
+            z-index: 1;
             display: flex;
             align-items: center;
-            gap: 4rem;
+            gap: 5rem;
+            width: 100%;
         }
 
-        .profile-img {
-            width: 220px;
-            height: 220px;
-            border-radius: 12px;
-            object-fit: cover;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border: 4px solid white;
-        }
-
-        .hero-text h1 {
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
-            color: var(--secondary-color);
-            font-weight: 600;
-        }
-
-        .hero-text .subtitle {
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-weight: 400;
-        }
-
-        .hero-text p {
-            font-size: 1.05rem;
-            color: #555;
-            max-width: 600px;
-            margin-bottom: 1rem;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.3rem 1rem;
-            background-color: #eee;
-            color: #555;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        section {
-            padding: 5rem 0;
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            margin-bottom: 2.5rem;
+        .hero-photo-wrapper {
+            flex-shrink: 0;
             position: relative;
-            padding-bottom: 0.8rem;
-            color: var(--secondary-color);
         }
 
-        h2::after {
+        .hero-photo {
+            width: 240px;
+            height: 240px;
+            border-radius: 24px;
+            object-fit: cover;
+            border: 2px solid var(--glass-border);
+            position: relative;
+            z-index: 1;
+            transition: all 0.5s ease;
+        }
+
+        .hero-photo:hover {
+            border-color: var(--accent);
+            transform: scale(1.03);
+        }
+
+        .hero-photo-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 260px;
+            height: 260px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--gradient-3) 100%);
+            opacity: 0.15;
+            filter: blur(30px);
+            z-index: 0;
+            animation: glow-pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+
+            0%,
+            100% {
+                opacity: 0.15;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            50% {
+                opacity: 0.25;
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1.2rem;
+            background: var(--accent-subtle);
+            border: 1px solid rgba(201, 48, 62, 0.2);
+            border-radius: 50px;
+            color: var(--accent-light);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge i {
+            font-size: 0.65rem;
+        }
+
+        .hero-name {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-title {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title span {
+            color: var(--accent-light);
+            font-weight: 500;
+        }
+
+        .hero-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 520px;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.75rem 1.8rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+
+        .btn-ghost {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--glass-border-hover);
+            transform: translateY(-2px);
+        }
+
+        /* ========== Section Title ========== */
+        .section-header {
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-light);
+            margin-bottom: 1rem;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 20px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        /* ========== About Section ========== */
+        .about {
+            background: var(--bg-secondary);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .about-text {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.9;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.8rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .stat-card:hover {
+            border-color: var(--glass-border-hover);
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+        }
+
+        .stat-card .stat-icon {
+            font-size: 1.5rem;
+            color: var(--accent-light);
+            margin-bottom: 0.8rem;
+        }
+
+        .stat-card .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ========== Timeline (Education) ========== */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
             content: '';
             position: absolute;
             left: 0;
+            top: 0;
             bottom: 0;
-            width: 60px;
-            height: 4px;
-            background-color: var(--primary-color);
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
         }
 
-        .grid {
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .timeline-item:hover {
+            border-color: var(--glass-border-hover);
+            background: var(--bg-card-hover);
+            transform: translateX(8px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3rem;
+            top: 2.2rem;
+            width: 36px;
+            height: 2px;
+            background: var(--glass-border);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: calc(-3rem - 5px);
+            top: calc(2.2rem - 4px);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: 2px solid var(--accent);
+            z-index: 1;
+        }
+
+        .timeline-item:first-child::after {
+            background: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .timeline-badge {
+            display: inline-block;
+            padding: 0.25rem 0.8rem;
+            background: var(--accent-subtle);
+            color: var(--accent-light);
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+
+        .timeline-badge.active {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+        }
+
+        .timeline-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .timeline-sub {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== Research Section ========== */
+        .research {
+            background: var(--bg-secondary);
+        }
+
+        .research-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .card {
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
-            transition: all 0.3s ease;
-            border: 1px solid #f0f0f0;
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-        }
-
-        .card h3 {
-            margin-bottom: 1.2rem;
-            color: var(--secondary-color);
-            font-size: 1.3rem;
-            border-left: 4px solid var(--primary-color);
-            padding-left: 15px;
-        }
-
-        .info-list {
-            list-style: none;
-        }
-
-        .info-list li {
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            font-size: 0.95rem;
-        }
-
-        .info-list li::before {
-            content: '•';
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-
-        footer {
-            background-color: var(--secondary-color);
-            color: var(--white);
-            padding: 4rem 0;
-            text-align: center;
-        }
-
-        .footer-text {
-            opacity: 0.7;
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
             gap: 2rem;
         }
 
-        .contact-links a {
-            color: var(--white);
+        .research-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2.2rem;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .research-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--gradient-2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .research-card:hover {
+            border-color: var(--glass-border-hover);
+            background: var(--bg-card-hover);
+            transform: translateY(-6px);
+        }
+
+        .research-card:hover::before {
+            opacity: 1;
+        }
+
+        .research-card .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--accent-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            color: var(--accent-light);
+        }
+
+        .research-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .research-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .research-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1.5rem;
+        }
+
+        .tag {
+            padding: 0.3rem 0.9rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            border-color: var(--accent);
+            color: var(--accent-light);
+            background: var(--accent-subtle);
+        }
+
+        /* ========== Duties Section ========== */
+        .duties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .duty-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .duty-card:hover {
+            border-color: var(--glass-border-hover);
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+        }
+
+        .duty-card .duty-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--accent-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1rem;
+            color: var(--accent-light);
+        }
+
+        .duty-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .duty-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ========== Contact Section ========== */
+        .contact {
+            background: var(--bg-secondary);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .contact-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
             text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
-        .contact-links a:hover {
-            background-color: var(--white);
-            color: var(--secondary-color);
+        .contact-card:hover {
+            border-color: var(--accent);
+            background: var(--bg-card-hover);
+            transform: translateY(-6px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
-        @media (max-width: 768px) {
+        .contact-card .contact-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--accent-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+            font-size: 1.3rem;
+            color: var(--accent-light);
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover .contact-icon {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .contact-card .contact-label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .contact-card .contact-value {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            word-break: break-all;
+        }
+
+        /* ========== Footer ========== */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-text {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .footer-text a {
+            color: var(--accent-light);
+            text-decoration: none;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        /* ========== Scroll Animations ========== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .reveal-delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        /* ========== Responsive ========== */
+        @media (max-width: 900px) {
             .hero-content {
                 flex-direction: column;
                 text-align: center;
-                gap: 2rem;
+                gap: 3rem;
             }
 
-            .hero-text h1 {
-                font-size: 1.8rem;
+            .hero-name {
+                font-size: 2.5rem;
+            }
+
+            .hero-desc {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 1.2rem;
+            }
+
+            section {
+                padding: 4.5rem 0;
+            }
+
+            .hero-name {
+                font-size: 2rem;
+            }
+
+            .hero-photo {
+                width: 180px;
+                height: 180px;
+            }
+
+            .hero-photo-glow {
+                width: 200px;
+                height: 200px;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(10, 10, 15, 0.97);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .nav-links a {
+                font-size: 1.2rem;
+                padding: 1rem 2rem;
+            }
+
+            .hamburger {
+                display: flex;
+                z-index: 1001;
+            }
+
+            .stat-cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.8rem;
+            }
+
+            .stat-card {
+                padding: 1.2rem;
+            }
+
+            .timeline {
+                padding-left: 2rem;
+            }
+
+            .timeline-item::before {
+                left: -2rem;
+                width: 20px;
+            }
+
+            .timeline-item::after {
+                left: calc(-2rem - 5px);
             }
         }
     </style>
@@ -233,70 +977,401 @@
 
 <body>
 
-    <header>
+    <!-- ============ Navigation ============ -->
+    <nav id="navbar">
         <div class="container">
-            <nav class="nav-content">
-                <a href="#" class="logo">
+            <div class="nav-inner">
+                <a href="#" class="nav-brand">
+                    <img src="../assets/logo.svg" alt="Hacettepe Logo" class="nav-logo">
                     Hacettepe Üniversitesi
                 </a>
-            </nav>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#about" onclick="closeMenu()">Hakkımda</a></li>
+                    <li><a href="#education" onclick="closeMenu()">Eğitim</a></li>
+                    <li><a href="#research" onclick="closeMenu()">Araştırma</a></li>
+                    <li><a href="#duties" onclick="closeMenu()">Görevler</a></li>
+                    <li><a href="#contact" onclick="closeMenu()">İletişim</a></li>
+                </ul>
+                <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menü">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <div class="hero-content">
+    <!-- ============ Hero Section ============ -->
+    <section class="hero" id="hero">
+        <canvas id="particles-canvas"></canvas>
+        <div class="hero-gradient hero-gradient-1"></div>
+        <div class="hero-gradient hero-gradient-2"></div>
+
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-photo-wrapper reveal">
+                    <div class="hero-photo-glow"></div>
                     <img src="https://fs.hacettepe.edu.tr/isletme/dosyalar/Fotograflar/ArastirmaGorevlileri/1001.jpg"
-                        alt="Nizameddin ALYAPRAK" class="profile-img">
-                    <div class="hero-text">
-                        <span class="badge">Akademik Kadro</span>
-                        <h1>Nizameddin ALYAPRAK</h1>
-                        <div class="subtitle">Araştırma Görevlisi</div>
-                        <p>Hacettepe Üniversitesi İşletme Bölümü, Sayısal Yöntemler Anabilim Dalı'nda akademik
-                            çalışmalarına devam etmektedir.</p>
-                        <p><strong>Görevler:</strong> Sınav Programı Koordinatörlüğü, Web Sitesi/Duyuru Sorumluluğu</p>
+                        alt="Nizameddin ALYAPRAK" class="hero-photo">
+                </div>
+                <div class="hero-text">
+                    <div class="hero-badge reveal reveal-delay-1">
+                        <i class="fas fa-graduation-cap"></i>
+                        Akademik Kadro
+                    </div>
+                    <h1 class="hero-name reveal reveal-delay-2">Nizameddin<br>ALYAPRAK</h1>
+                    <p class="hero-title reveal reveal-delay-3">Araştırma Görevlisi — <span>Sayısal Yöntemler</span></p>
+                    <p class="hero-desc reveal reveal-delay-3">
+                        Hacettepe Üniversitesi İktisadi ve İdari Bilimler Fakültesi, İşletme Bölümü bünyesinde
+                        Sayısal Yöntemler Anabilim Dalı'nda akademik çalışmalarına devam etmektedir.
+                    </p>
+                    <div class="hero-actions reveal reveal-delay-4">
+                        <a href="mailto:nizameddin.alyaprak@hacettepe.edu.tr" class="btn btn-primary">
+                            <i class="fas fa-envelope"></i> İletişime Geç
+                        </a>
+                        <a href="https://avesis.hacettepe.edu.tr/nizameddin.alyaprak" target="_blank"
+                            class="btn btn-ghost">
+                            <i class="fas fa-user-tie"></i> AVESİS Profili
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="details">
-            <div class="container">
-                <div class="grid">
-                    <div class="card">
-                        <h3>Eğitim Bilgileri</h3>
-                        <ul class="info-list">
-                            <li><strong>Doktora:</strong> Hacettepe Üniversitesi, İşletme Bölümü (Devam Ediyor)</li>
-                            <li><strong>Yüksek Lisans:</strong> Hacettepe Üniversitesi, Üretim Yönetimi ve Sayısal
-                                Yöntemler (Tezli)</li>
-                            <li><strong>Lisans:</strong> Hacettepe Üniversitesi, İşletme Bölümü (2018)</li>
-                        </ul>
+    <!-- ============ About Section ============ -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Hakkımda</div>
+                <h2 class="section-title">Akademik Profil</h2>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-text reveal">
+                    <p>
+                        Hacettepe Üniversitesi İşletme Bölümü'nde Araştırma Görevlisi olarak görev yapmaktadır.
+                        Sayısal Yöntemler ve Yöneylem Araştırması alanında doktora çalışmalarına devam etmektedir.
+                    </p>
+                    <p>
+                        Araştırma ilgi alanları arasında çizelgeleme problemleri, optimizasyon algoritmaları,
+                        ekonometri ve bilgisayar bilimleri yer almaktadır. Bölüm içinde Sınav Programı Koordinatörlüğü
+                        ve Web Sitesi Düzenleme ve Duyuru Koordinatörlüğü görevlerini yürütmektedir.
+                    </p>
+                </div>
+                <div class="stat-cards reveal reveal-delay-2">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-university"></i></div>
+                        <div class="stat-value">HÜ</div>
+                        <div class="stat-label">Üniversite</div>
                     </div>
-                    <div class="card">
-                        <h3>Araştırma Alanları</h3>
-                        <ul class="info-list">
-                            <li>Sayısal Yöntemler & Yöneylem Araştırması</li>
-                            <li>Ekonometri</li>
-                            <li>Algoritmalar & Bilgisayar Bilimleri</li>
-                            <li>Çizelgeleme Problemleri</li>
-                        </ul>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-briefcase"></i></div>
+                        <div class="stat-value">İşletme</div>
+                        <div class="stat-label">Bölüm</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-flask"></i></div>
+                        <div class="stat-value">SY</div>
+                        <div class="stat-label">Anabilim Dalı</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-book-open"></i></div>
+                        <div class="stat-value">Dr.</div>
+                        <div class="stat-label">Doktora (Devam)</div>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
+    <!-- ============ Education Section ============ -->
+    <section id="education">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Eğitim</div>
+                <h2 class="section-title">Akademik Yolculuk</h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item reveal">
+                    <span class="timeline-badge active">Devam Ediyor</span>
+                    <h3 class="timeline-title">Doktora — İşletme</h3>
+                    <p class="timeline-sub">Hacettepe Üniversitesi, Sosyal Bilimler Enstitüsü</p>
+                    <p class="timeline-meta"><i class="fas fa-map-marker-alt"></i> Ankara, Türkiye</p>
+                </div>
+
+                <div class="timeline-item reveal reveal-delay-1">
+                    <span class="timeline-badge">Tamamlandı</span>
+                    <h3 class="timeline-title">Yüksek Lisans — Üretim Yönetimi ve Sayısal Yöntemler</h3>
+                    <p class="timeline-sub">Hacettepe Üniversitesi, Sosyal Bilimler Enstitüsü (Tezli)</p>
+                    <p class="timeline-meta"><i class="fas fa-map-marker-alt"></i> Ankara, Türkiye</p>
+                </div>
+
+                <div class="timeline-item reveal reveal-delay-2">
+                    <span class="timeline-badge">2018</span>
+                    <h3 class="timeline-title">Lisans — İşletme</h3>
+                    <p class="timeline-sub">Hacettepe Üniversitesi, İktisadi ve İdari Bilimler Fakültesi</p>
+                    <p class="timeline-meta"><i class="fas fa-map-marker-alt"></i> Ankara, Türkiye</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Research Section ============ -->
+    <section class="research" id="research">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Araştırma</div>
+                <h2 class="section-title">Araştırma Alanları</h2>
+            </div>
+
+            <div class="research-grid">
+                <div class="research-card reveal">
+                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Sayısal Yöntemler & Yöneylem Araştırması</h3>
+                    <p>Matematiksel modelleme, optimizasyon, doğrusal ve doğrusal olmayan programlama teknikleri üzerine
+                        çalışmalar.</p>
+                    <div class="research-tags">
+                        <span class="tag">Optimizasyon</span>
+                        <span class="tag">Modelleme</span>
+                        <span class="tag">LP / NLP</span>
+                    </div>
+                </div>
+
+                <div class="research-card reveal reveal-delay-1">
+                    <div class="card-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h3>Çizelgeleme Problemleri</h3>
+                    <p>Üretim ve hizmet sistemlerinde kaynak atama, iş sıralama ve zamanlama problemleri üzerine
+                        algoritmik çözümler.</p>
+                    <div class="research-tags">
+                        <span class="tag">Scheduling</span>
+                        <span class="tag">Metaheuristics</span>
+                        <span class="tag">Combinatorial</span>
+                    </div>
+                </div>
+
+                <div class="research-card reveal reveal-delay-2">
+                    <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3>Ekonometri</h3>
+                    <p>İstatistiksel yöntemler ve ekonometrik modeller kullanarak veri analizi ve tahminleme
+                        çalışmaları.</p>
+                    <div class="research-tags">
+                        <span class="tag">Regresyon</span>
+                        <span class="tag">Zaman Serileri</span>
+                        <span class="tag">Panel Veri</span>
+                    </div>
+                </div>
+
+                <div class="research-card reveal reveal-delay-3">
+                    <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3>Algoritmalar & Bilgisayar Bilimleri</h3>
+                    <p>Algoritmik problem çözme, veri yapıları, yapay zeka ve makine öğrenmesi tekniklerinin
+                        uygulamaları.</p>
+                    <div class="research-tags">
+                        <span class="tag">Algoritmalar</span>
+                        <span class="tag">AI / ML</span>
+                        <span class="tag">Python</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Duties Section ============ -->
+    <section id="duties">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">Görevler</div>
+                <h2 class="section-title">İdari Sorumluluklar</h2>
+            </div>
+
+            <div class="duties-grid">
+                <div class="duty-card reveal">
+                    <div class="duty-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div>
+                        <h3>Sınav Koordinatörlüğü</h3>
+                        <p>İşletme Bölümü sınav takviminin hazırlanması, koordinasyonu ve yönetimi.</p>
+                    </div>
+                </div>
+                <div class="duty-card reveal reveal-delay-1">
+                    <div class="duty-icon"><i class="fas fa-globe"></i></div>
+                    <div>
+                        <h3>Web Sitesi Düzenleme ve Duyuru Koordinatörlüğü</h3>
+                        <p><a href="https://isletme.hacettepe.edu.tr" target="_blank"
+                                style="color: var(--accent-light); text-decoration: none;">isletme.hacettepe.edu.tr</a>
+                            web sitesinin düzenlenmesi ve akademik duyuruların koordinasyonu.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Contact Section ============ -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">İletişim</div>
+                <h2 class="section-title">Bana Ulaşın</h2>
+            </div>
+
+            <div class="contact-grid">
+                <a href="mailto:nizameddin.alyaprak@hacettepe.edu.tr" class="contact-card reveal">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-label">E-posta</div>
+                    <div class="contact-value">nizameddin.alyaprak@hacettepe.edu.tr</div>
+                </a>
+
+                <a href="tel:+903122978700" class="contact-card reveal reveal-delay-1">
+                    <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                    <div class="contact-label">Telefon</div>
+                    <div class="contact-value">+90 312 297 8700</div>
+                </a>
+
+                <a href="https://avesis.hacettepe.edu.tr/nizameddin.alyaprak" target="_blank"
+                    class="contact-card reveal reveal-delay-2">
+                    <div class="contact-icon"><i class="fas fa-user-tie"></i></div>
+                    <div class="contact-label">AVESİS</div>
+                    <div class="contact-value">Akademik Profil</div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ Footer ============ -->
     <footer>
         <div class="container">
-            <p class="footer-text">© 2024 Arş. Gör. Nizameddin ALYAPRAK. Tüm hakları saklıdır.</p>
-            <div class="contact-links">
-                <a href="mailto:nizameddin.alyaprak@hacettepe.edu.tr">E-posta</a>
-                <a href="https://avesis.hacettepe.edu.tr/nizameddin.alyaprak" target="_blank">AVESİS Profili</a>
-                <a href="https://github.com/nizameddin-alyaprak">GitHub</a>
+            <div class="footer-inner">
+                <p class="footer-text">
+                    © 2025 <a href="#">Nizameddin ALYAPRAK</a> · Hacettepe Üniversitesi
+                </p>
+                <div class="footer-links">
+                    <a href="mailto:nizameddin.alyaprak@hacettepe.edu.tr" title="E-posta"><i
+                            class="fas fa-envelope"></i></a>
+                    <a href="https://avesis.hacettepe.edu.tr/nizameddin.alyaprak" target="_blank" title="AVESİS"><i
+                            class="fas fa-university"></i></a>
+
+                </div>
             </div>
         </div>
     </footer>
+
+    <!-- ============ Scripts ============ -->
+    <script>
+        // ---- Particles Animation ----
+        (function () {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let animationId;
+
+            function resize() {
+                const hero = document.querySelector('.hero');
+                canvas.width = hero.offsetWidth;
+                canvas.height = hero.offsetHeight;
+            }
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.3;
+                    this.vy = (Math.random() - 0.5) * 0.3;
+                    this.radius = Math.random() * 1.5 + 0.5;
+                    this.opacity = Math.random() * 0.4 + 0.1;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(201, 48, 62, ${this.opacity})`;
+                    ctx.fill();
+                }
+            }
+
+            function init() {
+                resize();
+                const count = Math.min(80, Math.floor((canvas.width * canvas.height) / 12000));
+                particles = [];
+                for (let i = 0; i < count; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function connectParticles() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(201, 48, 62, ${0.06 * (1 - dist / 120)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                connectParticles();
+                animationId = requestAnimationFrame(animate);
+            }
+
+            init();
+            animate();
+
+            window.addEventListener('resize', () => {
+                cancelAnimationFrame(animationId);
+                init();
+                animate();
+            });
+        })();
+
+        // ---- Scroll-triggered nav style ----
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ---- Scroll reveal animations ----
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // ---- Mobile menu ----
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+        function closeMenu() {
+            document.getElementById('navLinks').classList.remove('open');
+        }
+    </script>
 
 </body>
 
