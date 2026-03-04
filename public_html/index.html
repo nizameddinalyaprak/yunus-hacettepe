@@ -383,6 +383,28 @@
             transform: translateY(-2px);
         }
 
+        .btn-special {
+            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        .btn-special:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.6);
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+            }
+
+            100% {
+                box-shadow: 0 4px 30px rgba(168, 85, 247, 0.7);
+            }
+        }
+
         /* ========== Section Title ========== */
         .section-header {
             margin-bottom: 4rem;
@@ -986,6 +1008,8 @@
                     Hacettepe Üniversitesi
                 </a>
                 <ul class="nav-links" id="navLinks">
+                    <li><a href="bulmacalar/index.html" style="color: #a855f7; font-weight: 700;"><i
+                                class="fas fa-puzzle-piece"></i> Zeka Bulmacaları</a></li>
                     <li><a href="#about" onclick="closeMenu()">Hakkımda</a></li>
                     <li><a href="#education" onclick="closeMenu()">Eğitim</a></li>
                     <li><a href="#research" onclick="closeMenu()">Araştırma</a></li>
@@ -1026,12 +1050,15 @@
                         Sayısal Yöntemler Anabilim Dalı'nda akademik çalışmalarına devam etmektedir.
                     </p>
                     <div class="hero-actions reveal reveal-delay-4">
-                        <a href="mailto:nizameddin.alyaprak@hacettepe.edu.tr" class="btn btn-primary">
+                        <a href="bulmacalar/index.html" class="btn btn-special">
+                            <i class="fas fa-brain"></i> Algoritmik Zeka Bulmacaları
+                        </a>
+                        <a href="mailto:nizameddin.alyaprak@hacettepe.edu.tr" class="btn btn-ghost">
                             <i class="fas fa-envelope"></i> İletişime Geç
                         </a>
                         <a href="https://avesis.hacettepe.edu.tr/nizameddin.alyaprak" target="_blank"
                             class="btn btn-ghost">
-                            <i class="fas fa-user-tie"></i> AVESİS Profili
+                            <i class="fas fa-user-tie"></i> AVESİS
                         </a>
                     </div>
                 </div>
