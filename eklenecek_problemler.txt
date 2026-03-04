@@ -72,3 +72,63 @@ Düşünme Molası: Araya bir "Çözümü Görmek İçin Tıklayın" butonu koyu
 Çözüm: Adım adım, anlaşılır, gerekirse basit tablolarla çözümü verin.
 
 Akademisyenin Notu (Sizin İmzanız): En sona kısa bir paragraf ekleyin: "Biz bu problemi Sayısal Yöntemler alanında X teorisi adıyla inceleriz. Aslında bu sadece bir bulmaca değil; günümüzde kargo şirketlerinin rota planlamasında veya yapay zekanın karar algoritmalarında tam olarak bu matematik yatıyor." diyerek konuyu doğrudan uzmanlığınıza bağlayın. En sona ufak bir Python çözüm kodu bile ekleyebilirsiniz.
+
+1. Stigler’in Diyet Problemi (The Diet Problem)
+
+Hikaye: Yıl 1939. Amerikan ordusu 2. Dünya Savaşı'nda askerlerini hem en sağlıklı hem de en ucuza nasıl besleyeceğini bulmaya çalışır. Piyasada 77 farklı gıda maddesi ve bir askerin günlük alması gereken temel vitamin/mineral sınırları vardır. Askerin günlük menüsü minimum maliyetle nasıl oluşturulur?
+
+Akademik Arka Plan: Doğrusal Programlama (Linear Programming). Optimizasyonun tarihteki ilk ve en meşhur gerçek hayat uygulamalarından biridir. George Stigler'in haftalarca elle hesaplayarak bulduğu sezgisel (heuristic) sonuçla, yıllar sonra bilgisayarların Simpleks (Simplex) algoritmasıyla bulduğu mutlak optimum sonuç arasındaki farkın yılda sadece 24 cent olması muazzam bir detaydır.
+
+2. Kararlı Eşleşme Problemi (Gale-Shapley Algoritması)
+
+Hikaye: Elimizde tıp fakültesinden yeni mezun 100 doktor ve 100 hastanenin asistan kadrosu var. Doktorların hastane tercih sıralamaları farklı, hastanelerin de asistan tercih sıralamaları farklı. Öyle bir atama (yerleştirme) yapmalısınız ki; atama bittikten sonra örneğin X doktoru ile Y hastanesi birbirlerini mevcut eşleşmelerinden daha fazla isteyip sistemi delmesin. Herkesi "maksimum rızada" tutan, bozulmaz (kararlı) eşleşme nasıl bulunur?
+
+Akademik Arka Plan: Atama ve Eşleştirme Teorisi (Matching Theory). Bu algoritma bugün LGS/YKS tercihlerinden, organ nakli bekleyen hastaların eşleştirilmesine kadar kullanılır. Yaratıcılarına 2012 Nobel Ekonomi Ödülü'nü kazandırmıştır.
+
+3. Yemek Yiyen Filozoflar Problemi (Dining Philosophers)
+
+Hikaye: Yuvarlak bir masada 5 filozof oturmaktadır. Önlerinde birer tabak spagetti ve her iki filozofun arasında birer çatal vardır (toplam 5 çatal). Bir filozofun spagetti yiyebilmesi için hem sağındaki hem solundaki çatalı aynı anda alması gerekir. Eğer herkes aynı anda sadece sağındaki çatalı alır ve solundakinin boşa çıkmasını beklerse ne olur? (Kimse yiyemez, sonsuza kadar aç kalıp ölürler - Deadlock). Filozofların birbirini kilitlemeden yemek yemelerini sağlayacak algoritma nedir?
+
+Akademik Arka Plan: Kaynak Tahsisi (Resource Allocation), Çizelgeleme (Scheduling) ve Darboğaz/Kilitlenme (Deadlock) yönetimi. Özellikle kısıtlı kaynakların optimum paylaşımı için çok zihin açıcıdır.
+
+4. Königsberg'in Yedi Köprüsü
+
+Hikaye: Prusya'nın Königsberg kentinde içinden nehir geçen bir şehir ve iki ada vardır. Bu adaları ve anakarayı birbirine bağlayan tam 7 tarihi köprü bulunur. Bir gezgin, şehrin herhangi bir yerinden yürüyüşe başlayarak her köprüden sadece ve sadece bir kez geçmek şartıyla tüm köprüleri bitirip başladığı yere geri dönebilir mi?
+
+Akademik Arka Plan: Çizge Teorisi (Graph Theory) ve Ağ Optimizasyonu (Network Routing). Lojistik şirketlerinin rota planlamasının (Örn: Çöp toplama veya kargo dağıtım araçlarının rotaları) temelini oluşturan Euler'in ünlü problemidir.
+
+5. Doğum Günü Paradoksu
+
+Hikaye: Bir sınıfa/odaya giriyorsunuz. İçerideki insanlardan en az ikisinin aynı gün ve ayda (Örn: 15 Mart) doğmuş olma ihtimalinin %50'den yüksek olması için odada en az kaç kişi olmalıdır? İnsan sezgisi 365 gün olduğu için sayının yüksek olması gerektiğini (180 civarı) düşünür. Oysa matematiksel gerçek çok daha şaşırtıcıdır (Sadece 23 kişi yeterlidir!).
+
+Akademik Arka Plan: Olasılık Dağılımları ve İstatistiksel Yanılgılar. İnsan sezgilerinin faktöriyel hesaplarında matematiğe nasıl yenildiğini gösteren, öğrencilerin kendi aralarında en çok iddiaya gireceği problemlerden biridir.
+
+1. Çölde Araç Problemi (The Jeep Problem / Desert Crossing Problem)
+
+Hikaye: Elinizde 5 adet bidon benzinle çölde mahsur kalmış bir arazi aracınız var. Aracınızın deposu 5 bidon benzin alabiliyor ve 1 bidon benzinle 100 km gidebiliyor. Amacınız, bu 5 bidonu kullanarak en uzak noktaya ulaşmak. Bunun için en verimli strateji nedir?
+
+Akademik Arka Plan: Optimizasyon ve Kaynak Yönetimi. Bu problem, kaynakların (benzin) en verimli şekilde nasıl dağıtılacağını (ara duraklarda benzin bırakarak) gösterir. Doğrudan lojistik ve tedarik zinciri yönetimi derslerinde "depo yerleşimi" optimizasyonu olarak kullanılır.
+
+2. Çiftçi, Tilki, Tavuk ve Tahıl Problemi
+
+Hikaye: Bir çiftçi, nehrin bir tarafından diğer tarafına geçmek zorundadır. Yanında bir tilki, bir tavuk ve bir torba tahıl vardır. Ancak kayığı sadece kendisi ve yanına bir nesne alabilecek kadar büyüktür. Ayrıca, çiftçi yokken tilki tavuğu yer, tavuk da tahılı yer. Çiftçi tüm varlıkları zarar görmeden karşıya nasıl geçirir?
+
+Akademik Arka Plan: Durum Uzayı (State-Space Search) ve Algoritmik Düşünce. Bu problem, yapay zeka derslerinde "Arama Algoritmaları" (Breadth-First Search) anlatılırken kullanılan klasik bir örnektir. Çözüm, sadece deneme yanılma değil, olası durumlar arasındaki en kısa yolu bulma mantığına dayanır.
+
+3. İki Kule ve Çekiç Problemi (Two-Tower Problem)
+
+Hikaye: Elinizde 100 katlı bir gökdelen ve bu gökdelenin camlarını kırmak için kullanabileceğiniz 10 adet çekiç var. Amacınız, yumurta probleminden farklı olarak, çekiçlerin kırılmadığı en yüksek katı (kritik katı) bulmak. Ancak çekiçler kırılgan ve her kırılan çekiç kayboluyor. En kötü senaryoda minimum deneme sayısını garanti edecek strateji nedir?
+
+Akademik Arka Plan: Dinamik Programlama ve Minimax Stratejisi. Yumurta problemine benzer görünse de, kaynakların (çekiçlerin) sınırsız olduğu varsayımıyla (veya çok fazla olduğu durumda) çözümün nasıl değiştiğini gösterir. Ayrıca, "çekiçleri 10'arlı gruplar halinde atmak" gibi sezgisel ama yanlış stratejilerin neden optimal olmadığını ispatlar.
+
+4. Üç Kapı ve Araba Problemi (Monty Hall Problem)
+
+Hikaye: Bir yarışmadasınız. Önünüzde 3 kapı var, birinin arkasında araba, diğer ikisinde keçi var. Siz bir kapı seçiyorsunuz (Örn: Kapı 1). Sunucu, içinde keçi olan bir kapıyı açıyor (Örn: Kapı 3). Sonra size soruyor: "Seçimini değiştirmek ister misin?". İnsanların çoğu "değiştirmenin fark etmeyeceğini" düşünür. Doğru strateji nedir?
+
+Akademik Arka Plan: Koşullu Olasılık ve Bayes Teoremi. İnsan sezgilerinin olasılık hesaplarında ne kadar yanıltıcı olabileceğini gösteren, belki de en meşhur olasılık bulmacasıdır. Akademik sitelerde "viral" olabilecek bir içeriğe sahiptir.
+
+5. En Kısa Yol Problemi (Shortest Path Problem)
+
+Hikaye: Bir harita üzerinde A noktasından B noktasına gitmek istiyorsunuz. Ancak yolların sadece uzunlukları değil, aynı zamanda "trafik yoğunluğu" veya "benzin tüketimi" gibi maliyetleri de var. Amacınız, sadece en kısa mesafeyi değil, en düşük maliyetli yolu bulmak. Hangi algoritma bu işi en hızlı yapar?
+
+Akademik Arka Plan: Çizge Teorisi (Graph Theory) ve Dijkstra Algoritması. Bu problem, modern yazılım geliştirmenin ve navigasyon sistemlerinin (Google Maps, Waze) temelini oluşturur. "En kısa yol" algoritmaları, bilgisayar bilimlerinin en temel ve en çok kullanılan araçlarındandır.

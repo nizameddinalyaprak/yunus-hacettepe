@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Königsberg'in Yedi Köprüsü | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .graph-viz {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Çizge Teorisi (Graph Theory)</span>
+            <h1 style="font-size: 3rem;">Königsberg'in Yedi Köprüsü</h1>
+        </header>
+
+        <div class="content-body">
+            <div class="story-section">
+                <p>Prusya'nın Königsberg kentinde (şimdiki Kaliningrad, Rusya) Pregel Nehri'nin ortasında iki büyük ada
+                    bulunmaktaydı. Bu iki adayı birbirine ve nehrin iki yakasına (anakaraya) bağlayan tam <strong>7
+                        tarihi köprü</strong> vardı.</p>
+                <p>Kent sakinleri tatil günlerinde kendilerine hep aynı bulmacayı sorarlardı: <strong>Şehrin herhangi
+                        bir yerinden yürüyüşe başlayarak, her bir köprüden sadece bir kez geçmek şartıyla bütün
+                        köprüleri bitirip aynı noktaya dönebilir miyiz?</strong></p>
+                <p>Yıllarca hiçbir kent sakini bunu başaramamıştı. Acaba birisi gerçekten o rotayı bulabilir miydi yoksa
+                    bu imkansız mıydı?</p>
+            </div>
+
+            <div class="interactive-widget">
+                <h3 style="color: #e2e8f0; margin-bottom: 1rem;">Köprülerin Şematik Çizimi (Graf)</h3>
+                <div class="graph-viz">
+                    <svg width="300" height="200" viewBox="0 0 300 200">
+                        <circle cx="50" cy="100" r="20" fill="#a855f7" /> <!-- Sol yaka -->
+                        <circle cx="250" cy="100" r="20" fill="#a855f7" /> <!-- Sağ yaka -->
+                        <circle cx="150" cy="40" r="20" fill="#6366f1" /> <!-- Üst ada -->
+                        <circle cx="150" cy="160" r="20" fill="#6366f1" /> <!-- Alt ada -->
+
+                        <path d="M65 90 Q 100 50 135 45" stroke="#94a3b8" stroke-width="4" fill="none" />
+                        <path d="M65 110 Q 100 80 135 55" stroke="#94a3b8" stroke-width="4" fill="none" />
+
+                        <path d="M65 90 Q 100 150 135 155" stroke="#94a3b8" stroke-width="4" fill="none" />
+                        <path d="M65 110 Q 100 120 135 145" stroke="#94a3b8" stroke-width="4" fill="none" />
+
+                        <line x1="165" y1="45" x2="235" y2="90" stroke="#94a3b8" stroke-width="4" fill="none" />
+                        <line x1="165" y1="155" x2="235" y2="110" stroke="#94a3b8" stroke-width="4" fill="none" />
+                        <line x1="150" y1="60" x2="150" y2="140" stroke="#94a3b8" stroke-width="4" fill="none" />
+
+                        <text x="50" y="105" fill="#fff" font-family="Arial" font-size="12"
+                            text-anchor="middle">A</text>
+                        <text x="250" y="105" fill="#fff" font-family="Arial" font-size="12"
+                            text-anchor="middle">B</text>
+                        <text x="150" y="45" fill="#fff" font-family="Arial" font-size="12"
+                            text-anchor="middle">C</text>
+                        <text x="150" y="165" fill="#fff" font-family="Arial" font-size="12"
+                            text-anchor="middle">D</text>
+                    </svg>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Düğüm (Kıta/Ada) ve Ayrıt (Köprü) modeli.</p>
+            </div>
+
+            <div class="poll-container" id="poll-container" data-problem-id="konigsberg-kopruleri">
+                <h3 class="poll-title">Sizce Bu Mümkün mü?</h3>
+                <div class="poll-buttons">
+                    <button class="poll-btn btn-success" id="btn-poll-success">Mümkün 🎯</button>
+                    <button class="poll-btn btn-fail" id="btn-poll-fail">İmkansız 🤯</button>
+                </div>
+                <div class="poll-results" id="poll-results">
+                    <p id="poll-stat"></p>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Deneyerek Bulmak İmkansız mıdır?</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">İnsanlar her seferinde
+                    farklı bir rotadan gitmeyi denediler. Belki o köprüden değil de ötekinden geçse başaracaktı...
+                    Dünyanın en büyük matematikçilerinden Leonhard Euler bu soruna 1736 yılında kağıt üzerinde sadece
+                    "Noktalar ve Çizgiler" çizerek nokta koydu.</p>
+                <button class="btn" id="reveal-btn">Çözümü Göster ↓</button>
+            </div>
+
+            <div class="solution-section blurred" id="solution-section">
+                <h3>Çözüm: Euler Döngüleri İmkansızlığı İspatlar</h3>
+                <p>Leonhard Euler, adalara ve nehrin yakalarına "Düğüm (Nokta)", köprülere ise "Ayrıt (Çizgi)" dedi.
+                    Matematiksel olarak ispatladı ki böyle bir rotanın var olabilmesi için çok katı bir "Euler kuralı"
+                    vardır:</p>
+                <ul>
+                    <li>Gittiğiniz bir kara parçasından geri çıkabilmeniz için oraya bağlanan köprü sayısının mutlaka
+                        <strong>ÇİFT SAYI (2, 4, 6)</strong> olması gerekir. (Bir köprüden girersiniz, diğerinden
+                        çıkarsınız).</li>
+                    <li>Karalara bağlanan köprü sayısına karanın "Derecesi" diyelim. Bütün düğümlerin derecesi çiftse,
+                        her köprüden sadece bir kez geçerek turlayabilirsiniz. <strong>(Euler Döngüsü)</strong></li>
+                    <li>Eğer tam olarak iki kara parçasının derecesi tek ise, rotaya tek dereceli karalardan birinde
+                        başlayıp diğerinde bitirebilirsiniz ancak başlangıç noktanıza dönemezsiniz. <strong>(Euler
+                            Yolu)</strong></li>
+                </ul>
+                <p>Königsberg şehrinde ise 4 kara parçasının (A, B, C, D) <strong>dördünün de bağlanma derecesi Tek
+                        Sayıdır! (3, 3, 3 ve 5).</strong> İkiden fazla tek dereceli düğüm olduğu için bu problemi çözmek
+                    uzay ve zaman kurallarına göre <strong>Kesinlikle İmkansızdır!</strong></p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Çizge Teorisi (Graph Theory) ve Yöneylem</strong></p>
+                <p>Leonhard Euler'in çözüm için kullandığı Nokta ve Çizgi soyutlaması, bugün tüm bilgisayar bilimlerinin
+                    kullandığı <strong>Çizge Teorisi'nin</strong> (Graph Theory) doğuşu kabul edilir. Günümüzde UPS ve
+                    FedEx rotalamaları (Çöp toplama, posta dağıtma, kargo rotaları) Çinli Postacı Problemi ve Eulerian
+                    Yolu algoritmaları üzerinden çözülmektedir.</p>
+            </div>
+
+            <div class="next-problem-container">
+                <div></div>
+                <a href="en-kisa-yol.html" class="next-problem-link">Sıradaki Problem ➡️</a>
+            </div>
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

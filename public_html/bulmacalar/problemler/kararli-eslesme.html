@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kararlı Eşleşme Problemi | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Algoritmik Düşünce</span>
+            <h1 style="font-size: 3rem;">Kararlı Eşleşme Problemi</h1>
+        </header>
+
+        <div class="content-body">
+            <div class="story-section">
+                <p>Elinizde tıp fakültesinden yeni mezun 100 doktor ve tıpatıp 100 hastanenin asistan kadrosu var.</p>
+                <p>Doktorların kendi içinde çalışmak istedikleri hastaneleri belirten gizli bir <strong>tercih
+                        sıralaması</strong> var (Örn: "Birinci tercihim A Hastanesi, ikinci B hastanesi..."). Benzer
+                    şekilde, hastanelerin de başvuran doktorları puanlarına/mülakatlarına göre dizdikleri bir
+                    <strong>asistan tercih sıralaması</strong> var.</p>
+                <p>Merkezi bir sistem olarak öyle bir atama (yerleştirme) yapmalısınız ki; atama bittikten sonra
+                    <strong>sistem delinmesin! (Kararsızlık olmasın)</strong></p>
+                <p><strong>Kararsızlık (Instability) Nedir?</strong>: Eğer X doktoru ile Y hastanesi eşleşmemiş
+                    olmalarına rağmen, birbirlerini "kendi mevcut eşleşmelerinden <strong>daha fazla</strong>"
+                    istiyorlarsa sistemi delerler (Doktor istifa eder, Y hastanesi de mevcut asistanını kovar ve
+                    kavuşurlar).</p>
+                <p>Herkesin mızmızlık etmeden, kimsenin kimseyi ayartamayacağı o kusursuz "Kararlı (Stable)" atamayı
+                    yüzlerce kişi için hatasız bulan algoritma nedir?</p>
+            </div>
+
+            <div class="poll-container" id="poll-container" data-problem-id="kararli-eslesme">
+                <h3 class="poll-title">Çözümü Bulabildiniz Mi?</h3>
+                <div class="poll-buttons">
+                    <button class="poll-btn btn-success" id="btn-poll-success">Kendim Buldum 🎯</button>
+                    <button class="poll-btn btn-fail" id="btn-poll-fail">Bulamadım, Zor 🤯</button>
+                </div>
+                <div class="poll-results" id="poll-results">
+                    <p id="poll-stat"></p>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Gale-Shapley'in Sihri</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">1962'de iki deha, David
+                    Gale ve Lloyd Shapley, eşleşme oyununun kuralını yazdı. Algoritma basit görünüyor ancak
+                    iterasyonları milyonları bulabiliyor. Acaba kim kime önce teklif etmeli?</p>
+                <button class="btn" id="reveal-btn">Çözümü Göster ↓</button>
+            </div>
+
+            <div class="solution-section blurred" id="solution-section">
+                <h3>Çözüm: Kabul Et-Ertele (Deferred Acceptance) Algoritması</h3>
+                <p>Gale ve Shapley'in çözümü şu şekilde işler (Doktorların teklif ettiği senaryoda):</p>
+                <ol>
+                    <li>Tüm doktorlar, listelerindeki <strong>en iyi 1. hastaneye</strong> başvurularını yaparlar.</li>
+                    <li>Hastaneler kapısındaki doktorlara bakar. Listesindeki <strong>en iyi</strong> doktoru "Şimdilik
+                        burada kal, seni tutuyorum" der ve beklemeye alır (Kesin kabul etmez, ertelemeli kabul). Geri
+                        kalanları reddeder.</li>
+                    <li>Reddedilen doktorlar, listelerindeki <strong>2. sıradaki hastanelere</strong> giderler.</li>
+                    <li>Hastaneler şimdi hem ellerinde beklettikleri doktorlara hem de "yeni gelen" başvurulara bakar.
+                        Aralarından en iyisini bulup onu tutup (eskiyi kovup) bekletmeye devam ederler. Diğerlerini
+                        reddederler.</li>
+                    <li>Bu döngü hiç "reddedilen doktor kalmayana kadar" devam eder. En sonunda eşleşmeler kesinleşir.
+                    </li>
+                </ol>
+                <p>Bu muazzam ritmik döngü, eninde sonunda sonlanır ve ortaya çıkan eşleşme <strong>%100
+                        kararlıdır</strong>. Sistemi delecek hiçbir ikili ortaya çıkmaz!</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Atama ve Eşleştirme Teorisi (Matching Theory)</strong></p>
+                <p>Nobel Ekonomi Ödülü (2012) kazandıran bu eşleşme dinamiği, günümüzde sadece hastane atamalarında
+                    değil, LGS/YKS sınav tercihlerimizde, okul yerleştirmelerinde ve hatta organ nakillerinde
+                    donör-hasta çapraz eşleşmelerinde kullanılan devrimsel bir algoritmadır.</p>
+            </div>
+
+            <div class="next-problem-container">
+                <div></div>
+                <a href="yemek-yiyen-filozoflar.html" class="next-problem-link">Sıradaki Problem ➡️</a>
+            </div>
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

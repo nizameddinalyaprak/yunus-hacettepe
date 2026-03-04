@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>En Kısa Yol Problemi | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Optimizasyon ve Lojistik</span>
+            <h1 style="font-size: 3rem;">En Kısa Yol Problemi</h1>
+        </header>
+
+        <div class="content-body">
+            <div class="story-section">
+                <p>Bir harita üzerinde A noktasından B noktasına gitmek istiyorsunuz. Yüzlerce ara sokak, bulvar ve
+                    köprü var.</p>
+                <p>Ancak önemli bir detay var: Gezgin satıcı probleminde olduğu gibi "en az mesafe giden" yol, gerçek
+                    hayatta "zaman" veya "maliyet" açısından en iyisi olmayabilir. Birinci yolda mesafe kısadır ama
+                    trafik kilitlidir (Zaman maliyeti yüksek). İkinci yolda mesafe biraz daha uzundur ancak uçsuz
+                    bucaksız boş bir otobandır.</p>
+                <p>Amacınız, bir noktadan diğerine giderken, yolların üzerindeki ağırlıkları (trafik maliyeti, benzin
+                    tüketimi, geçiş ücretleri) dikkate alarak "En Düşük Maliyetli (En Kısa) Yolu" bulmaktır. Fakat tüm
+                    dünyadaki sokak ve caddeleri denemeden bir bilgisayar bunu en hızlı nasıl bulur?</p>
+            </div>
+
+            <div class="poll-container" id="poll-container" data-problem-id="en-kisa-yol">
+                <h3 class="poll-title">Çözümü Bulabildiniz Mi?</h3>
+                <div class="poll-buttons">
+                    <button class="poll-btn btn-success" id="btn-poll-success">Kendim Buldum 🎯</button>
+                    <button class="poll-btn btn-fail" id="btn-poll-fail">Bulamadım, Zor 🤯</button>
+                </div>
+                <div class="poll-results" id="poll-results">
+                    <p id="poll-stat"></p>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Harita Uygulamalarının Görünmez Beyni</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">A noktasından B noktasına
+                    gitmek için haritadaki trilyonlarca olasılığı denemeye kalksam bilgisayar çöker. İşin sırrı, "Kısa
+                    yolu onaylaya onaylaya (kesinleştirerek) genişlemek" mantığına dayanıyor.</p>
+                <button class="btn" id="reveal-btn">Çözümü Göster ↓</button>
+            </div>
+
+            <div class="solution-section blurred" id="solution-section">
+                <h3>Çözüm: Dijkstra Algoritması</h3>
+                <p>Bilgisayar bilimcisi Edsger W. Dijkstra, bu sorunu çözmek için (Açgözlü / Greedy yaklaşımlı ama
+                    optimum) muhteşem bir algoritma yazdı:</p>
+                <ol>
+                    <li>Başlangıç noktamıza (A) 0 maliyet, diğer dünyadaki tüm kavşaklara "Sonsuz" (Geçici) maliyet
+                        yazılır.</li>
+                    <li>Sıfır maliyetli A noktasından komşu kavşaklara olan mesafelere/maliyetlere bakılır. Eğer A'dan
+                        komşuya gitme maliyeti, o komşu üzerindeki mevcut maliyetten (başta sonsuzdu) daha küçükse, o
+                        komşunun maliyeti güncellenir.</li>
+                    <li>Matematiksel kesinlik: Haritada henüz bakılmayan (geçici) düğümler (kavşaklar) arasında
+                        <strong>üzerinde yazan sayı EN KÜÇÜK (en yakın) olan kavşak seçilir</strong>. Seçilen bu kavşağa
+                        daha kısa (negatif ayrıtlar hariç) yoldan gelinebilmesi imkansızdır. Bu kavşak KESİNLEŞİR
+                        (Permanent).</li>
+                    <li>Kesinleşen bu yeni kavşağın komşularına bakılır. Adım 2 tekrarlanır. Su damlasının yavaş yavaş
+                        halkalar halinde etrafa yayılması gibi en yakınlar kesinleşe kesinleşe Hedef (B) noktasına
+                        ulaşılır.</li>
+                </ol>
+                <p>Böylece trilyonlarca rotayı kontrol etmek yerine oldukça hızlı (ve kesin) bir şekilde en mantıklı
+                    rota bulunur.</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Dijkstra ve Optimizasyon</strong></p>
+                <p>Bu algoritma, bugün cebimizdeki Google Haritalar, Yandex, Waze gibi navigasyon sistemlerinin;
+                    internet ağındaki "Router" cihazlarının (OSPF Protokolü - verileri internette hedefe ulaştırma)
+                    altında yatan matematiksel beynin bizzat kendisidir. İleri seviye versiyonları A* (A-Star)
+                    algoritması gibi yapılarla robot süpürgelerde veya oyun motorlarındaki NPC'lerde (yapay zeka) yön
+                    bulma (Pathfinding) için kullanılır.</p>
+            </div>
+
+            <div class="next-problem-container">
+                <div></div>
+                <a href="ciftci-tilki-tavuk.html" class="next-problem-link">Sıradaki Problem ➡️</a>
+            </div>
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

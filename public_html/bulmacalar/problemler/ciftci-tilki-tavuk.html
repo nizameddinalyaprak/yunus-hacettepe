@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çiftçi, Tilki, Tavuk ve Tahıl | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .river-scene {
+            background: linear-gradient(to bottom, #1e293b 0%, #0ea5e9 40%, #0284c7 60%, #1e293b 100%);
+            border-radius: 12px;
+            padding: 3rem;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .bank {
+            background: #4d7c0f;
+            padding: 1rem;
+            border-radius: 8px;
+            width: 100px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .boat {
+            background: #854d0e;
+            width: 80px;
+            height: 40px;
+            border-radius: 4px 4px 20px 20px;
+            position: absolute;
+            left: 120px;
+            bottom: 30%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+        }
+
+        .item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Algoritmik Düşünce</span>
+            <h1 style="font-size: 3rem;">Çiftçi, Tilki ve Tavuk</h1>
+        </header>
+
+        <div class="content-body">
+            <div class="story-section">
+                <p>Bir çiftçi nehri geçmek zorundadır. Yanında bir tilki (🐺), bir tavuk (🐔) ve bir çuval tahıl (🌾)
+                    vardır.</p>
+                <p>Ancak kayık çok küçüktür ve <strong>çiftçi yanına sadece 1 tanesini alabilir.</strong></p>
+                <p>Tehlike kuralları şunlardır:</p>
+                <ul>
+                    <li>Eğer çiftçi yanlarında değilken <strong>Tilki ve Tavuk</strong> baş başa kalırsa, Tilki tavuğu
+                        yer!</li>
+                    <li>Eğer çiftçi yanlarında değilken <strong>Tavuk ve Tahıl</strong> baş başa kalırsa, Tavuk tahılı
+                        yer!</li>
+                </ul>
+                <p>Çiftçi hiçbir zayiat vermeden, üçünü birden nehrin karşı kıyısına nasıl geçirebilir?</p>
+            </div>
+
+            <div class="interactive-widget">
+                <h3 style="color: #e2e8f0; margin-bottom: 1rem;">Nehir Sahnesi</h3>
+                <div class="river-scene">
+                    <div class="bank" id="left-bank">
+                        <div class="item">👨‍🌾</div>
+                        <div class="item">🐺</div>
+                        <div class="item">🐔</div>
+                        <div class="item">🌾</div>
+                    </div>
+                    <div class="boat">🚣</div>
+                    <div class="bank" id="right-bank">
+                        <!-- Empty at start -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="poll-container" id="poll-container" data-problem-id="ciftci-tilki-tavuk">
+                <h3 class="poll-title">Çözümü Bulabildiniz Mi?</h3>
+                <div class="poll-buttons">
+                    <button class="poll-btn btn-success" id="btn-poll-success">Kendim Buldum 🎯</button>
+                    <button class="poll-btn btn-fail" id="btn-poll-fail">Bulamadım, Zor 🤯</button>
+                </div>
+                <div class="poll-results" id="poll-results">
+                    <p id="poll-stat"></p>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Durum Uzayı Ağaçları</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">İnsan beyni bu soruyu
+                    "ileri-geri" hayal ederek deneme yanılmayla kısa sürede bulabilir. Peki ama bunu bir yapay zekaya
+                    (bilgisayara) nasıl öğretebiliriz?</p>
+                <button class="btn" id="reveal-btn">Çözümü ve Algoritmasını Göster ↓</button>
+            </div>
+
+            <div class="solution-section blurred" id="solution-section">
+                <h3>Çözüm: Durum Uzayı Araması (State Space Search)</h3>
+                <p>İşin günlük hayattaki çözümü klasiktir:</p>
+                <ol>
+                    <li>Çiftçi önce Tavuğu karşıya geçirir (Tavuk geçince, tilki tahılı yemez).</li>
+                    <li>Çiftçi boş döner. Sonra Tilkiyi karşıya geçirir.</li>
+                    <li><strong>KRİTİK HAMLE:</strong> Çiftçi tilkiyi karşıda bırakır ama <strong>Tavuğu geri
+                            getirir!</strong> (Yoksa tilki tavuğu yer).</li>
+                    <li>Tavuğu başlangıç noktasına bırakır, Tahılı alır, karşıya (Tilkinin yanına) geçirir.</li>
+                    <li>Çiftçi boş döner ve son olarak yalnız bekleyen Tavuğu da karşıya geçirir. Herkes güvendedir!
+                    </li>
+                </ol>
+                <p><strong>Bilgisayar Bunu Nasıl Çözer? (Genişlik Öncelikli Arama - BFS)</strong></p>
+                <p>Yapay zeka bu problemi bir <strong>"Durum Ağacı" (State Tree)</strong> olarak çizer. Her bir pozisyon
+                    bir "Düğüm" (Node) olur. Örneğin "Sol yaka: Çiftçi, Tavuk, Tilki, Sağ yaka: Tahıl" bir Düğüm
+                    noktasıdır.</p>
+                <p>Bilgisayar BFS algoritmasını kullanarak ağacı yukarıdan aşağıya tarar. Kurallara aykırı olan
+                    düğümleri (Tavuk ve Tilki yalnız) budayarak <strong>"Geçersiz (Dead-end)"</strong> olarak işaretler.
+                    Kalan geçerli yollarda dallanmaya devam eder ve BFS doğası gereği sizi Çözüm Düğümüne ulaştıran
+                    <strong>en kısa yolu (minimum hamleyi)</strong> garanti ederek bulur.</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Yapay Zeka ve Durum Ağaçları</strong></p>
+                <p>Eski çağlardan (9. Yüzyıl) kalma bu nehir geçme bulmacası, bugün Modern Yapay Zeka (AI)
+                    Algoritmalarının "Planning (Planlama)" ve "Search (Arama)" algoritmalarının temel öğretilerinden
+                    birisidir. Satranç motorları bile bir sonraki hamleyi aynı bu "Arama Ağacı" mantığıyla, ancak
+                    milyonlarca durum arasından (Minimax algoritmasıyla) analiz ederek seçerler.</p>
+            </div>
+
+            <div class="next-problem-container">
+                <div></div>
+                <a href="iki-kule-cekic.html" class="next-problem-link">Sıradaki Problem ➡️</a>
+            </div>
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

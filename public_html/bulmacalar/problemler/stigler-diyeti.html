@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stigler’in Diyet Problemi | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Optimizasyon ve Yöneylem</span>
+            <h1 style="font-size: 3rem;">Stigler’in Diyet Problemi</h1>
+        </header>
+
+        <div class="content-body">
+            <div class="story-section">
+                <p>Yıl 1939. Amerikan ordusu II. Dünya Savaşı'nda askerlerini hem en sağlıklı hem de <strong>en
+                        ucuza</strong> nasıl besleyeceğini bulmaya çalışır.</p>
+                <p>Piyasada buğday, süt, et, lahana gibi tam 77 farklı gıda maddesi bulunmaktadır ve bir askerin günlük
+                    alması gereken temel 9 vitamin/mineral ile minimum kalori sınırları mevcuttur.</p>
+                <p>O dönemki fiyatlar üzerinden askerin günlük menüsü <strong>minimum maliyetle</strong> (bütün besin
+                    ihtiyaçlarını karşılayacak şekilde) nasıl oluşturulmalıdır?</p>
+            </div>
+
+            <div class="interactive-widget">
+                <svg width="200" height="200" viewBox="0 0 100 100">
+                    <rect x="20" y="40" width="60" height="40" fill="rgba(168,85,247,0.2)" stroke="#a855f7"
+                        stroke-width="2" />
+                    <circle cx="50" cy="50" r="15" fill="#10b981" />
+                    <path d="M50 35 L50 65 M35 50 L65 50" stroke="white" stroke-width="2" />
+                </svg>
+                <p style="margin-top: 1rem; color: #cbd5e1; text-align: center;">Yüzlerce denklem ve kısıt, henüz
+                    "Bilgisayar" ve "Simpleks Algoritması" ortada yokken nasıl çözülebilir?</p>
+            </div>
+
+            <div class="poll-container" id="poll-container" data-problem-id="stigler-diyeti">
+                <h3 class="poll-title">Çözümü Bulabildiniz Mi?</h3>
+                <div class="poll-buttons">
+                    <button class="poll-btn btn-success" id="btn-poll-success">Kendim Buldum 🎯</button>
+                    <button class="poll-btn btn-fail" id="btn-poll-fail">Bulamadım, Zor 🤯</button>
+                </div>
+                <div class="poll-results" id="poll-results">
+                    <p id="poll-stat"></p>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">İnsan Aklının Sınırları</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">George Stigler adeta
+                    karanlıkta iğne arayarak "sezgisel" bir listeyle bir çözüm üretti. Sence bilgisayar icat edildikten
+                    sonra onun bulduğu çözümle bilgisayarın bulduğu mutlak optimum çözüm arasında ne kadar maliyet farkı
+                    çıkmıştır?</p>
+                <button class="btn" id="reveal-btn">Çözümü Göster ↓</button>
+            </div>
+
+            <div class="solution-section blurred" id="solution-section">
+                <h3>Çözüm: Simpleks’e Karşı İnsan Zekası</h3>
+                <p>George Stigler, tam haftalar (veya aylarca) süren yoğun el hesaplamaları ve deneme yanılma
+                    yöntemleriyle (sezgisel - heuristic) askerin günlük gıda maliyetini <strong>yıllık sadece
+                        $39.93</strong> olarak sınırlandıran bir diyet listesi ortaya çıkardı. Formülü buğday unu,
+                    buharlaşmış süt, lahana, ıspanak ve kuru fasulyeden oluşuyordu.</p>
+                <p>Bir on yıl sonra, modern optimizasyonun dehası George Dantzig "Simpleks Algoritmasını" keşfettiğinde
+                    ve ilk devasa bilgisayarlar bu 77 değişkenli, 9 kısıtlı dev modeli çalıştırdığında, makinenin
+                    bulduğu en mükemmel (mutlak optimum) sonuç <strong>yıllık $39.69</strong> olarak hesaplandı.</p>
+                <p>Evet, bir insan zekasının haftalarca uğraşıp bulduğu 77 değişkenli sonuçla, bir süperbilgisayarın
+                    bulduğu matematiksel gerçeklik arasında <strong>yılda sadece 24 cent'lik</strong> bir fark vardı!
+                    Stigler bu başarısıyla doğrusal programlamanın Starihteki en meşhur "el ile çözüm" vakasına imza
+                    atmıştır ve sonrasında Nobel Ekonomi ödülü kazanmıştır.</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Doğrusal Programlama (Linear Programming)</strong></p>
+                <p>Biz bu problemi Sayısal Yöntemler alanında Doğrusal Programlama'nın ve Diyet (Karışım) problemlerinin
+                    en klasik örneği olarak inceleriz. Aslında bu sadece askeri bir beslenme tablosu değil; bugün
+                    rafineri fabrikalarının ham petrolü işleyip benzin-dizel yüzdelerini belirlemesinde veya büyük
+                    lojistik taşıma kapasitesi analizlerinde kullanılan devasa matematiğin temeli ve kıvılcımıdır.</p>
+            </div>
+
+            <div class="next-problem-container">
+                <div></div>
+                <a href="colde-arac.html" class="next-problem-link">Sıradaki Problem ➡️</a>
+            </div>
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İki Kule ve Çekiç Problemi | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Algoritmik Düşünce</span>
+            <h1 style="font-size: 3rem;">İki Kule ve Çekiç Problemi</h1>
+        </header>
+
+        <div class="content-body">
+            <div class="story-section">
+                <p>Bu problem, ünlü "100 Katlı Bina ve İki Yumurta" probleminin malzeme bilimi uyarlaması ve daha
+                    ekstrem bir versiyonudur.</p>
+                <p>Elinizde iki devasa çelik kule var (Kule A ve Kule B). İkisinin de yüksekliği bilinmiyor ve yapıları
+                    farklı olabilir.</p>
+                <p>Ayrıca elinizde sadece <strong>10 adet Çekiç</strong> var.</p>
+                <p>Amacınız bu 10 çekici öyle stratejik kullanarak Kule A ve Kule B'ye vuracaksınız ki, çekicin ne kadar
+                    güç uygularsa kırılacağını bulmak istiyorsunuz. Kule A için dayanıklılık eşiğini, Kule B için
+                    dayanıklılık eşiğini test etmelisiniz ancak çekiç test esnasında kırılabiliyor ve kırılan çekici bir
+                    daha kullanamıyorsunuz.</p>
+                <p>Peki ya 10 çelik çekicin kırılmadan dayanabileceği kuvvetleri matematiksel olarak test etmenin "En
+                    Kötü Senaryoda Bile (Worst Case) Maksimum Kesinlik Sağlayan" ağaç yapısı nasıldır?</p>
+            </div>
+
+            <div class="poll-container" id="poll-container" data-problem-id="iki-kule-cekic">
+                <h3 class="poll-title">Çözümü Bulabildiniz Mi?</h3>
+                <div class="poll-buttons">
+                    <button class="poll-btn btn-success" id="btn-poll-success">Kendim Buldum 🎯</button>
+                    <button class="poll-btn btn-fail" id="btn-poll-fail">Bulamadım, Zor 🤯</button>
+                </div>
+                <div class="poll-results" id="poll-results">
+                    <p id="poll-stat"></p>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Minimax Yaklaşımı</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">İki yumurta probleminde
+                    olduğu gibi, kaynakların kısıtlı olması, doğrusal test (tek tek 1'den başlama) yerine daha zekice
+                    bir "aralık atlama (step interval)" mekanizması gerektirir. Burada "En kötü ihtimalle yaşayacağımız
+                    maliyeti (deneme sayısını) minimuma çekme" yani Minimax taktiği konuşur.</p>
+                <button class="btn" id="reveal-btn">Çözümü Göster ↓</button>
+            </div>
+
+            <div class="solution-section blurred" id="solution-section">
+                <h3>Çözüm: Dinamik Aralık Küçültme</h3>
+                <p>100 katlı binadaki iki yumurta problemiyle aynı Dinamik Programlama matematiğine sahiptir. Oradaki "x
+                    + (x-1) + (x-2)... = 100" mantığı burada iki kule için çapraz denendiğinde; atış aralıklarını veya
+                    darbe şiddetlerini kaba-mertebeli testlerden hassa testlere doğru asimptotik olarak küçültürüz.</p>
+                <p>Örneğin ilk çekici %14 güçle, ikincisini %27, üçüncüsünü %39 güçle (azalan aralıklarla) kulelere
+                    vururuz. Eğer %39'da çekiç kırılırsa, elimizdeki diğer çekiçlerle ve çok kısıtlı marjla %28 ile %38
+                    arasındaki her gücü tek tek (doğrusal) test etmek zorunda kalırız.</p>
+                <p>Bu matematiksel ayarlama (azalan basamaklar serisi), "en kötü senaryoda bile en az atış/vuruşla"
+                    malzemenin kırılma limitini tam doğrulukla tespit etmemizi sağlayan tek yöntemdir.</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Minimax Stratejisi ve Karar Ağaçları</strong></p>
+                <p>Bu problemler oyun teorisindeki Minimax (Maksimum kaybı minimize etme) kavramının endüstriyel
+                    mühendislik ve algoritma tasarımı (Bilgisayar bilimlerindeki Worst-Case Big-O Notation analizi)
+                    yansımasıdır. Riskten kaçınmayı ve en verimli algoritmayı aynı anda gözetir.</p>
+            </div>
+
+            <div class="next-problem-container">
+                <div></div>
+                <a href="dogum-gunu-paradoksu.html" class="next-problem-link">Sıradaki Problem ➡️</a>
+            </div>
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+</body>
+
+</html>
