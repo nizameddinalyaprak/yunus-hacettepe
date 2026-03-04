@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kesme-Stok Problemi | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .roll-container {
+            width: 100%;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            position: relative;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .cut-piece {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+            border-right: 2px dashed rgba(255, 255, 255, 0.5);
+        }
+
+        .cut-waste {
+            height: 100%;
+            background: repeating-linear-gradient(45deg,
+                    rgba(239, 68, 68, 0.2),
+                    rgba(239, 68, 68, 0.2) 10px,
+                    rgba(239, 68, 68, 0.4) 10px,
+                    rgba(239, 68, 68, 0.4) 20px);
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ef4444;
+            font-weight: 700;
+        }
+
+        .pattern-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--accent);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+        }
+
+        .pattern-btn:hover,
+        .pattern-btn.active {
+            background: var(--accent);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Optimizasyon Problemi</span>
+            <h1 style="font-size: 3rem;">Kesme-Stok Problemi <span
+                    style="color: var(--text-muted); font-size: 1.5rem;">(Cutting Stock)</span></h1>
+        </header>
+
+        <div class="content-body">
+
+            <div class="story-section">
+                <p>Devasa bir kağıt üretim fabrikasının yöneticisisiniz. Fabrikada üretilen standart kağıt (veya
+                    metal/kumaş) rulolarının uzunluğu standart <strong>100 metredir</strong>.</p>
+                <p>Bir matbaa şirketinden sipariş aldınız. Matbaa sizden farklı ölçülerde rulolar istiyor: 35 metrelik
+                    rulolardan 5 adet, 45 metrelik rulolardan 3 adet vb.</p>
+                <p>Sorun şurada: 100 metrelik dev ruloyu keserken geriye kalan ufak parçalar işe yaramamakta ve doğrudan
+                    çöpe (fireye / zayiata) gitmektedir. Fabrika müdürü olarak siparişleri karşılarken <strong>fire
+                        miktarını minimuma indirmeniz</strong> gerekmektedir.</p>
+            </div>
+
+            <!-- Interactive Component -->
+            <div class="interactive-widget">
+                <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Kesim Şablonunu Seçin (Standart Rulo: 100m)</h3>
+                <p style="color: var(--text-muted); text-align: center; margin-bottom: 2rem;">Müşterinin 35m ve 45m
+                    rulolara ihtiyacı var. Bir adet 100m ruloyu nasıl keserseniz en az kağıdı çöpe atmış olursunuz?</p>
+
+                <div class="roll-container" id="visual-roll">
+                    <!-- Default state -->
+                    <div
+                        style="width: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                        Henüz bir kesim şablonu seçilmedi (100m Bütün Rulo)</div>
+                </div>
+
+                <div style="text-align: center;">
+                    <button class="pattern-btn" onclick="applyPattern([45, 45], 10)">Şablon 1 (45m + 45m)</button>
+                    <button class="pattern-btn" onclick="applyPattern([35, 35, 35], -5)"
+                        style="background: rgba(239, 68, 68, 0.2); border-color: #ef4444;">Şablon 2 (35m + 35m + 35m) ❌
+                        Sığmaz!</button>
+                    <button class="pattern-btn" onclick="applyPattern([45, 35], 20)">Şablon 3 (45m + 35m)</button>
+                    <button class="pattern-btn" onclick="applyPattern([35, 35], 30)">Şablon 4 (35m + 35m)</button>
+                </div>
+                <div id="waste-display"
+                    style="margin-top: 1.5rem; font-size: 1.2rem; font-weight: 700; color: #10b981;"></div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Binlerce Rulo Olunca Ne Olacak?</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">Elde edilen fire (çöp)
+                    miktarını ekranda gördünüz. Sadece iyi bir kesim planıyla bile milyonlarca lira kâr edebilirsiniz.
+                    Tek bir rulo için en az fireyi veren şablonu bulmak çok kolayken, yüzlerce farklı sipariş ölçüsünü
+                    binlerce rulo içerisine sığdırmak insan zekasının sınırlarını zorlar.</p>
+                <button class="btn" id="reveal-btn">Çözümü ve Algoritmayı Göster ↓</button>
+            </div>
+
+            <div class="solution-section" id="solution-section">
+                <h3>Çözüm: Kolon Üretimi Algoritması (Column Generation)</h3>
+                <p>Elinizdeki iki-üç siparişi bir ruloya sığdırmak elbette kolaydır (Örn: 45m + 45m = 90m yapar ve
+                    sadece 10m çöpe gider). Ancak büyük fabrikalarda yüzlerce farklı sipariş çeşidi gelir. O zaman tüm
+                    olası "Kesim Şablonlarını" listelememiz ve hangi şablondan kaç tane kesmemiz gerektiğini
+                    hesaplamamız gerekir.</p>
+                <p>Tüm şablonları listelemek milyarlarca kombinasyon demektir ve bilgisayarlar patlar. Rus matematikçi
+                    Kantorovich tarafından 1939'da temelleri atılan ve Gilmore-Gomory tarafından geliştirilen
+                    <strong>Sütun/Kolon Üretimi (Column Generation)</strong> tekniği, sadece kârlı/işe yarar şablonları
+                    (kolonları) sıfırdan üreterek problemi çözer. Aksi halde fabrika her gün onlarca ton demiri veya
+                    kağıdı çöpe atıyor olurdu!</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Buna literatürde "Kesme-Stok Problemi (Cutting Stock Problem - CSP)" diyoruz.</strong></p>
+                <p>Doğrusal ve Tamsayılı programlamanın endüstriye doğrudan 1'e 1 katkı sağladığı en somut örnektir.
+                    Kağıt üreticilerinden, tekstil fabrikalarındaki kalıp kesimlerine (2D Bin Packing), hatta bilgisayar
+                    hafıza yönetim birimlerine kadar her yerde inanılmaz bir israftan kaçınmamızı sağlar. Bazen %1'lik
+                    bir iyileşme bile yıllık milyarlarca dolara tekabül eder.</p>
+            </div>
+
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+
+    <script>
+        function applyPattern(pieces, waste) {
+            const container = document.getElementById('visual-roll');
+            const wasteText = document.getElementById('waste-display');
+
+            // Highlight active button
+            document.querySelectorAll('.pattern-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (waste < 0) {
+                container.innerHTML = `<div style="width: 100%; display: flex; align-items: center; justify-content: center; color: #ef4444; font-weight:700;">HATA! ${Math.abs(waste)}m Taştı. Ruloya Sığmaz!</div>`;
+                container.style.borderColor = '#ef4444';
+                wasteText.innerHTML = "Geçersiz Şablon Seçimi ⛔";
+                wasteText.style.color = "#ef4444";
+                return;
+            }
+
+            container.style.borderColor = 'rgba(255,255,255,0.2)';
+            let html = '';
+            const colors = ['#3b82f6', '#8b5cf6', '#ec4899'];
+
+            pieces.forEach((piece, index) => {
+                html += `<div class="cut-piece" style="width: ${piece}%; background: ${colors[index % colors.length]};">${piece}m Müşteri</div>`;
+            });
+
+            if (waste > 0) {
+                html += `<div class="cut-waste" style="width: ${waste}%;">${waste}m Fire</div>`;
+            }
+
+            container.innerHTML = html;
+            wasteText.innerHTML = `Sadece ${waste} Metre Kağıt Çöpe Gitti!`;
+            wasteText.style.color = waste === 10 ? "#10b981" : "#fbbf24";
+        }
+    </script>
+</body>
+
+</html>

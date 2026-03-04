@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacettepe API Test Formu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 500px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>🎯 Veritabanı ve Yükleme Testi</h2>
+        <p>Bu form doğrudan Hacettepe sunucunuzdaki <b>api.php</b> dosyasına veri gönderecektir.</p>
+
+        <!-- Action kısmı GÜNCELLENDİ (https ve nokta eklendi) -->
+        <form action="https://yunus.hacettepe.edu.tr/~nizameddin.alyaprak/api.php" method="POST"
+            enctype="multipart/form-data">
+
+            <label for="isim">Adınız Soyadınız:</label>
+            <input type="text" id="isim" name="isim" value="Yapay Zeka Test Kullanıcısı" required>
+
+            <label for="mesaj">Mesajınız:</label>
+            <input type="text" id="mesaj" name="mesaj" value="Bu mesaj doğrudan veritabanına kaydedilecek!" required>
+
+            <label for="fotograf">Bir Fotoğraf Seçin:</label>
+            <input type="file" id="fotograf" name="fotograf" accept="image/*" required>
+
+            <input type="submit" value="Test Et ve Gönder">
+        </form>
+    </div>
+
+</body>
+
+</html>

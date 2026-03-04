@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Mahkum Problemi | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .prison-yard {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--card-border);
+            text-align: center;
+        }
+
+        .box-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .box {
+            background: #1e293b;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-weight: 800;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .box:hover {
+            background: #334155;
+            transform: translateY(-3px);
+            border-color: #60a5fa;
+        }
+
+        .box.opened {
+            background: var(--bg-dark);
+            cursor: default;
+            transform: none;
+            border-color: #94a3b8;
+            color: var(--accent);
+        }
+
+        .box.target-found {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .box.failed {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .box::after {
+            content: attr(data-index);
+            position: absolute;
+            top: -10px;
+            right: -5px;
+            background: var(--bg-dark);
+            font-size: 0.6rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #334155;
+            color: #cbd5e1;
+        }
+
+        .hud {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+
+        #game-msg {
+            min-height: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Olasılık ve İstatistik</span>
+            <h1 style="font-size: 3rem;">100 Mahkum Problemi</h1>
+        </header>
+
+        <div class="content-body">
+
+            <div class="story-section">
+                <p>Bir hapishanede 1’den 100’e kadar numaralandırılmış <strong>100 mahkum</strong> var. Zalim müdür
+                    onlara affedilmeleri için son bir şans (ve korkunç bir oyun) sunuyor.</p>
+                <p>Müdür bir odaya 1'den 100'e kadar numaralandırılmış 100 adet kutu koyuyor. Her kutunun içine 1'den
+                    100'e kadar olan numaraları rastgele, her kutuya bir numara gelecek şekilde gizliyor.</p>
+                <p>Mahkumlar tek tek odaya girecek. Her mahkumun <strong>tam olarak 50 kutu (yarısını)</strong> açma
+                    hakkı var. Eğer 50 hakkında <strong style="color:#fbbf24;">kendi numarasını bulursa</strong>
+                    yaşayacak. İçeri giren mahkumların çıktıktan sonra dışarıdakilerle iletişim kurması YASAK.</p>
+                <p>Kritik Kural: <strong>100 mahkumun 100'ü de kendi numarasını bulmak ZORUNDA.</strong> Eğer içlerinden
+                    TEK BİR KİŞİ BİLE bulamazsa 100'ü birden idam edilecek. Bu oyunda 100 kişinin kurtulma şansı nedir?
+                </p>
+            </div>
+
+            <div class="interactive-widget">
+                <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Mini Simülatör (10 Mahkum / 5 Kutu Açma Hakkı)</h3>
+                <p style="color: var(--text-muted); text-align: center; margin-bottom: 1rem;">Oyunun mantığını 10 kişi
+                    üzerinden deneyelim. Siz "Mahkum 3.sünüz" ve kendi numaranız "3"ü en fazla 5 kutu açarak
+                    bulmalısınız.</p>
+
+                <div class="prison-yard">
+
+                    <div class="hud">
+                        <div>Senin Numaran: <strong style="color:#fbbf24;">3</strong></div>
+                        <div>Kalan Hakkın: <strong style="color:#ef4444;" id="lives-left">5</strong> / 5</div>
+                    </div>
+
+                    <div id="game-msg">Rastgele Dağıtılmış 10 Kutu. Birine tıklayarak aç! (Üst köşedeki numara Kutunun
+                        numarası)</div>
+
+                    <div class="box-grid" id="boxes-container">
+                        <!-- Boxes populated by JS -->
+                    </div>
+
+                    <div style="margin-top:2rem;">
+                        <button class="filter-btn active" id="reset-btn" onclick="initGame()">Tekrar Dene</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Rastgele Seçimler İmkansızı Getirir</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">Eğer mahkumlar kutuları
+                    tamamen şansa, rastgele açarlarsa, her birinin başarı şansı 1/2'dir (kutuların yarısını açıyor).
+                    Ancak 100'ünün BİRDEN başarılı olma ihtimali: (1/2) ^ 100 = <strong>%
+                        0.0000000000000000000000000000008!</strong> Evrendeki en şanslı organizma olsalar dahi bunu
+                    başaramazlar. Peki matematiksel bir "Kural (Algoritma)" uygulayarak oranı nasıl
+                    <strong>%31.18</strong> gibi akıl almaz bir seviyeye çıkardılar?</p>
+                <button class="btn" id="reveal-btn">Çözümü ve Döngü Algoritmasını Göster ↓</button>
+            </div>
+
+            <div class="solution-section" id="solution-section">
+                <h3>Çözüm: Permütasyon Döngüleri (Pointer Algorithm)</h3>
+                <p>Mahkumlar idamdan bir gece önce hücrelerinde gizlice şu plana (algoritmaya) karar verirler:</p>
+                <ol>
+                    <li>Mahkum numarası Kaçsa (Örn 3), odaya girince önce <strong>Üzerinde 3 yazan Kutuyu</strong>
+                        açacaktır.</li>
+                    <li>3 Nolu kutunun içinden Atıyorum "7" numarası çıktı.</li>
+                    <li>O zaman ikinci açacağı kutu, <strong>Üzerinde 7 yazan Kutu</strong> olacaktır!</li>
+                    <li>7 Numaralı kutudan "2" çıkarsa, 2 numaralı kutuya gider.</li>
+                </ol>
+                <p>Bu çok zekice bir harekettir çünkü kutuların içindeki kağıtlar "rastgele" değildi. Hepsinden 1 tane
+                    vardı. Aslında ortada Kapalı Döngüler (Cycles) vardır. Eninde sonunda o zincire girdiğinizde mutlaka
+                    "kendi numaranızı" bulursunuz.</p>
+                <p>Bu algoritma uygulandığında oyunun kaderi değişir: Artık soru "Herkes tek tek bulabilecek mi"
+                    değildir. Soru şuna dönüşür: <strong>"Acaba kutular dağıtılırken, 50 halkadan daha uzun tek bir
+                        zincir döngü oluşmuş mudur?"</strong> Matematiksel hesaplamalara göre 100 kutuda 50'den uzun
+                    zincir oluşma olasılığı yaklaşık %69'dur. Eğer oluşmamışsa (Kalan %31), her bir mahkum o kısa
+                    zincirlerdeki turunu en fazla 50 hakta tamamlayacak ve kendi numarasını ZİNCİRLEME olarak
+                    bulacaktır!</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Graf Teorisi (Graph Theory) ve Permütasyon Grupları</strong></p>
+                <p>Danimarkalı P.B. Miltersen tarafından 2003'te ortaya atılan bu problem, bilgisayar bilimleri veri
+                    yapıları derslerindeki Pointer (İşaretçi) takibinin temel felsefesini anlatır. Problemi
+                    rastlantısallıktan kurala, "Bağımsız Olasılıklardan -> Ortak Bir Bağımlılığa" dönüştüren kusursuz
+                    bir strateji (Pointer takip zinciri) sunar.</p>
+            </div>
+
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const totalBoxes = 10;
+        const maxLives = 5;
+        const targetNumber = 3; // The player is prisoner 3
+
+        let boxes = [];
+        let lives = maxLives;
+        let gameState = 'playing';
+
+        function initGame() {
+            // Shuffle 1 to 10
+            let nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+            for (let i = nums.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [nums[i], nums[j]] = [nums[j], nums[i]];
+            }
+            boxes = nums;
+            lives = maxLives;
+            gameState = 'playing';
+
+            document.getElementById('lives-left').innerText = lives;
+            document.getElementById('game-msg').innerHTML = 'Rastgele Dağıtılmış 10 Kutu. Birine tıklayarak aç! (Üst köşedeki numara Kutunun numarası)';
+
+            const container = document.getElementById('boxes-container');
+            container.innerHTML = '';
+
+            for (let i = 0; i < totalBoxes; i++) {
+                let box = document.createElement('div');
+                box.className = 'box';
+                box.setAttribute('data-index', i + 1);
+                box.innerHTML = '❓';
+                box.onclick = () => openBox(i, box);
+                container.appendChild(box);
+            }
+        }
+
+        function openBox(index, element) {
+            if (gameState !== 'playing' || element.classList.contains('opened')) return;
+
+            lives--;
+            document.getElementById('lives-left').innerText = lives;
+
+            let numberInside = boxes[index];
+            element.classList.add('opened');
+            element.innerHTML = numberInside;
+
+            const msg = document.getElementById('game-msg');
+
+            if (numberInside === targetNumber) {
+                element.classList.add('target-found');
+                msg.innerHTML = `<span style="color:#10b981;">Tebrikler! ${maxLives - lives}. hakkında kendi numaranı (${targetNumber}) buldun! Kurtuldun!</span>`;
+                gameState = 'won';
+            } else if (lives <= 0) {
+                element.classList.add('failed');
+                msg.innerHTML = `<span style="color:#ef4444;">Eyvah! Bütün hakların bitti. İdam edileceksin!</span>`;
+                gameState = 'lost';
+            } else {
+                msg.innerHTML = `Kutudan ${numberInside} çıktı. Kalan hakkın: ${lives}. Çıkan numaralı kutuya basarak Zincir Kuralını uygula!`;
+            }
+        }
+
+        initGame();
+    </script>
+</body>
+
+</html>

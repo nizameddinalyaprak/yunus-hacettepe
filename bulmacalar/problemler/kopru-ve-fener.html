@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Köprü ve El Feneri Problemi | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .bridge-game {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px inset rgba(255, 255, 255, 0.1);
+        }
+
+        .landscape {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 200px;
+            position: relative;
+        }
+
+        .side {
+            width: 30%;
+            height: 100%;
+            background: #0f172a;
+            border-top: 4px solid #10b981;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 10px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .bridge {
+            width: 40%;
+            height: 20px;
+            background: #78350f;
+            border-top: 2px dashed #d97706;
+            border-bottom: 2px dashed #d97706;
+            position: relative;
+        }
+
+        .person {
+            width: 50px;
+            height: 60px;
+            background: #334155;
+            border: 2px solid #94a3b8;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .person.selected {
+            transform: translateY(-10px);
+            border-color: #fbbf24;
+            background: #475569;
+        }
+
+        .person-time {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .person-label {
+            font-size: 0.7rem;
+            color: #cbd5e1;
+        }
+
+        .flashlight {
+            position: absolute;
+            top: -40px;
+            font-size: 2rem;
+            transition: left 0.5s ease;
+        }
+
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-family: var(--font-heading);
+            color: #fbbf24;
+            font-weight: 800;
+        }
+
+        .timer.danger {
+            color: #ef4444;
+        }
+
+        #game-msg {
+            text-align: center;
+            height: 30px;
+            font-weight: 700;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .action-row {
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Algoritmik Düşünce</span>
+            <h1 style="font-size: 3rem;">Köprü ve El Feneri Problemi</h1>
+        </header>
+
+        <div class="content-body">
+
+            <div class="story-section">
+                <p>Zombilerden kaçan 4 kişilik bir grup, gece vakti derin bir uçurumun üzerindeki eski, çürük bir asma
+                    köprüye ulaştı. Köprü o kadar zayıf ki <strong>aynı anda en fazla 2 kişiyi</strong> taşıyabiliyor.
+                </p>
+                <p>Gece zifiri karanlık olduğu için köprüden geçerken ellerinde mutlaka bir <strong>el feneri</strong>
+                    olmak zorunda. (Yani gruptan biri karşıya geçtikten sonra feneri geri getirmeli ki diğerleri
+                    geçebilsin. Feneri karşıdan karşıya atamazlar).</p>
+                <p>Gruptakilerin yaşları ve kondisyonları farklı olduğu için köprüyü geçiş süreleri de farklıdır:
+                    <strong>1 dakika, 2 dakika, 5 dakika ve 10 dakika.</strong> İki kişi köprüye çıktığında hızları
+                    mecburen <strong style="color:#ef4444;">daha yavaş olanın hızına</strong> düşmektedir. (Örneğin 1 dk
+                    ve 10 dk'lık kişiler beraber geçerse 10 dakika sürer).</p>
+            </div>
+
+            <!-- Interactive Component -->
+            <div class="interactive-widget">
+                <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Sadece 17 Dakikanız Var. Oyunu Oynayın!</h3>
+                <p style="color: var(--text-muted); text-align: center; margin-bottom: 1rem;">Kişilerin üzerine
+                    tıklayarak seçin. Sonra "Geç" butonuna basın. Zombiler tam 17 dakika sonra burada olacak!</p>
+
+                <div class="bridge-game">
+                    <div class="hud">
+                        <div style="font-size: 1.2rem;">Kalan Zamanınız azaldıkça kırmızılaşır...</div>
+                        <div class="timer" id="timer-display">00:00 / 17:00</div>
+                    </div>
+
+                    <div id="game-msg">Fener sol tarafta. Geçmesi için 2 kişi seçin.</div>
+
+                    <div class="landscape">
+                        <div class="side" id="side-left">
+                            <div class="person" data-time="1">
+                                <div class="person-time">1</div>
+                                <div class="person-label">dk</div>
+                            </div>
+                            <div class="person" data-time="2">
+                                <div class="person-time">2</div>
+                                <div class="person-label">dk</div>
+                            </div>
+                            <div class="person" data-time="5">
+                                <div class="person-time">5</div>
+                                <div class="person-label">dk</div>
+                            </div>
+                            <div class="person" data-time="10">
+                                <div class="person-time">10</div>
+                                <div class="person-label">dk</div>
+                            </div>
+                        </div>
+
+                        <div class="bridge">
+                            <div class="flashlight" id="flashlight" style="left: -30px;">🔦</div>
+                        </div>
+
+                        <div class="side" id="side-right">
+                            <!-- Arriving people here -->
+                        </div>
+                    </div>
+
+                    <div class="action-row">
+                        <button class="filter-btn active" id="action-btn" onclick="performAction()">Köprüyü Geç
+                            ➡️</button>
+                        <button class="filter-btn" onclick="resetGame()" style="margin-left: 10px;">Baştan
+                            Başla</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">"En Hızlı Olan Git/Gel Yapsın" Yanılgısı</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">İnsan zihni, en hızlı
+                    adamı (1 dakikalık) joker gibi kullanmak ister. 1 ve 2 geçer (Zaman 2). 1 döner (Zaman 3). 1 ve 5
+                    geçer (Zaman 8). 1 döner (Zaman 9). 1 ve 10 geçer (Zaman 19). <strong>Eyvah, 19 dakika
+                        oldu!</strong> Zombilere yakalandınız. 17 dakikada geçmek için bu "Hızlı Getir Götürcü"
+                    mantığını kırmanız gerekiyor. Oynamadıysanız yukarıdaki simülatörde 17 dakikayı bulmaya çalışın.</p>
+                <button class="btn" id="reveal-btn">Çözümü ve Darboğaz Yönetimini Göster ↓</button>
+            </div>
+
+            <div class="solution-section" id="solution-section">
+                <h3>Çözüm: Darboğazları Beraber Geçirmek</h3>
+                <p>Eğer 5 ve 10 dakikalık iki yavaş kişiyi ayrı ayrı geçirirsek, faturamız 15 dakika sadece onların
+                    geçişine yazılır. Bu büyük bir israftır. Bu iki yavaş kişiyi (darboğazı) köprüden <strong>aynı anda
+                        beraber geçirirsek</strong> toplam faturamız sadece daha yavaş olanınki (10 dk) olur!</p>
+                <p>İşte 17 dakikalık sihirli algoritma:</p>
+                <ol>
+                    <li>Önce en hızlı iki kişi (1 ve 2) geçer. <strong>(Süre: 2 dk)</strong></li>
+                    <li>Feneri geri getirmek için 1 (veya 2) döner. <strong>(Süre: 1 dk)</strong> Toplam: 3.</li>
+                    <li>Şimdi en yavaş ikiliyi (5 ve 10) beraber geçiririz! Onların geçişi faturaya 10 dk yazar.
+                        <strong>(Süre: 10 dk)</strong> Toplam: 13.</li>
+                    <li>Sağ tarafta 10, 5 ve 2 var. 1 ise geride kalmıştı. Sağdan feneri kim getirecek? Tabii ki hızlı
+                        olan 2 döner. <strong>(Süre: 2 dk)</strong> Toplam: 15.</li>
+                    <li>Son olarak kalan iki kişi (1 ve 2) beraber geçerler. <strong>(Süre: 2 dk)</strong>. <br>Genel
+                        Toplam: 13 + 2 + 2 = <strong>Tam 17 Dakika!</strong></li>
+                </ol>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Operasyon Yönetiminde "Darboğaz" (Bottleneck) Teorisi</strong></p>
+                <p>Bir fabrikanın üretim bandının hızı, en hızlı makinesinin hızına göre değil, <strong>en yavaş
+                        istasyonunun (darboğazın)</strong> hızına göre belirlenir. Bu bulmaca, bir projeyi programlarken
+                    (Pert-CPM Gantt çizelgeleri) darboğaz oluşturan en uzun görevleri paralel yürütmenin (5 ve 10'u
+                    beraber geçirmek) projenin genel tamamlanma süresinden (Makespan) nasıl tasarruf sağladığının
+                    mükemmel bir kanıtıdır.</p>
+            </div>
+
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+
+    <script>
+        let totalTime = 0;
+        let pLeft = [1, 2, 5, 10];
+        let pRight = [];
+        let lightIsLeft = true;
+        let selected = [];
+
+        function render() {
+            const lDiv = document.getElementById('side-left');
+            const rDiv = document.getElementById('side-right');
+            const timer = document.getElementById('timer-display');
+            const flash = document.getElementById('flashlight');
+            const btn = document.getElementById('action-btn');
+
+            lDiv.innerHTML = '';
+            rDiv.innerHTML = '';
+
+            pLeft.forEach(p => {
+                let el = document.createElement('div');
+                el.className = 'person';
+                if (selected.includes(p)) el.classList.add('selected');
+                el.innerHTML = `<div class="person-time">${p}</div><div class="person-label">dk</div>`;
+                el.onclick = () => toggleSelect(p, true);
+                lDiv.appendChild(el);
+            });
+
+            pRight.forEach(p => {
+                let el = document.createElement('div');
+                el.className = 'person';
+                if (selected.includes(p)) el.classList.add('selected');
+                el.innerHTML = `<div class="person-time">${p}</div><div class="person-label">dk</div>`;
+                el.onclick = () => toggleSelect(p, false);
+                rDiv.appendChild(el);
+            });
+
+            timer.innerText = `${totalTime.toString().padStart(2, '0')}:00 / 17:00`;
+            if (totalTime > 17) timer.classList.add('danger');
+            else timer.classList.remove('danger');
+
+            flash.style.left = lightIsLeft ? '-30px' : '100%';
+
+            if (lightIsLeft) {
+                btn.innerText = "Köprüyü Geç ➡️";
+                btn.className = "filter-btn active";
+            } else {
+                btn.innerText = "Fenerle Dön ⬅️";
+                btn.className = "filter-btn";
+                btn.style.borderColor = "#fbbf24";
+                btn.style.color = "#fbbf24";
+            }
+
+            checkEndGame();
+        }
+
+        function toggleSelect(p, isLeft) {
+            if (isLeft !== lightIsLeft) return; // Can only select from side with light
+
+            let idx = selected.indexOf(p);
+            if (idx > -1) {
+                selected.splice(idx, 1);
+            } else {
+                if (lightIsLeft && selected.length >= 2) return; // Max 2 can cross right
+                if (!lightIsLeft && selected.length >= 1) return; // Max 1 can return left
+                selected.push(p);
+            }
+            render();
+        }
+
+        function performAction() {
+            const msg = document.getElementById('game-msg');
+
+            if (lightIsLeft) {
+                if (selected.length === 0 || selected.length > 2) {
+                    msg.innerText = "Lütfen geçecek 1 veya 2 kişi seçin!"; return;
+                }
+                const timeTaken = Math.max(...selected);
+                totalTime += timeTaken;
+
+                selected.forEach(p => {
+                    pLeft.splice(pLeft.indexOf(p), 1);
+                    pRight.push(p);
+                });
+            } else {
+                if (selected.length !== 1) {
+                    msg.innerText = "Lütfen dönecek 1 kişi seçin!"; return;
+                }
+                const timeTaken = selected[0];
+                totalTime += timeTaken;
+
+                let p = selected[0];
+                pRight.splice(pRight.indexOf(p), 1);
+                pLeft.push(p);
+            }
+
+            lightIsLeft = !lightIsLeft;
+            selected = [];
+            msg.innerText = lightIsLeft ? "Fener solda. Kim geçecek?" : "Fener sağda. Kim geri getirecek?";
+            render();
+        }
+
+        function checkEndGame() {
+            const msg = document.getElementById('game-msg');
+            if (pLeft.length === 0) {
+                if (totalTime <= 17) {
+                    msg.innerHTML = `<span style="color:#10b981;">Tebrikler! ${totalTime} dakikada herkesi geçirdiniz! Kurtuldunuz.</span>`;
+                } else {
+                    msg.innerHTML = `<span style="color:#ef4444;">Eyvah! ${totalTime} dakika sürdü. Zombilere yakalandınız. Tekrar deneyin.</span>`;
+                }
+            }
+        }
+
+        function resetGame() {
+            totalTime = 0;
+            pLeft = [1, 2, 5, 10];
+            pRight = [];
+            lightIsLeft = true;
+            selected = [];
+            document.getElementById('game-msg').innerText = "Fener solda. Geçmesi için 2 kişi seçin.";
+            render();
+        }
+
+        render();
+    </script>
+</body>
+
+</html>

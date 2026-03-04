@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gezgin Satıcı Problemi (TSP) | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .tsp-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            cursor: crosshair;
+            overflow: hidden;
+        }
+
+        .tsp-node {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--primary-glow);
+            transition: transform 0.2s ease, background 0.2s ease;
+            z-index: 10;
+        }
+
+        .tsp-node:hover {
+            transform: translate(-50%, -50%) scale(1.3);
+            background: #fbbf24;
+        }
+
+        .tsp-node.visited {
+            background: #10b981;
+        }
+
+        #tsp-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .hud-distance {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: #fbbf24;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .tsp-controls {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Optimizasyon Problemi</span>
+            <h1 style="font-size: 3rem;">Gezgin Satıcı Problemi <span
+                    style="color: var(--text-muted); font-size: 2rem;">(TSP)</span></h1>
+        </header>
+
+        <div class="content-body">
+
+            <div class="story-section">
+                <p>Türkiye'nin yoğun çalışan bir lojistik firmasında kuryesiniz. Sabah deponuzdan çıkıp, gün içerisinde
+                    teslimat yapmanız gereken farklı noktalara (şehirlere veya ilçelere) uğrayıp, mesainiz bitince
+                    başlangıç noktanıza dönmeniz gerekiyor.</p>
+                <p>Sadece 5 farklı noktaya uğrayacaksanız, bu noktaları gezmenizin toplam 120 farklı (5 faktöriyel)
+                    rotası vardır. Peki ya rota sayınız 81 ile çıkarsa?</p>
+                <p>Amacınız: Bu şehirlerin <strong>hepsine sadece birer kez uğrayıp</strong> başlangıç noktasına en kısa
+                    toplam mesafeyi (yakıtı ve zamanı) harcayarak dönmek.</p>
+            </div>
+
+            <!-- Interactive Component -->
+            <div class="interactive-widget">
+                <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Harita Üzerindeki Şehirleri Birleştirin</h3>
+                <p style="color: var(--text-muted); text-align: center; margin-bottom: 2rem;">Tüm yeşil noktalara
+                    sırayla tıklayarak en kısa turu oluşturmaya çalışın. (Son noktadan sonra ilk noktaya tıklayarak turu
+                    tamamlayın).</p>
+
+                <div class="tsp-container" id="tsp-container">
+                    <svg id="tsp-svg"></svg>
+                    <!-- Nodes will be injected here -->
+                </div>
+
+                <div class="hud-distance">Toplam Mesafe: <span id="dist-display">0</span> birim</div>
+                <div class="tsp-controls">
+                    <button class="filter-btn active" id="reset-tsp">Rotayı Sıfırla</button>
+                    <button class="filter-btn" id="solve-tsp" style="border-color: #10b981; color: #10b981;">Bilgisayar
+                        Çözsün (Greedy)</button>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Evrendeki Atom Sayısından Fazla İhtimal!</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">Yukarıdaki basit haritada
+                    bile en kısa yolu bulmak için fare ile biraz uğraşmanız gerekti, değil mi? Peki ya Türkiye'nin 81
+                    ili için kargo şirketinin algoritması en kısa rotayı bulmak isteseydi? Mümkün olabilir miydi?</p>
+                <button class="btn" id="reveal-btn">Çözümü ve Gerçekleri Göster ↓</button>
+            </div>
+
+            <div class="solution-section" id="solution-section">
+                <h3>Çözüm: Faktöriyel Patlaması (Combinatorial Explosion)</h3>
+                <p>Türkiye'nin 81 ilini ziyaret etmek isteyen bir satıcının rotasını bulmak için tek tek tüm
+                    kombinasyonları bilgisayara hesaplatmak isterseniz, tam <strong>81! (81 faktöriyel)</strong> farklı
+                    rotayı hesaba katmanız gerekir. Bu sayı, tüm evrendeki gözlemlenebilir atom sayısından katbekat daha
+                    büyüktür!</p>
+                <p>Dünyanın en güçlü süper bilgisayarını çalıştırsanız bile, 81! rotanın hepsini deneyip en kısasını
+                    bulması evrenin ömründen daha uzun sürecektir. İşin korkunç tarafı budur. Buna literatürde
+                    <strong>NP-Zor (NP-Hard)</strong> problem diyoruz.</p>
+                <p>İşte tam da bu yüzden "Sezgisel (Heuristics)" denen yaklaşımları kullanırız. Sezgiseller bize kesin
+                    olarak "En iyisi budur" demezler ancak saniyeler içerisinde "En iyisine çok çok yakın ve işini
+                    görecek kadar harika" devasa rotalar çizerler. Makine Çözümü butonuna bastığınızda çalışan da "En
+                    Yakın Komşu" sezgiselidir.</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Biz buna akademide "Gezgin Satıcı Problemi (TSP - Traveling Salesperson Problem)"
+                        diyoruz.</strong></p>
+                <p>Amazon'un depo içi robotlarının paket toplaması, kargo araçlarının mahalle dağıtımları ve hatta devre
+                    kartlarına mikroçipler lehimlenirken robotik kolun izleyeceği yolu çizen algoritmalar tamamen bu
+                    optimizasyon problemine dayanır. Günümüzde devasa lojistik firmaları Karınca Kolonisi Optimizasyonu,
+                    Genetik Algoritmalar ve Tabu Arama gibi yapay zeka temelli Yöneylem algoritmalarıyla trilyonlarca
+                    dolarlık yakıt tasarrufu yaparlar.</p>
+            </div>
+
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const container = document.getElementById('tsp-container');
+        const svg = document.getElementById('tsp-svg');
+        const distDisplay = document.getElementById('dist-display');
+
+        let nodes = [];
+        let route = [];
+        let totalDistance = 0;
+        const numNodes = 12;
+
+        // Generate Random Nodes
+        function initNodes() {
+            container.innerHTML = '<svg id="tsp-svg"></svg>';
+            nodes = [];
+            route = [];
+            totalDistance = 0;
+            distDisplay.innerText = 0;
+
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+
+            for (let i = 0; i < numNodes; i++) {
+                // Keep away from the extreme edges
+                let x = Math.random() * (w - 60) + 30;
+                let y = Math.random() * (h - 60) + 30;
+                nodes.push({ id: i, x, y });
+
+                let el = document.createElement('div');
+                el.className = 'tsp-node';
+                el.style.left = x + 'px';
+                el.style.top = y + 'px';
+
+                el.addEventListener('click', () => handleNodeClick(i, el));
+                container.appendChild(el);
+            }
+        }
+
+        function handleNodeClick(id, element) {
+            if (route.length === numNodes && route[0] === id && route[route.length - 1] !== id) {
+                // Finish the loop
+                addNodeToRoute(id, element);
+                element.classList.add('visited');
+                return;
+            }
+
+            if (route.includes(id)) return; // Already visited
+
+            addNodeToRoute(id, element);
+            element.classList.add('visited');
+        }
+
+        function addNodeToRoute(id, element) {
+            route.push(id);
+            drawRoute();
+        }
+
+        function drawRoute() {
+            let pathHtml = '';
+            totalDistance = 0;
+
+            for (let i = 0; i < route.length - 1; i++) {
+                let n1 = nodes[route[i]];
+                let n2 = nodes[route[i + 1]];
+
+                let dx = n1.x - n2.x;
+                let dy = n1.y - n2.y;
+                totalDistance += Math.sqrt(dx * dx + dy * dy);
+
+                pathHtml += `<line x1="${n1.x}" y1="${n1.y}" x2="${n2.x}" y2="${n2.y}" stroke="#6366f1" stroke-width="3" stroke-dasharray="8 4" />`;
+            }
+
+            document.getElementById('tsp-svg').innerHTML = pathHtml;
+            distDisplay.innerText = Math.round(totalDistance);
+        }
+
+        document.getElementById('reset-tsp').addEventListener('click', initNodes);
+
+        document.getElementById('solve-tsp').addEventListener('click', () => {
+            initNodes();
+            // Simple Nearest Neighbor Greedy Approach
+            let unvisited = [...Array(numNodes).keys()];
+            let current = unvisited[0]; // Start freely from 0
+
+            let elements = document.querySelectorAll('.tsp-node');
+
+            route.push(current);
+            unvisited.splice(unvisited.indexOf(current), 1);
+            elements[current].classList.add('visited');
+
+            while (unvisited.length > 0) {
+                let nearest = -1;
+                let minDist = Infinity;
+                let currNode = nodes[current];
+
+                for (let cid of unvisited) {
+                    let cand = nodes[cid];
+                    let d = Math.hypot(currNode.x - cand.x, currNode.y - cand.y);
+                    if (d < minDist) {
+                        minDist = d;
+                        nearest = cid;
+                    }
+                }
+
+                current = nearest;
+                route.push(current);
+                unvisited.splice(unvisited.indexOf(current), 1);
+                elements[current].classList.add('visited');
+            }
+            // Return to start
+            route.push(route[0]);
+            drawRoute();
+        });
+
+        // Initialize on load
+        setTimeout(initNodes, 100);
+        window.addEventListener('resize', initNodes);
+    </script>
+</body>
+
+</html>

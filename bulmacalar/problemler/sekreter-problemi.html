@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sekreter Problemi | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .secretary-game {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .candidate-card {
+            width: 150px;
+            height: 200px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            margin: 0 auto 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            position: relative;
+            user-select: none;
+        }
+
+        .candidate-score {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .candidate-label {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .candidate-hidden {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #334155;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--accent);
+            transform: scale(1.3);
+        }
+
+        .dot.rejected {
+            background: #ef4444;
+        }
+
+        .dot.accepted {
+            background: #10b981;
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-reject {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid #ef4444;
+            color: #ef4444;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-reject:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-accept {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid #10b981;
+            color: #10b981;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-accept:hover {
+            background: #10b981;
+            color: white;
+        }
+
+        #game-msg {
+            min-height: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Oyun Teorisi ve İstatistik</span>
+            <h1 style="font-size: 3rem;">Sekreter Problemi <span style="color: var(--text-muted); font-size: 2rem;">(%37
+                    Kuralı)</span></h1>
+        </header>
+
+        <div class="content-body">
+
+            <div class="story-section">
+                <p>Çok önemli bir genel müdür asistanı (sekreter) arıyorsunuz. İlana tam olarak <strong>10 aday</strong>
+                    başvurdu. Adayları sırayla tek tek mülakata alıyorsunuz.</p>
+                <p>Kurallar çok katı: Bir adayla mülakat yaptıktan sonra ona hemen <strong>"İşe Alındın" veya
+                        "Reddedildin"</strong> demek zorundasınız. Geriye dönüp "Dünkü adayı çok beğenmiştim, hadi onu
+                    alayım" diyemezsiniz.</p>
+                <p>Amacınız: Sadece "İdare Eder" birini alıp geçmek değil, <strong>bu 10 kişi içerisindeki kesinlikle
+                        "EN İYİ" adayı (1. olanı)</strong> bulup işe almaktır. İkinci veya üçüncü en iyiyi alsanız bile
+                    oyunu kaybedersiniz. En iyiyi yakalama şansınızı nasıl maksimize edersiniz?</p>
+            </div>
+
+            <div class="interactive-widget">
+                <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Simülasyon: En İyi Adayı (100 Puan) Bulabilecek Misin?
+                </h3>
+                <p style="color: var(--text-muted); text-align: center; margin-bottom: 2rem;">10 aday rastgele sırayla
+                    gelecek. Unutmayın, sadece tek bir kişiyi işe alabilirsiniz ve reddettiklerinize bir daha
+                    dönemezsiniz!</p>
+
+                <div class="secretary-game">
+                    <div id="game-msg">Kapının Ardında 10 Aday Bekliyor. Hazır mısın?</div>
+
+                    <div class="progress-dots" id="dots-container">
+                        <!-- Dots populated via JS -->
+                    </div>
+
+                    <div class="candidate-card" id="card">
+                        <div class="candidate-hidden">?</div>
+                    </div>
+
+                    <div class="game-controls" id="controls">
+                        <button class="filter-btn" style="border-color: var(--accent); color: white;"
+                            onclick="startGame()">Mülakatlara Başla</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Sezgilerimiz Bizi Neden Yanıltır?</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">Birinciyi hemen işe
+                    alırsak, arkadakilerin kalitesini görmemiş oluruz ve büyük ihtimalle en iyisini kaçırırız. Sonuncu
+                    kişiye kalırsak da, "Gelen en iyilerden biri zaten elenmiştir" gerçeğiyle yüzleşiriz (artık
+                    seçeneksizizdir). Rastgele birini seçerseniz kazanma şansınız %10'dur. Ancak matematiksel bir
+                    <strong>Durma Kuralı (Optimal Stopping)</strong> uygularsanız bu şansınızı her şartta %37'ye
+                    çıkarabilirsiniz.</p>
+                <button class="btn" id="reveal-btn">Çözümü ve %37 Kuralını Göster ↓</button>
+            </div>
+
+            <div class="solution-section" id="solution-section">
+                <h3>Çözüm: Çöpe At ve Bekle (Optimal Durma)</h3>
+                <p>Bu problemde kanıtlanmış bir strateji olan <strong>%37 Kuralı (veya 1/e Kuralı)</strong> kullanılır.
+                    Aday sayınız ne olursa olsun (ister 10, ister 1,000,000), algoritma şudur:</p>
+                <ol>
+                    <li>Toplam adayların ilk <strong>%37'sini kesinlikle reddedin.</strong> (10 aday varsa ilk 3-4 adayı
+                        doğrudan eleyin). Onlar sadece "piyasadaki seviyeyi öğrenmek/veritabanı oluşturmak" içindir.
+                    </li>
+                    <li>Bu ilk %37'lik reddedilen gruptaki "En Yüksek Puanlıyı (Referans Noktası)" aklınıza yazın.</li>
+                    <li>Referans grubunu geçtikten sonra, karşınıza çıkan ve <strong>"şu ana kadarki herkesi geçen
+                            (referansı yenen)"</strong> İLK ADAYI sorgusuz sualsiz işe alın!</li>
+                </ol>
+                <p>Bu kuralı uyguladığınızda, aday sayısı Trilyon bile olsa, Mükemmel Adayı bulma şansınız sonsuza dek
+                    sabit kalır: İhtimal daima <strong>%36.8 (Yani 1/e)</strong> olur. Bilinen evrenin en optimize durma
+                    stratejisidir.</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Uygulamalı Gerçek Dünya Kararları</strong></p>
+                <p>Sekreter Problemi, "Optimal Durma Teorisi (Optimal Stopping Theory)"nin en popüler dalıdır. Sadece
+                    işe alımlarda değil; bir evi satın alırken ne zaman diğer evlere bakmayı bırakmalısınız? Borsada bir
+                    hisseyi zararına satarken ne zaman durmalısınız? Hatta evleneceğiniz kişiyi seçerken kaç flört
+                    sonrası "Tamam, artık şu ana kadarkilerin en iyisine odaklanayım" demelisiniz? Evlilik kararınızın
+                    bile matematiği %37 Kuralına dayanır!</p>
+            </div>
+
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+
+    <script>
+        let scores = [];
+        let currentIndex = 0;
+        let bestScore = 0;
+        let gameState = 'ready'; // ready, playing, ended
+
+        const totalCandidates = 10;
+
+        function initGameData() {
+            // Generate 10 unique random scores (1 to 100)
+            let arr = [];
+            while (arr.length < totalCandidates) {
+                let r = Math.floor(Math.random() * 100) + 1;
+                if (arr.indexOf(r) === -1) arr.push(r);
+            }
+            scores = arr;
+            bestScore = Math.max(...scores); // Know the absolute best for validation
+            currentIndex = 0;
+        }
+
+        function renderDots() {
+            const c = document.getElementById('dots-container');
+            c.innerHTML = '';
+            for (let i = 0; i < totalCandidates; i++) {
+                let d = document.createElement('div');
+                d.className = 'dot ' + (i === currentIndex ? 'active' : '');
+                d.id = 'dot-' + i;
+                c.appendChild(d);
+            }
+        }
+
+        function startGame() {
+            initGameData();
+            renderDots();
+            gameState = 'playing';
+            showCandidate();
+        }
+
+        function showCandidate() {
+            const card = document.getElementById('card');
+            const controls = document.getElementById('controls');
+            const msg = document.getElementById('game-msg');
+
+            msg.innerHTML = `${currentIndex + 1}. Aday Mülakatta! Puanını İncele:`;
+
+            card.innerHTML = `
+                <div class="candidate-score">${scores[currentIndex]}</div>
+                <div class="candidate-label">Yetenek Puanı</div>
+            `;
+            card.style.borderColor = 'var(--accent)';
+
+            if (currentIndex === totalCandidates - 1) {
+                // Last one, force accept
+                controls.innerHTML = `
+                    <button class="btn-accept" onclick="acceptCandidate()">Zorunlu İşe Al (Son Aday)</button>
+                `;
+            } else {
+                controls.innerHTML = `
+                    <button class="btn-reject" onclick="rejectCandidate()">Reddet ❌</button>
+                    <button class="btn-accept" onclick="acceptCandidate()">İşe Al ✔️</button>
+                `;
+            }
+        }
+
+        function rejectCandidate() {
+            if (gameState !== 'playing') return;
+            document.getElementById('dot-' + currentIndex).classList.add('rejected');
+            document.getElementById('dot-' + currentIndex).classList.remove('active');
+
+            currentIndex++;
+            if (currentIndex < totalCandidates) {
+                document.getElementById('dot-' + currentIndex).classList.add('active');
+                showCandidate();
+            }
+        }
+
+        function acceptCandidate() {
+            if (gameState !== 'playing') return;
+            gameState = 'ended';
+
+            let pickedScore = scores[currentIndex];
+            document.getElementById('dot-' + currentIndex).classList.add('accepted');
+
+            const msg = document.getElementById('game-msg');
+            const card = document.getElementById('card');
+            const controls = document.getElementById('controls');
+
+            // Find if there is a better score missed or coming up
+            if (pickedScore === bestScore) {
+                msg.innerHTML = `<span style="color:#10b981;">MUHTEŞEM! 🏆 Gerçekten de EN İYİ (1.) adayı buldunuz!</span>`;
+                card.style.borderColor = '#10b981';
+                card.style.boxShadow = '0 0 30px rgba(16, 185, 129, 0.4)';
+            } else {
+                msg.innerHTML = `<span style="color:#ef4444;">KAYBETTİNİZ! Seçtiğiniz aday ${pickedScore} puanlı. <br>Oysa bu grupta ${bestScore} puanlı biri vardı!</span>`;
+                card.style.borderColor = '#ef4444';
+                card.style.boxShadow = '0 0 30px rgba(239, 68, 68, 0.4)';
+            }
+
+            // Reveal all
+            let summary = document.createElement('div');
+            summary.style.marginTop = '1rem';
+            summary.style.fontSize = '0.9rem';
+            summary.style.color = 'var(--text-muted)';
+            summary.innerHTML = "Listenin Tamamı: " + scores.join(" - ");
+            card.appendChild(summary);
+
+            controls.innerHTML = `<button class="filter-btn" style="border-color: var(--accent); color: white;" onclick="startGame()">Tekrar Dene</button>`;
+        }
+    </script>
+</body>
+
+</html>

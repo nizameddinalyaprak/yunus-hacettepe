@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Korsanların Altın Paylaşımı | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .pirate-ship {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 250px;
+            border-bottom: 4px solid #3b82f6;
+            /* ocean */
+            position: relative;
+        }
+
+        .pirate {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .pirate-avatar {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+            position: relative;
+        }
+
+        .pirate.dead {
+            opacity: 0.2;
+            transform: translateY(40px) rotate(90deg);
+        }
+
+        .pirate.dead .pirate-avatar::after {
+            content: '❌';
+            position: absolute;
+            font-size: 2rem;
+            top: 10px;
+            left: 5px;
+            color: #ef4444;
+        }
+
+        .pirate-name {
+            font-weight: 800;
+            color: #cbd5e1;
+        }
+
+        .pirate-gold {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: #fbbf24;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 10px;
+            border-radius: 12px;
+            border: 1px solid #fbbf24;
+            margin-top: 5px;
+        }
+
+        .step-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .induction-step {
+            display: none;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .induction-step.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Oyun Teorisi</span>
+            <h1 style="font-size: 3rem;">Korsanların Altın Paylaşımı</h1>
+        </header>
+
+        <div class="content-body">
+
+            <div class="story-section">
+                <p>Güvertesinde tam <strong>100 Altın Sikke</strong> olan bir gemidesiniz. Gemide çok zeki, acımasız ve
+                    tamamen rasyonel (duygusal düşünmeyen) 5 korsan var: Kaptan A (En kıdemli), B, C, D ve E (En
+                    kıdemsiz).</p>
+                <p>Korsan kanunlarına göre altınlar şöyle paylaşılır:</p>
+                <ul>
+                    <li>En kıdemli korsan bir dağıtım planı sunar (Örn: Bana 90, size 10).</li>
+                    <li>Tüm korsanlar (teklifi yapan dahil) oylama yapar. Oyların <strong>%50'si veya fazlası
+                            "Evet"</strong> derse teklif kabul edilir, altınlar dağıtılır ve oyun biter.</li>
+                    <li>Eğer "Evet" oyu %50'nin altında kalırsa, <strong>teklif yapan korsan denize atılır
+                            (öldürülür)</strong> ve sıra bir sonraki kıdemli korsana geçer.</li>
+                </ul>
+                <p>Her korsanın 1. Amacı hayatta kalmak, 2. Amacı ise maksimum altını almaktır. Eğer siz Kaptan A
+                    olsaydınız denize atılmadan ve maksimum altını alarak nasıl bir teklif yapardınız?</p>
+            </div>
+
+            <div class="interactive-widget">
+                <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Geriye Doğru Tümevarım (Backward Induction) İncelemesi
+                </h3>
+                <p style="color: var(--text-muted); text-align: center; margin-bottom: 2rem;">Sadece 2 korsan kalsaydı
+                    ne olurdu? 3 Kalsaydı ne olurdu? Adım adım geriye doğru giderek Kaptan A'nın dahi planını çözün!</p>
+
+                <div class="pirate-ship" id="ship-deck">
+                    <!-- Pirates rendered here -->
+                </div>
+
+                <div class="step-controls">
+                    <button class="filter-btn active" onclick="showStep(2)">2 Korsan (D ve E)</button>
+                    <button class="filter-btn" onclick="showStep(3)">3 Korsan (C, D, E)</button>
+                    <button class="filter-btn" onclick="showStep(4)">4 Korsan (B, C, D, E)</button>
+                    <button class="filter-btn" onclick="showStep(5)"
+                        style="border-color:#fbbf24; color:#fbbf24;">(Çözüm) 5 Korsan (Tümü)</button>
+                </div>
+
+                <div id="steps-container">
+                    <div class="induction-step" id="ind-2">
+                        <h4>Sadece D ve E kalsaydı:</h4>
+                        <p>Kıdemli olan D teklif yapar: "100 altını ben alırım, sen sıfır (0) alırsın." D kendisi Evet
+                            oyu verir. 2 oydan 1 Evet çıktığı için oran %50 olur ve teklif geçer. <br><strong>Sonuç: D
+                                100 alır, E 0 alır.</strong></p>
+                    </div>
+                    <div class="induction-step" id="ind-3">
+                        <h4>Sadece C, D ve E kalsaydı:</h4>
+                        <p>C teklif yapar. C bilir ki kendisi ölürse D 100 altını alacak, E ise havasını alacaktır.
+                            E'nin bundan korktuğunu bilen C, E'ye sadece <strong>1 altın "rüşvet"</strong> teklif eder.
+                            E, ölmektense 1 altını havada kaparak Evet der (Çünkü C ölürse 0 altın alacaktır). C'nin oyu
+                            + E'nin oyu %50'yi geçer.<br><strong>Sonuç: C 99 alır, D 0 alır, E 1 alır.</strong></p>
+                    </div>
+                    <div class="induction-step" id="ind-4">
+                        <h4>B, C, D ve E kalsaydı:</h4>
+                        <p>B teklif yapar. Bilir ki kendisi ölürse C:99, D:0, E:1 senaryosu gerçekleşecek. Yani B ölürse
+                            D sıfır çekecek. Bu yüzden B, sadece D'ye <strong>1 altın "rüşvet"</strong> verir. Kendi oyu
+                            (1) + D'nin oyu (1) = 2 Oy (%50). Teklif geçer.<br><strong>Sonuç: B 99 alır, C 0 alır, D 1
+                                alır, E 0 alır.</strong></p>
+                    </div>
+                    <div class="induction-step" id="ind-5">
+                        <h4 style="color:#fbbf24;">Ve Gelelim Kaptan A'nın Muazzam Teklifine (5 Korsan):</h4>
+                        <p>Kaptan A (Siz!), eğer denize atılırsanız B:99, C:0, D:1, E:0 tarifesinin geçerli olacağını
+                            hesaplarsınız!</p>
+                        <p>Siz denize atılırsanız, <strong>C ve E hiç altın alamayacaktır.</strong> Siz sadece o ikisine
+                            1'er altın rüşvet teklif edersiniz. Onlar havada kabul eder (Yoksa B onlara hiç vermeyecek).
+                            Kendi Oylarınız: A(Siz), C ve E = 3 Oy (%60). İşlem Tamam!</p>
+                        <p style="font-size: 1.2rem; margin-top: 1rem;"><strong style="color:#10b981;">Nihai Sonuç:
+                                Kaptan A (98 Altın), B (0 Altın), C (1 Altın), D (0 Altın), E (1 Altın).</strong></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Acımasız Mantığın Güzelliği</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">Sıradan bir insan Kaptan
+                    A yerine olsaydı "Madem 5 kişiyiz herkese 20 altın vereyim de canımdan olmayayım" der veya
+                    korkusundan "Tamam ben 40 alayım da kalan 60'ı size vereyim" diyerek devasa bir kayba uğrardı. Oyun
+                    Teorisi bizi hislerimizden arındırıp en rasyonel ve kârlı matrisleri bulmamızı sağlar.</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Alt Oyun Mükemmel Dengesi (Subgame Perfect Equilibrium)</strong></p>
+                <p>Sıralı oyunlarda (Satranç, Poker veya İhaleler) ileriye dönük düşünmek insan zihni için zordur. Bu
+                    yüzden ekonomistler ve matematikçiler <strong>Ağacı Sondan Köküne (Geriye) Doğru</strong> okurlar.
+                    Buna "Backward Induction" (Geriye Tümevarım) denir. Korsan problemi, mikroiktisat okullarında oyun
+                    teorisini anlatmak için kullanılan en kültleşmiş ve şaşırtıcı örnektir.</p>
+            </div>
+
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const pirates = [
+            { id: 'A', avatar: '🪝', name: 'A (Kaptan)' },
+            { id: 'B', avatar: '🏴‍☠️', name: 'B' },
+            { id: 'C', avatar: '🗡️', name: 'C' },
+            { id: 'D', avatar: '🦜', name: 'D' },
+            { id: 'E', avatar: '⚓', name: 'E' }
+        ];
+
+        function renderDeck(numAlive, goldDistribution) {
+            const deck = document.getElementById('ship-deck');
+            deck.innerHTML = '';
+
+            // Render 5 pirates. Mark dead ones according to (5 - numAlive)
+            const deadCount = 5 - numAlive;
+
+            pirates.forEach((p, index) => {
+                let isDead = index < deadCount;
+                let gold = goldDistribution[index] !== undefined ? goldDistribution[index] : 0;
+
+                deck.innerHTML += `
+                    <div class="pirate ${isDead ? 'dead' : ''}" id="p-${p.id}">
+                        <div class="pirate-avatar">${p.avatar}</div>
+                        <div class="pirate-name">${p.name}</div>
+                        ${!isDead ? `<div class="pirate-gold">${gold} 🟡</div>` : ''}
+                    </div>
+                `;
+            });
+        }
+
+        function showStep(num) {
+            // Update buttons
+            document.querySelectorAll('.step-controls .filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Hide all steps, show target
+            document.querySelectorAll('.induction-step').forEach(step => step.classList.remove('active'));
+            document.getElementById('ind-' + num).classList.add('active');
+
+            // Map distributions for specific setups
+            // A, B, C, D, E index maps
+            const dist = {
+                2: { 3: 100, 4: 0 },             // D:100, E:0
+                3: { 2: 99, 3: 0, 4: 1 },         // C:99, D:0, E:1
+                4: { 1: 99, 2: 0, 3: 1, 4: 0 },   // B:99, C:0, D:1, E:0
+                5: { 0: 98, 1: 0, 2: 1, 3: 0, 4: 1 } // A:98, B:0, C:1, D:0, E:1
+            };
+
+            renderDeck(num, dist[num]);
+        }
+
+        // Initialize with Step 2 (as if playing backwards)
+        setTimeout(() => showStep(2), 100);
+    </script>
+</body>
+
+</html>

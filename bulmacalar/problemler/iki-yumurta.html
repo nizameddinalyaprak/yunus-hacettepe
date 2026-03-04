@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Katlı Bina ve İki Yumurta Problemi | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .building-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 350px;
+            margin-bottom: 2rem;
+            position: relative;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(99, 102, 241, 0.1) 100%);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        .building {
+            width: 80px;
+            height: 300px;
+            background: linear-gradient(to bottom, #1e293b, #0f172a);
+            border: 2px solid #334155;
+            position: relative;
+            display: flex;
+            flex-direction: column-reverse;
+            overflow: hidden;
+        }
+
+        .floor {
+            flex-grow: 1;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .floor:nth-child(10n) {
+            border-bottom: 2px solid #64748b;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .egg {
+            position: absolute;
+            width: 20px;
+            height: 28px;
+            background: #fdfbf7;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: inset -3px -3px 6px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 255, 255, 0.5);
+            left: 50%;
+            transform: translateX(150%);
+            transition: bottom 1s cubic-bezier(0.5, 0, 1, 1);
+            bottom: 300px;
+            /* Start at top */
+        }
+
+        .egg.falling {
+            bottom: 0px !important;
+            /* Fall to ground */
+        }
+
+        .egg.broken {
+            background: transparent;
+            box-shadow: none;
+            border-bottom: 4px solid #fdfbf7;
+            border-radius: 0;
+            width: 30px;
+            height: 5px;
+            transform: translateX(100%);
+        }
+
+        .egg.broken::before {
+            content: '💥';
+            position: absolute;
+            top: -20px;
+            left: -5px;
+            font-size: 1.5rem;
+        }
+
+        .stats-panel {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fbbf24;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Algoritmik Düşünce</span>
+            <h1 style="font-size: 3rem;">100 Katlı Bina ve İki Yumurta</h1>
+        </header>
+
+        <div class="content-body">
+
+            <div class="story-section">
+                <p>Elinizde kırılganlıkları tamamen aynı <strong>iki adet yumurta</strong> var ve 100 katlı bir
+                    gökdelendesiniz. Yumurtanın kırılmadan yere atılabileceği belirli bir kritik kat (örneğin 37. kat)
+                    var. 37'den atarsanız kırılmaz (alıp tekrar kullanabilirsiniz), fakat 38'den atarsanız kırılır.</p>
+                <p>Amacınız, bu yumurtanın kırıldığı <strong>en yüksek katı (kritik katı) bulmak.</strong> Eğer bir
+                    yumurta kırılırsa onu kaybedersiniz. Sadece 2 canınız var.</p>
+                <p>En kötü senaryoda (şansınızın en yaver gitmediği durumda) bile, <strong>minimum kaç deneme
+                        yaparak</strong> bu kritik katı kesin olarak bulabilirsiniz?</p>
+            </div>
+
+            <!-- Interactive Component -->
+            <div class="interactive-widget">
+                <h3 style="margin-bottom: 2rem; color: #e2e8f0;">Animasyon: 50. Kattan Başlamak Neden Hatalıdır?</h3>
+
+                <div class="building-container">
+                    <div class="building">
+                        <!-- Tiny floors just for visual effect -->
+                    </div>
+                    <div class="egg" id="anim-egg"></div>
+                </div>
+
+                <div class="stats-panel">
+                    <div>Kalan Yumurta: <span class="stat-value" id="eggs-left">2</span>/2</div>
+                    <div>Kat Aralığı: <span class="stat-value" id="floor-range">0-100</span></div>
+                    <div>Atış Sayısı: <span class="stat-value" id="drop-count">0</span></div>
+                </div>
+
+                <div style="margin-top: 2rem; text-align: center;">
+                    <button class="pattern-btn" id="sim-btn" onclick="runSimulation()">"Yarıya Bölme" Algoritmasını
+                        İzle</button>
+                    <p id="sim-text" style="color: var(--text-muted); margin-top: 1rem; min-height: 48px;"></p>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">İkiye Bölme Neden İşe Yaramaz?</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">İnsan beyni "Binary
+                    Search (İkili Arama)" yapmaya programlıdır. Akla ilk gelen fikir: "Önce 50. kattan atarım. Kırılırsa
+                    1. kattan 49'a kadar tek tek (49 kez daha) atarım" demek olur. Yani en kötü senaryoda 1 + 49 =
+                    <strong>50 atış</strong> yapmak zorundasınızdır. Ama bu sayı çok kötü! İki yumurtanızla bunu 14
+                    denemeye kadar düşürebilirsiniz. Nasıl?</p>
+                <button class="btn" id="reveal-btn">Çözümü ve Stratejiyi Göster ↓</button>
+            </div>
+
+            <div class="solution-section" id="solution-section">
+                <h3>Çözüm: Formüllü Atlayış ve Dengelenmiş Risk</h3>
+                <p>Amacımız en kötü ihtimaldeki atış sayısını sabitlemek. İlk atışımızdan sonra kırılmazsa bir basamak
+                    daha çıkarız. Diyelim ki ilk atışımızı $x$. kattan yapıyoruz. Kırılırsa, $x-1$ kez daha 1. kattan
+                    başlayıp atmak zorundayız (Toplam deneme: $x$). Kırılmazsa, geriye elimizde kalan o $x-1$ hakkımız
+                    var demektir.</p>
+                <p>Bu yüzden her seferinde aralığı 1 azaltmalıyız. Atış katlarımız şöyle olmalı:<br>
+                    <strong>$x + (x-1) + (x-2) + (x-3) ... + 1 \ge 100$</strong>
+                </p>
+                <p>Formül n(n+1)/2 = 100 olarak çözüldüğünde n=13.6 civarı çıkar. Yukarı yuvarlarsak <strong>14
+                        buluruz.</strong></p>
+                <p>Yani ilk yumurtayı 14. kattan atarsınız. Kırılmazsa, bu kez 13 kat yukarıdan yani 27. (14+13) kattan
+                    atarsınız. Kırılmazsa 39. (27+12) kattan atarsınız. Eğer 39'da kırılırsa, geriye kalan o 1 yumurta
+                    ile 28'den 38'e kadar tek tek gidersiniz. <strong>Hangi katta kırılırsa kırılsın, en fazla 14 deneme
+                        yaparak</strong> hedefi bulursunuz! 50 atış nerede, 14 atış nerede?</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Dinamik Programlama (Dynamic Programming) ve Minimax!</strong></p>
+                <p>İki yumurta problemi meşhur bir mülakat sorusu olmasının yanı sıra, yazılım mühendisliğinde "Minimax
+                    Stratejisi" denen ve "en kötü senaryodaki kaybı minimize etmek" olarak tanımlanan Algoritma
+                    Tasarımının temelidir. Kaynaklarınız (yumurtalarınız) sınırlı olduğunda, problemin alt parçalara
+                    bölünerek dengeli bir biçimde çözüldüğü o paha biçilmez anı gösterir.</p>
+            </div>
+
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Draw decorative floors
+        const bldg = document.querySelector('.building');
+        for (let i = 1; i <= 20; i++) {
+            let f = document.createElement('div');
+            f.className = 'floor';
+            f.innerText = (i * 5);
+            bldg.appendChild(f);
+        }
+
+        async function runSimulation() {
+            const egg = document.getElementById('anim-egg');
+            const text = document.getElementById('sim-text');
+            const btn = document.getElementById('sim-btn');
+            const drops = document.getElementById('drop-count');
+            const left = document.getElementById('eggs-left');
+            const range = document.getElementById('floor-range');
+
+            btn.disabled = true;
+            btn.innerText = "Simülasyon Çalışıyor...";
+
+            // Reset state
+            egg.className = 'egg';
+            egg.style.bottom = '150px'; // 50th floor visual relative
+            drops.innerText = '0';
+            left.innerText = '2';
+            range.innerText = '0-100';
+
+            text.innerHTML = 'İlk strateji denemesindeyiz. Yumurtayı <strong style="color:white;">50. Kattan</strong> aşağı bırakıyoruz...';
+
+            await new Promise(r => setTimeout(r, 1500));
+            // Fall
+            egg.classList.add('falling');
+            drops.innerText = '1';
+
+            await new Promise(r => setTimeout(r, 1000));
+            // Break
+            egg.className = 'egg broken falling'; // Overwrite to breaking visual
+            left.innerText = '1';
+            range.innerText = '1-49';
+
+            text.innerHTML = '💥 Eyvah kırıldı! Kritik katın 1. ile 49. katlar arasında olduğunu anladık. <br>Ama elimizde <strong>sadece 1 yumurtamız kaldı.</strong>';
+
+            await new Promise(r => setTimeout(r, 3000));
+
+            text.innerHTML = 'Kalan o tek yumurtayı 25. kattan atmaya korkarsınız, ya kırılırsa? <br><strong style="color:#ef4444;">Mecburen 1. kattan başlayıp 49. kata kadar TEK TEK atmak zorundasınız.</strong> Toplam 50 deneme!';
+
+            btn.innerText = "Tekrar Oynat";
+            btn.disabled = false;
+        }
+    </script>
+</body>
+
+</html>

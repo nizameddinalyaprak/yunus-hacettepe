@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sırt Çantası Problemi (Knapsack) | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .item-list {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .item-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            width: 120px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .item-card:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .item-card.selected {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+
+        .item-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-weight {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .item-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .knapsack-status {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            height: 30px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            margin-bottom: 1rem;
+        }
+
+        .knapsack-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), #a855f7);
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        .knapsack-fill.overload {
+            background: #ef4444;
+        }
+
+        .stats-hud {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Optimizasyon Problemi</span>
+            <h1 style="font-size: 3rem;">Sırt Çantası Problemi <span
+                    style="color: var(--text-muted); font-size: 2rem;">(Knapsack)</span></h1>
+        </header>
+
+        <div class="content-body">
+
+            <div class="story-section">
+                <p>Gece vakti paha biçilemez tarihi eserlerle dolu bir müzeye gizlice girmeyi başaran zeki bir
+                    hırsızsınız. Odanın ortasında duruyorsunuz. Etrafınızda farklı ağırlıklara ve maddi değerlere sahip
+                    birbirinden kıymetli tarihi eserler var.</p>
+                <p>Ancak büyük bir sorununuz var: Yanınızda getirdiğiniz <strong>sırt çantası en fazla 15 kilogram
+                        taşıyabiliyor.</strong> 15 kilonun üzerindeki herhangi bir ağırlıkta çanta anında yırtılacak ve
+                    hiçbir şey alamadan kaçmak zorunda kalacaksınız.</p>
+                <p>Amacınız: Çantayı yırtmadan (15 kg'ı aşmadan), içine koyduğunuz eşyaların <strong>toplam maddi
+                        değerini maksimuma çıkarmak.</strong> Bakalım "en pahalıları alıp çıkayım" şeklindeki mantık
+                    gerçekten işe yarıyor mu?</p>
+            </div>
+
+            <!-- Interactive Component -->
+            <div class="interactive-widget">
+                <h3 style="margin-bottom: 2rem; color: #e2e8f0;">Sırt Çantanızı Doldurun (Kapasite: 15 kg)</h3>
+
+                <div class="item-list" id="items-container">
+                    <!-- Items rendered via JS -->
+                </div>
+
+                <div class="knapsack-status">
+                    <div class="knapsack-fill" id="k-fill"></div>
+                </div>
+
+                <div class="stats-hud">
+                    <span>Ağırlık: <span id="current-weight">0</span> / 15 kg</span>
+                    <span>Toplam Değer: <span id="current-value"
+                            style="color: #fbbf24; font-weight: 700;">$0</span></span>
+                </div>
+                <p id="overload-warning"
+                    style="color: #ef4444; font-weight: 600; margin-top: 1rem; opacity: 0; transition: opacity 0.3s;">⚠️
+                    Çanta Yırtıldı! Ağırlık limitini aştınız.</p>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Siz Olsaydınız Hangi Eşyaları Alırdınız?</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">İnsanın doğası gereği
+                    önce en pahalı olan 3200$'lık tacı almak isteriz. Peki ya o çok ağırsa? Belki de onun yerine 3 tane
+                    hafif ama ucuz eşya alsak kârımız daha fazla olacaktır. Çözümü okumadan önce yukarıdaki araçla en
+                    yüksek kârı bulmaya çalışın.</p>
+                <button class="btn" id="reveal-btn">Çözümü ve Matematiksel Mantığı Göster ↓</button>
+            </div>
+
+            <div class="solution-section" id="solution-section">
+                <h3>Çözüm: "Açgözlü" (Greedy) Olmak Neden Kaybettirir?</h3>
+                <p>Eğer insan sezgilerine güvenip sadece <strong style="color:#fbbf24;">En Pahalıları (Greedy
+                        Algoritması)</strong> almaya kalksaydık, 3200$'lık Tacı ve yanına sığabilen ufak tefek eşyaları
+                    alıp çıkardık. Ancak bu optimum (en mükemmel) sonucu vermez.</p>
+                <p>Aslında optimum strateji, eşyaların <strong>Kilogram Başına Değerini (Fiyat/Ağırlık oranını)</strong>
+                    hesaplamakla başlar. Ancak bu oran bile bazen tek başına yetersiz kalır, çünkü çantada kalan küçük
+                    boşlukları dolduramayabilirsiniz.</p>
+                <p>Bu tablodaki optimum (maksimum kâr) çözüm şudur: <strong>Kolyeyi (1kg), Yüzüğü (2kg), Altın Külçesini
+                        (8kg) ve Kaseyi (4kg) almak.</strong> Bu kombinasyon tam olarak 15 kg ağırlığa ulaşır ve size
+                    tam <strong>$4400</strong> kazandırır! (Tacı dışarıda bıraktığımıza dikkat edin).</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Biz buna akademide "Tamsayılı Programlama" veya "Dinamik Programlama" diyoruz.</strong></p>
+                <p>Sırt Çantası Problemi (Knapsack), Yöneylem Araştırması'nın en meşhur kombinatoryal optimizasyon
+                    problemlerinden biridir. Sadece hırsızlık için kullanılmaz; borsada sınırlı bütçeyle en kârlı hisse
+                    senedi portföyünü oluştururken, uzay mekiklerine gönderilecek kargo seçilirken veya bilgisayar
+                    işlemcilerinde hangi verinin önbellekte tutulacağına karar verilirken arka planda aynı matematik
+                    ('0-1 Knapsack' algoritmaları) çalışır.</p>
+            </div>
+
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const items = [
+            { id: 1, name: 'Kraliyet Tacı', icon: '👑', weight: 10, value: 3200 },
+            { id: 2, name: 'Altın Külçesi', icon: '🧈', weight: 8, value: 1600 },
+            { id: 3, name: 'Gümüş Kase', icon: '🥣', weight: 4, value: 900 },
+            { id: 4, name: 'Elmas Yüzük', icon: '💍', weight: 2, value: 700 },
+            { id: 5, name: 'Zümrüt Kolye', icon: '📿', weight: 1, value: 1200 },
+            { id: 6, name: 'Tarihi Tablo', icon: '🖼️', weight: 5, value: 1000 }
+        ];
+
+        let currentWeight = 0;
+        let currentValue = 0;
+        const capacity = 15;
+
+        const container = document.getElementById('items-container');
+        const weightEl = document.getElementById('current-weight');
+        const valueEl = document.getElementById('current-value');
+        const fillEl = document.getElementById('k-fill');
+        const warningEl = document.getElementById('overload-warning');
+
+        items.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'item-card';
+            el.innerHTML = `
+                <div class="item-icon">${item.icon}</div>
+                <div class="item-value">$${item.value}</div>
+                <div class="item-weight">${item.weight} kg</div>
+            `;
+            el.addEventListener('click', () => {
+                if (el.classList.contains('selected')) {
+                    el.classList.remove('selected');
+                    currentWeight -= item.weight;
+                    currentValue -= item.value;
+                } else {
+                    el.classList.add('selected');
+                    currentWeight += item.weight;
+                    currentValue += item.value;
+                }
+                updateHUD();
+            });
+            container.appendChild(el);
+        });
+
+        function updateHUD() {
+            weightEl.innerText = currentWeight;
+            valueEl.innerText = '$' + currentValue;
+
+            let percentage = (currentWeight / capacity) * 100;
+            if (percentage > 100) percentage = 100;
+            fillEl.style.width = percentage + '%';
+
+            if (currentWeight > capacity) {
+                fillEl.classList.add('overload');
+                warningEl.style.opacity = '1';
+                valueEl.style.color = '#ef4444';
+                weightEl.style.color = '#ef4444';
+            } else {
+                fillEl.classList.remove('overload');
+                warningEl.style.opacity = '0';
+                valueEl.style.color = '#fbbf24';
+                weightEl.style.color = 'var(--text-main)';
+            }
+        }
+    </script>
+</body>
+
+</html>

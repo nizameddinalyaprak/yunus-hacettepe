@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monty Hall Problemi | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .monty-stage {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--card-border);
+            text-align: center;
+        }
+
+        .doors-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .door-wrapper {
+            position: relative;
+            width: 120px;
+            height: 180px;
+            perspective: 800px;
+            cursor: pointer;
+        }
+
+        .door-inner {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .door-wrapper.open .door-inner {
+            transform: rotateY(-105deg);
+        }
+
+        .door-front,
+        .door-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 4rem;
+        }
+
+        .door-front {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+            font-weight: 800;
+            font-size: 3rem;
+            border: 4px solid #3b82f6;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .door-wrapper.selected .door-front {
+            border-color: #fbbf24;
+            box-shadow: 0 0 20px #fbbf24;
+        }
+
+        .door-back {
+            background: #1e293b;
+            transform: rotateY(180deg);
+            border: 4px solid #334155;
+        }
+
+        .stats-table {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .stats-table th,
+        .stats-table td {
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-table th {
+            background: rgba(0, 0, 0, 0.5);
+            font-family: var(--font-heading);
+        }
+
+        #game-msg {
+            min-height: 60px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+
+        .control-btns {
+            display: none;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Olasılık ve İstatistik</span>
+            <h1 style="font-size: 3rem;">Monty Hall Problemi</h1>
+        </header>
+
+        <div class="content-body">
+
+            <div class="story-section">
+                <p>Ünlü bir televizyon yarışmasındasınız (Let's Make a Deal). Karşınızda <strong>3 adet kapalı
+                        kapı</strong> var. Kapılardan birinin arkasında muhteşem bir <strong>Son Model Spor
+                        Araba</strong>, diğer ikisinin arkasında ise meleyen <strong>Keçiler</strong> var.</p>
+                <p>Bir kapı seçtiniz (Örneğin Kapı 1). Yarışmanın sunucusu (Monty Hall) hangi kapının arkasında ne
+                    olduğunu biliyor ve kalan iki kapıdan arkasında kesinlikle keçi olan bir kapıyı sizin için açıyor
+                    (Otomobili asla açmıyor).</p>
+                <p>Sunucu size soruyor: <strong>"İlk seçiminde mi kalmak istersin, yoksa fikrini değiştirip diğer kapıyı
+                        mı seçmek istersin?"</strong> Değiştirmek şansınızı etkiler mi?</p>
+            </div>
+
+            <div class="interactive-widget">
+                <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Yarışma Simülatörü: Karar Senin!</h3>
+                <p style="color: var(--text-muted); text-align: center; margin-bottom: 1rem;">Oyunları hem değiştirerek
+                    hem de aynı kapıda kalarak oyna. Aşağıdaki istatistik tablosunda "Değiştirmek Kazandırır" efsanesini
+                    test et.</p>
+
+                <div class="monty-stage">
+                    <div id="game-msg">Lütfen bir kapı seçerek oyuna başlayın!</div>
+
+                    <div class="doors-container">
+                        <div class="door-wrapper" id="door-0" onclick="selectDoor(0)">
+                            <div class="door-inner">
+                                <div class="door-front">1</div>
+                                <div class="door-back" id="back-0">🐐</div>
+                            </div>
+                        </div>
+                        <div class="door-wrapper" id="door-1" onclick="selectDoor(1)">
+                            <div class="door-inner">
+                                <div class="door-front">2</div>
+                                <div class="door-back" id="back-1">🐐</div>
+                            </div>
+                        </div>
+                        <div class="door-wrapper" id="door-2" onclick="selectDoor(2)">
+                            <div class="door-inner">
+                                <div class="door-front">3</div>
+                                <div class="door-back" id="back-2">🐐</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-btns" id="action-btns">
+                        <button class="filter-btn" style="border-color:#ef4444; color:#ef4444;"
+                            onclick="makeFinalDecision(false)">Kapımda Kalayım 🔒</button>
+                        <button class="filter-btn" style="border-color:#10b981; color:#10b981;"
+                            onclick="makeFinalDecision(true)">Değiştireyim 🔄</button>
+                    </div>
+                </div>
+
+                <table class="stats-table">
+                    <tr>
+                        <th>Strateji</th>
+                        <th>Kazanma (Araba)</th>
+                        <th>Kaybetme (Keçi)</th>
+                        <th>Kazanma Oranı</th>
+                    </tr>
+                    <tr>
+                        <td style="color:#ef4444; font-weight:700;">Değiştirme (Kal)</td>
+                        <td id="stay-win">0</td>
+                        <td id="stay-loss">0</td>
+                        <td id="stay-rate">0%</td>
+                    </tr>
+                    <tr>
+                        <td style="color:#10b981; font-weight:700;">Değiştir</td>
+                        <td id="switch-win">0</td>
+                        <td id="switch-loss">0</td>
+                        <td id="switch-rate">0%</td>
+                    </tr>
+                </table>
+                <div style="text-align: center;"><button class="filter-btn" onclick="resetStats()">İstatistikleri
+                        Sıfırla</button></div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">İnsan Zihnine Aykırı: Neden %50 - %50 Değil?</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">Dünyanın en zeki
+                    insanları (hatta Paul Erdős bile) ilk duyduğunda "İki kapı kaldı, yani şans %50 %50, değiştirmeye
+                    gerek yok" demiştir. Oysa gerçekte değiştirdiğinizde kazanma şansınız tam olarak iki katına (%66.6)
+                    çıkar! Simülatörde 10-15 kere oynarsanız bunu kendiniz göreceksiniz. Nedenini matematikle izah
+                    edelim.</p>
+                <button class="btn" id="reveal-btn">Çözümü ve Koşullu Olasılığı Göster ↓</button>
+            </div>
+
+            <div class="solution-section" id="solution-section">
+                <h3>Çözüm: Oyunun Kurucusu "Bilgiyi" Değiştiriyor</h3>
+                <p>En baştan düşünelim:</p>
+                <ul>
+                    <li>1. Kapıyı ilk seçtiğinizde araba bulma ihtimaliniz <strong>%33.3 (1/3)</strong>, arka plandaki
+                        diğer 2 kapıda araba olma ihtimali toplamda <strong>%66.6 (2/3)</strong>'tür. Yani muhtemelen
+                        (%66) yanlış kapı seçtiniz.</li>
+                    <li>Siz seçtikten sonra sunucu arkada kalan o 2 kapıdan BİLDİĞİ için içi boş (keçi olan) kapıyı açıp
+                        eliyor.</li>
+                    <li>Böylelikle, elenmeyen son kapı, sizin ilk seçemediğiniz o %66.6'lık ihtimalin Hepsini sırtlanmış
+                        oluyor!</li>
+                </ul>
+                <p>Eğer kapınızı değiştirmeme inadı ederseniz, ilk baştaki %33'lük kör şansınıza mahkumsunuz. Ancak
+                    <strong>Değiştirirseniz (Switch)</strong> bu, "ilk turda yanlış tahmin ettim" demektir ve ilk turda
+                    %66 yanlış tahmin etmiş olacağınız için kazanma şansınız matematiksel olarak %66 olur. Bayes Teoremi
+                    asıl bilginin sunucunun kapıyı açmasıyla geldiğini ispatlar.</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Marilyn vos Savant ve Şok Eden Olay (1990)</strong></p>
+                <p>Parade Magazine dergisinde bu problem ve "Değiştirmek kazandırır (%66)" yanıtı yayınlandığında,
+                    Amerika'daki matematik profesörlerinden binden fazla kınama ve hakaret mektubu geldi ("Bir kadın
+                    matematiği bu kadar katledebilirdi, elbette %50 - %50'dir" dediler). Ancak bilgisayar simülasyonları
+                    Marilyn'i haklı çıkardı, profesörler açık öğretim kitaplarından utançla özür dilemek zorunda
+                    kaldılar. İnsan beyni koşullu olasılığa (Bayes Algısına) uygun evrimleşmemiştir!</p>
+            </div>
+
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+
+    <script>
+        let carDoor = -1;
+        let selectedDoor = -1;
+        let openedDoor = -1;
+        let gameState = 'pick'; // pick, switch, ended
+
+        let stats = {
+            stayWin: 0, stayLoss: 0,
+            switchWin: 0, switchLoss: 0
+        };
+
+        function resetGame() {
+            carDoor = Math.floor(Math.random() * 3);
+            selectedDoor = -1;
+            openedDoor = -1;
+            gameState = 'pick';
+
+            for (let i = 0; i < 3; i++) {
+                let w = document.getElementById('door-' + i);
+                w.classList.remove('open', 'selected');
+                document.getElementById('back-' + i).innerText = i === carDoor ? '🚗' : '🐐';
+            }
+
+            document.getElementById('action-btns').style.display = 'none';
+            document.getElementById('game-msg').innerText = "Kapılar kapandı. Lütfen bir kapı seçerek oyuna başlayın!";
+        }
+
+        function selectDoor(index) {
+            if (gameState !== 'pick') return;
+
+            selectedDoor = index;
+            document.getElementById('door-' + index).classList.add('selected');
+
+            // Host opens a goat door that is not the selected
+            let possibleBads = [0, 1, 2].filter(d => d !== selectedDoor && d !== carDoor);
+            openedDoor = possibleBads[Math.floor(Math.random() * possibleBads.length)];
+
+            document.getElementById('door-' + openedDoor).classList.add('open');
+
+            gameState = 'switch';
+            document.getElementById('game-msg').innerText = `Monty Hall ${openedDoor + 1}. kapıyı açtı ve arkasında Keçi var! İlk seçtiğin ${selectedDoor + 1}. kapıda mı kalacaksın, değiştirecek misin?`;
+            document.getElementById('action-btns').style.display = 'flex';
+        }
+
+        function makeFinalDecision(isSwitching) {
+            let finalDoor = selectedDoor;
+            let msg = "";
+
+            if (isSwitching) {
+                finalDoor = [0, 1, 2].find(d => d !== selectedDoor && d !== openedDoor);
+                document.getElementById('door-' + selectedDoor).classList.remove('selected');
+                document.getElementById('door-' + finalDoor).classList.add('selected');
+            }
+
+            document.getElementById('door-0').classList.add('open');
+            document.getElementById('door-1').classList.add('open');
+            document.getElementById('door-2').classList.add('open');
+
+            let win = (finalDoor === carDoor);
+
+            if (win) {
+                msg = `<span style="color:#10b981;">Tebrikler! Arkasında Araba olan kapıyı buldunuz! 🏆🚗</span>`;
+                if (isSwitching) stats.switchWin++; else stats.stayWin++;
+            } else {
+                msg = `<span style="color:#ef4444;">Maalesef! Keçi çıktı. Araba ${carDoor + 1}. kapıdaydı! 🐐</span>`;
+                if (isSwitching) stats.switchLoss++; else stats.stayLoss++;
+            }
+
+            document.getElementById('game-msg').innerHTML = msg + `<br><br><button class="filter-btn" onclick="resetGame()">Yeniden Oyna</button>`;
+            document.getElementById('action-btns').style.display = 'none';
+            gameState = 'ended';
+
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('stay-win').innerText = stats.stayWin;
+            document.getElementById('stay-loss').innerText = stats.stayLoss;
+            let sTotal = stats.stayWin + stats.stayLoss;
+            document.getElementById('stay-rate').innerText = sTotal > 0 ? Math.round((stats.stayWin / sTotal) * 100) + '%' : '0%';
+
+            document.getElementById('switch-win').innerText = stats.switchWin;
+            document.getElementById('switch-loss').innerText = stats.switchLoss;
+            let swTotal = stats.switchWin + stats.switchLoss;
+            document.getElementById('switch-rate').innerText = swTotal > 0 ? Math.round((stats.switchWin / swTotal) * 100) + '%' : '0%';
+        }
+
+        function resetStats() {
+            stats = { stayWin: 0, stayLoss: 0, switchWin: 0, switchLoss: 0 };
+            updateStats();
+        }
+
+        // Init
+        resetGame();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Braess Paradoksu | Karar Bilimleri Bulmacaları</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <script src="../assets/js/interactions.js" defer></script>
+    <style>
+        .network-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .node {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: var(--bg-dark);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #fff;
+            z-index: 10;
+        }
+
+        .node-start {
+            left: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .node-a {
+            left: 50%;
+            top: 20%;
+            transform: translateX(-50%);
+        }
+
+        .node-b {
+            left: 50%;
+            bottom: 20%;
+            transform: translateX(-50%);
+        }
+
+        .node-end {
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .edge {
+            position: absolute;
+            height: 8px;
+            background: #334155;
+            transform-origin: left center;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .edge-label {
+            position: absolute;
+            background: var(--bg-dark);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            top: -25px;
+            white-space: nowrap;
+        }
+
+        .edge-start-a {
+            left: calc(10% + 25px);
+            top: 50%;
+            width: 230px;
+            transform: rotate(-35deg);
+        }
+
+        .edge-start-b {
+            left: calc(10% + 25px);
+            top: 50%;
+            width: 230px;
+            transform: rotate(35deg);
+        }
+
+        .edge-a-end {
+            left: 50%;
+            top: calc(20% + 25px);
+            width: 230px;
+            transform: rotate(35deg);
+        }
+
+        .edge-b-end {
+            left: 50%;
+            top: calc(80% - 25px);
+            width: 230px;
+            transform: rotate(-35deg);
+        }
+
+        .edge-shortcut {
+            left: 50%;
+            top: calc(20% + 25px);
+            width: 8px;
+            height: 160px;
+            background: transparent;
+            border-left: 4px dashed #ef4444;
+            transform-origin: top center;
+            z-index: 2;
+            display: none;
+            /* hidden initially */
+            justify-content: center;
+        }
+
+        .toggle-btn {
+            margin-top: 1rem;
+            padding: 0.75rem 2rem;
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .toggle-btn.active {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .travel-time {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: #fbbf24;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="../index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../index.html" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <header style="margin-bottom: 3rem;">
+            <span class="category-tag">Oyun Teorisi</span>
+            <h1 style="font-size: 3rem;">Braess Paradoksu</h1>
+        </header>
+
+        <div class="content-body">
+
+            <div class="story-section">
+                <p>Bir şehrin (Başlangıç) noktasından (Bitiş) noktasına her gün işe giden <strong>4000 sürücü</strong>
+                    var. Şehirde Başlangıç'tan Bitiş'e giden iki farklı güzergah bulunuyor: Üst yol (A üzerinden) ve Alt
+                    yol (B üzerinden).</p>
+                <p>Dar olan köprü yollarında seyahat süresi <strong>Trafik Yoğunluğu (X)/100</strong> formülüyle
+                    hesaplanıyor. Yani ne kadar çok araba girerse süre o kadar uzuyor. Geniş otobanlarda ise sabit
+                    <strong>45 dakika</strong> sürüyor.</p>
+                <p>Şehrin belediye başkanı, trafiği rahatlatmak için çok radikal bir karar alıyor ve A ile B arasına
+                    uçtan uca anında bağlanan <strong>1 dakikalık dev, genis bir Kestirme Yol</strong> inşa ediyor.
+                    Kestirme yol açılınca sürücüler sevinç çığlıkları atıyor. Ama ertesi gün işler hiç beklemedikleri
+                    bir şekilde ters gidiyor!</p>
+            </div>
+
+            <div class="interactive-widget">
+                <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Yol Ağı Animasyonu (4000 Araç)</h3>
+
+                <div class="network-container">
+                    <div class="node node-start">Başla</div>
+                    <div class="node node-a">A</div>
+                    <div class="node node-b">B</div>
+                    <div class="node node-end">Bitir</div>
+
+                    <div class="edge edge-start-a" id="e-sa">
+                        <div class="edge-label" id="l-sa">Köprü (x/100 dk)</div>
+                    </div>
+                    <div class="edge edge-a-end" id="e-ae">
+                        <div class="edge-label" id="l-ae">Otoban (Sabit 45 dk)</div>
+                    </div>
+
+                    <div class="edge edge-start-b" id="e-sb">
+                        <div class="edge-label" id="l-sb">Otoban (Sabit 45 dk)</div>
+                    </div>
+                    <div class="edge edge-b-end" id="e-be">
+                        <div class="edge-label" id="l-be">Köprü (x/100 dk)</div>
+                    </div>
+
+                    <div class="edge-shortcut" id="e-shortcut">
+                        <div class="edge-label"
+                            style="top: 50%; transform: translateY(-50%); left: 10px; color:#ef4444;">Yeni Kestirme (1
+                            dk)</div>
+                    </div>
+                </div>
+
+                <div class="travel-time" id="travel-display">Herkesin İşe Varış Süresi: 65 Dakika</div>
+
+                <div style="text-align: center;">
+                    <button class="filter-btn toggle-btn" id="shortcut-btn" onclick="toggleShortcut()">A'dan B'ye Yeni
+                        Kestirme Yolu İnşa Et 🚧</button>
+                </div>
+            </div>
+
+            <div class="think-section">
+                <h2 style="font-size: 2rem;">Yeni Yol Yapmak Trafiği Neden Kötüleştirir?</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">Mantıken daha çok yol
+                    demek, trafiğin daha çok dağılması ve hızlanması anlamına gelmez mi? Yukarıdaki animasyonda
+                    "Kestirme Yolu İnşa Et" butonuna basarak paradoksu bizzat test edin. 65 dakikalık sürenin bir anda
+                    daha uzun bir süreye nasıl fırladığını görün!</p>
+                <button class="btn" id="reveal-btn">Çözümü ve Nash Dengesini Göster ↓</button>
+            </div>
+
+            <div class="solution-section" id="solution-section">
+                <h3>Çözüm: Bencil Rasyonelliğin Çöküşü (Nash Equilibrium)</h3>
+                <p><strong>Eski Durum (Kestirme Yokken):</strong> 4000 aracın 2000'i üst yolu, 2000'i alt yolu seçer.
+                    Kimse diğer yola geçerse kâr edemez. <br>Üstteki aracın süresi: 2000/100 + 45 = <strong>65
+                        dakika.</strong></p>
+
+                <p><strong>Yeni Durum (Kestirme Açıldığında):</strong> A ile B arasına kestirme eklendiğinde yepyeni bir
+                    "Başlat -> A -> Kestirme -> B -> Bitir" rotası çıkar. Bu yol o kadar caziptir ki herkes bu yeni,
+                    hızlı kestirmeyi kullanmak ister. Bencil (rasyonel) her sürücü diğer yolları bırakıp bu rotaya
+                    yığılır.</p>
+                <p>Sonuçta 4000 aracın <strong>hepsi</strong> bu rotayı kullanır. Yeni süre hesaplayalım:<br>
+                    Başlat-A köprüsü: Bütün arabalar (4000/100) = 40 dakika.<br>
+                    Kestirme yol: 1 dakika.<br>
+                    B-Bitir köprüsü: Bütün arabalar (4000/100) = 40 dakika.<br>
+                    Genel Toplam = 40 + 1 + 40 = <strong>81 Dakika!</strong></p>
+                <p>Herkes bencilce kendi çıkarı (en kısa yolu seçeceği) için hareket ettiğinde, sistemi 65 dakikalık
+                    <strong>Sosyal Optimum</strong>'dan 81 dakikalık berbat bir <strong>Nash Dengesi</strong>'ne
+                    çektiler. Kimse rotasını değiştirip 45 dakikalık otobana girmek istemez çünkü o zaman süresi 86
+                    dakikaya çıkacaktır.</p>
+            </div>
+
+            <div class="academic-note">
+                <p><strong>Matematikçi Dietrich Braess Tarafından 1968'de Kanıtlandı</strong></p>
+                <p>Bu sadece kağıt üzerinde bir teori değildir. 1990'da Stuttgart, Almanya'da ve 1969'da Stuttgart'ta
+                    yapılan milyarlarca dolarlık devasa tünel/yol projeleri trafiği öyle kötü vurdu ki, belediye
+                    sonradan bu yepyeni yolları tekrar mühürlemek zorunda kaldı. Yol ağlarına kapasite eklemenin ağın
+                    performansını düşürebileceğini gösteren, Oyun Teorisi literatürünün en saygın paradokslarından
+                    biridir.</p>
+            </div>
+
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
+                    Bulmacalarına Dön</a></p>
+        </footer>
+    </div>
+
+    <script>
+        let isShortcutBuilt = false;
+
+        function toggleShortcut() {
+            const sc = document.getElementById('e-shortcut');
+            const btn = document.getElementById('shortcut-btn');
+            const display = document.getElementById('travel-display');
+            const e_sa = document.getElementById('e-sa');
+            const e_be = document.getElementById('e-be');
+
+            isShortcutBuilt = !isShortcutBuilt;
+
+            if (isShortcutBuilt) {
+                sc.style.display = 'flex';
+                btn.innerHTML = "Kestirme Yolu İptal Et / Kapat 🚫";
+                btn.classList.add('active');
+
+                // Traffic highlights
+                e_sa.style.background = '#ef4444'; // Heavy traffic
+                e_sa.style.height = '12px';
+
+                e_be.style.background = '#ef4444';
+                e_be.style.height = '12px';
+
+                display.innerHTML = 'Herkesin İşe Varış Süresi: <span style="color:#ef4444;">81 Dakika! 😱</span>';
+            } else {
+                sc.style.display = 'none';
+                btn.innerHTML = "A'dan B'ye Yeni Kestirme Yolu İnşa Et 🚧";
+                btn.classList.remove('active');
+
+                // Normal traffic
+                e_sa.style.background = '#334155';
+                e_sa.style.height = '8px';
+
+                e_be.style.background = '#334155';
+                e_be.style.height = '8px';
+
+                display.innerHTML = 'Herkesin İşe Varış Süresi: <span style="color:#10b981;">65 Dakika 😊</span>';
+            }
+        }
+    </script>
+</body>
+
+</html>

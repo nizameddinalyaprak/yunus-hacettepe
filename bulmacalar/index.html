@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karar Bilimleri Bulmacaları - Yöneylem Araştırması</title>
+    <meta name="description"
+        content="Sayısal Yöntemler, Optimizasyon, Oyun Teorisi ve Algoritmik düşünce üzerine klasikleşmiş interaktif zeka bulmacaları.">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <script src="assets/js/interactions.js" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Navigation / Logo -->
+        <nav>
+            <a href="index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#a855f7" />
+                            <stop offset="100%" stop-color="#6366f1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-gradient)" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="url(#logo-gradient)" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Karar Bilimleri Bulmacaları
+            </a>
+            <a href="../" class="back-link">← Ana Sayfaya Dön</a>
+        </nav>
+
+        <!-- Header -->
+        <header style="text-align: center; margin-bottom: 4rem;">
+            <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem;"><span class="gradient-text">Algoritmik Düşünce</span>
+                ve Zeka</h1>
+            <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 650px; margin: 0 auto; line-height: 1.8;">
+                Öğrencilerimiz için tasarlanmış, kahve molalarında beyninizi yakacak klasikleşmiş karar verme, olasılık
+                ve optimizasyon problemleri.</p>
+        </header>
+
+        <!-- Filter Buttons -->
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">Tümü</button>
+            <button class="filter-btn" data-filter="optimizasyon">Optimizasyon</button>
+            <button class="filter-btn" data-filter="oyun-teorisi">Oyun Teorisi</button>
+            <button class="filter-btn" data-filter="olasilik">Olasılık</button>
+            <button class="filter-btn" data-filter="algoritmik">Algoritmik Düşünce</button>
+        </div>
+
+        <!-- Problems Grid -->
+        <div class="problem-grid" id="problem-list">
+
+            <!-- Knapsack -->
+            <a href="problemler/sirt-cantasi.html" class="problem-card" data-category="optimizasyon">
+                <span class="category-tag">Optimizasyon</span>
+                <h3 class="card-title">Sırt Çantası Problemi</h3>
+                <p class="card-desc">Gece müzeye giren bir hırsızsınız. Çantanız en fazla 15 kg alıyor ama çok değerli
+                    ve ağırlıkları farklı nesneler var. Çantayı en kârlı şekilde nasıl doldurabilirsiniz?</p>
+                <div
+                    style="color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; align-items: center; display: flex; gap: 0.5rem;">
+                    İncele & Çöz <span>→</span></div>
+            </a>
+
+            <!-- TSP -->
+            <a href="problemler/gezgin-satici.html" class="problem-card" data-category="optimizasyon">
+                <span class="category-tag">Optimizasyon</span>
+                <h3 class="card-title">Gezgin Satıcı (TSP)</h3>
+                <p class="card-desc">Türkiye'nin 81 iline paket bırakacak bir kurye... Şehir sayısı azıcık arttığında
+                    faktöriyel olarak patlayan olasılıklar ve milyarlarca rotanın gizemi.</p>
+                <div
+                    style="color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; align-items: center; display: flex; gap: 0.5rem;">
+                    İncele & Çöz <span>→</span></div>
+            </a>
+
+            <!-- Cutting Stock -->
+            <a href="problemler/kesme-stok.html" class="problem-card" data-category="optimizasyon">
+                <span class="category-tag">Optimizasyon</span>
+                <h3 class="card-title">Kesme-Stok Problemi</h3>
+                <p class="card-desc">Fabrikanızdaki büyük kağıt/demir rulolarından farklı ebatlardaki müşteri
+                    siparişlerini en az fireyi (zayiatı) verecek şekilde nasıl çıkarırsınız?</p>
+                <div
+                    style="color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; align-items: center; display: flex; gap: 0.5rem;">
+                    İncele & Çöz <span>→</span></div>
+            </a>
+
+            <!-- Monty Hall -->
+            <a href="problemler/monty-hall.html" class="problem-card" data-category="olasilik">
+                <span class="category-tag">Olasılık</span>
+                <h3 class="card-title">Monty Hall Problemi</h3>
+                <p class="card-desc">Üç kapı, iki keçi ve bir araba! Sunucu boş kapılardan birini açtıktan sonra, ilk
+                    seçiminizi değiştirmeli misiniz, yoksa değiştirmemeli misiniz?</p>
+                <div
+                    style="color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; align-items: center; display: flex; gap: 0.5rem;">
+                    İncele & Çöz <span>→</span></div>
+            </a>
+
+            <!-- 100 Mahkum -->
+            <a href="problemler/100-mahkum.html" class="problem-card" data-category="olasilik">
+                <span class="category-tag">Olasılık</span>
+                <h3 class="card-title">100 Mahkum ve Kutu</h3>
+                <p class="card-desc">100 mahkum, 100 kutu ve sadece %0.000...08 kurtulma şansı. Permütasyonların büyüsü
+                    ile bu imkansız şansı nasıl %31.18'e çıkarırlar?</p>
+                <div
+                    style="color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; align-items: center; display: flex; gap: 0.5rem;">
+                    İncele & Çöz <span>→</span></div>
+            </a>
+
+            <!-- Braess -->
+            <a href="problemler/braess-paradoksu.html" class="problem-card" data-category="oyun-teorisi">
+                <span class="category-tag">Oyun Teorisi</span>
+                <h3 class="card-title">Braess Paradoksu</h3>
+                <p class="card-desc">Trafiği rahatlatmak için kısa ve geniş yepyeni bir yol yapıyorsunuz. Ancak ertesi
+                    gün trafik çok daha yavaş! Bu matematiksel olarak nasıl mümkün olabilir?</p>
+                <div
+                    style="color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; align-items: center; display: flex; gap: 0.5rem;">
+                    İncele & Çöz <span>→</span></div>
+            </a>
+
+            <!-- Sekreter -->
+            <a href="problemler/sekreter-problemi.html" class="problem-card" data-category="oyun-teorisi">
+                <span class="category-tag">Oyun Teorisi</span>
+                <h3 class="card-title">Sekreter Problemi (%37)</h3>
+                <p class="card-desc">100 aday tek tek geliyor, reddettiğinizi bir daha göremiyorsunuz. Mükemmel adayı
+                    seçme ihtimalinizi maksimize etmek için uygulamanız gereken altın kural!</p>
+                <div
+                    style="color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; align-items: center; display: flex; gap: 0.5rem;">
+                    İncele & Çöz <span>→</span></div>
+            </a>
+
+            <!-- Korsanlar -->
+            <a href="problemler/korsanlar.html" class="problem-card" data-category="oyun-teorisi">
+                <span class="category-tag">Oyun Teorisi</span>
+                <h3 class="card-title">Korsanların Altın Paylaşımı</h3>
+                <p class="card-desc">Tamamen rasyonel, çok zeki ve denize atılmamak için hayatta kalmak isteyen 5
+                    acımasız korsan 100 altını en kârlı şekilde nasıl bölüşebilir?</p>
+                <div
+                    style="color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; align-items: center; display: flex; gap: 0.5rem;">
+                    İncele & Çöz <span>→</span></div>
+            </a>
+
+            <!-- İki Yumurta -->
+            <a href="problemler/iki-yumurta.html" class="problem-card" data-category="algoritmik">
+                <span class="category-tag">Algoritmik Düşünce</span>
+                <h3 class="card-title">100 Katlı Bina ve İki Yumurta</h3>
+                <p class="card-desc">Elinizde kırılganlıkları aynı 2 yumurta ve 100 katlı bir bina var. Yumurtanın
+                    kırıldığı kritik eşiği "en az deneme sayısını" garanti ederek nasıl bulursunuz?</p>
+                <div
+                    style="color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; align-items: center; display: flex; gap: 0.5rem;">
+                    İncele & Çöz <span>→</span></div>
+            </a>
+
+            <!-- El Feneri -->
+            <a href="problemler/kopru-ve-fener.html" class="problem-card" data-category="algoritmik">
+                <span class="category-tag">Algoritmik Düşünce</span>
+                <h3 class="card-title">Köprü ve El Feneri</h3>
+                <p class="card-desc">Farklı geçiş hızlarına sahip 4 kişi, tek fenerle aynı köprüden "sadece 17 dakikada"
+                    nasıl geçer? En hızlıya git-gel yaptırmanın işe yaramadığı o an.</p>
+                <div
+                    style="color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; align-items: center; display: flex; gap: 0.5rem;">
+                    İncele & Çöz <span>→</span></div>
+            </a>
+
+        </div>
+
+        <footer
+            style="text-align: center; margin-top: 6rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p>© 2026 Nizameddin Alyaprak | Yöneylem Araştırması & Sayısal Yöntemler</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">Hacettepe Üniversitesi</p>
+        </footer>
+    </div>
+</body>
+
+</html>
