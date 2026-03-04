@@ -1,0 +1,74 @@
+1. Optimizasyon ve Yöneylem Klasikleri
+Sırt Çantası Problemi (Knapsack Problem):
+
+Hikaye: Gece müzeye giren bir hırsızın (veya kampa giden bir dağcının) çantası en fazla 15 kg taşıyabilmektedir. Etrafta ağırlıkları ve maddi değerleri birbirinden farklı eşyalar vardır. Çantayı toplam değeri en yüksek olacak şekilde nasıl doldurmalıdır?
+
+Akademik Arka Plan: Tamsayılı Programlama (Integer Programming). Öğrencilere "en pahalıları al" ya da "en hafifleri al" şeklindeki basit açgözlü (greedy) algoritmaların neden her zaman optimum sonucu vermediğini göstermek için vitrin niteliğindedir.
+
+Gezgin Satıcı Problemi (Traveling Salesperson Problem - TSP):
+
+Hikaye: Türkiye'nin 81 iline kargo bırakacak bir kurye, her şehre sadece bir kez uğrayıp başlangıç noktasına en kısa yoldan nasıl döner?
+
+Akademik Arka Plan: Kombinatoryal patlama ve NP-Zor kavramı. Şehir sayısı azıcık arttığında bile olasılıkların faktöriyel olarak nasıl çığırından çıktığını ve modern dünyada neden "Sezgisel (Heuristic)" yöntemlere muhtaç olduğumuzu anlatmak için mükemmeldir.
+
+Kesme-Stok Problemi (Cutting Stock Problem):
+
+Hikaye: Bir kağıt (veya demir) fabrikasında, standart uzunlukta devasa rulolar üretilmektedir. Müşteriler ise farklı uzunluklarda kesilmiş parçalar sipariş eder. Fabrika müdürü bu siparişleri, eldeki standart rulolardan en az fireyi (zayiatı) verecek şekilde nasıl kesmelidir?
+
+Akademik Arka Plan: Doğrusal ve Tamsayılı Programlama. Endüstriyel optimizasyonun en somut örneklerinden biridir.
+
+2. Algoritmik Düşünce ve Dinamik Programlama
+100 Katlı Bina ve İki Yumurta Problemi (The Two-Egg Problem):
+
+Hikaye: Elinizde kırılganlıkları tamamen aynı iki yumurta var ve 100 katlı bir binadasınız. Amacınız, yumurtanın camdan atıldığında kırılmadığı "en yüksek katı" (kritik katı) bulmak. Yumurta kırılırsa onu kaybedersiniz, kırılmazsa alıp tekrar kullanabilirsiniz. En kötü senaryoda minimum deneme sayısını garanti edecek strateji nedir?
+
+Akademik Arka Plan: Minimax stratejisi ve Dinamik Programlama. İnsanların aklına ilk gelen "katları ikiye bölme" mantığının, kaynak sınırlıyken (sadece 2 yumurta varken) neden işe yaramadığını şok edici bir şekilde gösterir.
+
+Köprü ve El Feneri Problemi (Bridge and Torch Problem):
+
+Hikaye: Gece vakti 4 kişi çürük bir asma köprüden geçecektir. Köprü aynı anda en fazla 2 kişi taşır ve sadece 1 el fenerleri vardır. Herkesin geçiş hızı farklıdır (örneğin 1, 2, 5 ve 10 dakika). Çiftler geçerken yavaş olanın hızında ilerlemek zorundadır. Herkesi en kısa sürede (tam 17 dakikada) karşıya nasıl geçirirsiniz?
+
+Akademik Arka Plan: Çizelgeleme (Scheduling) ve Darboğaz (Bottleneck) yönetimi. "En hızlı olan sürekli feneri getir-götür yapsın" şeklindeki yanlış sezgiyi yıkan efsane bir bulmacadır.
+
+3. Oyun Teorisi, Karar Verme ve Ağ Modelleri
+Braess Paradoksu (Braess's Paradox):
+
+Hikaye: Bir şehirde trafik çok sıkışıktır. Belediye başkanı trafiği rahatlatmak için ağa yepyeni, geniş bir kestirme yol ekler. Ancak ertesi gün trafik eskisinden çok daha yavaş hale gelir! Bu matematiksel olarak nasıl mümkün olabilir?
+
+Akademik Arka Plan: Ağ akış optimizasyonu ve Nash Dengesi. Bireylerin kendi çıkarlarını (en kısa yolu) seçmesinin, sistemin genel optimizasyonunu nasıl mahvedebileceğini gösteren bir şaheserdir.
+
+Sekreter Problemi (%37 Kuralı / Optimal Stopping):
+
+Hikaye: Mükemmel asistanı arıyorsunuz. Önünüzde 100 aday var ve tek tek görüşüyorsunuz. Reddettiğiniz adaya bir daha geri dönemezsiniz. En iyi adayı seçme ihtimalinizi maksimize etmek için adayların ilk yüzde kaçını sadece "piyasayı tartmak" için eleyip, sonrasında karşınıza çıkan ilk en iyi adaya "tamam" demelisiniz?
+
+Akademik Arka Plan: Optimal Durma (Optimal Stopping) teorisi. Hayattaki ev satın alma, araba kiralama veya eş seçme süreçlerine bile uyarlanabilen çok popüler bir konudur.
+
+Korsanların Altın Paylaşımı (The Pirate Game):
+
+Hikaye: Tamamen rasyonel, çok zeki ve hayatta kalmak isteyen 5 korsan 100 altını paylaşacaktır. Aralarında bir hiyerarşi vardır; en kıdemli korsan bir teklif yapar, oyların yarısını alamazsa denize atılır. İlk korsan hayatta kalıp en çok altını alabilmek için nasıl bir teklif yapmalıdır?
+
+Akademik Arka Plan: Geriye doğru tümevarım (Backward induction). Okuyucunun eline kağıt kalem aldırtan muazzam bir zeka oyunudur.
+
+4. Olasılık ve İstatistiksel Zeka
+Monty Hall Problemi:
+
+Hikaye: Bir yarışmadasınız. 3 kapıdan birinin arkasında araba, ikisinde keçi var. Siz bir kapı seçtikten sonra, nerede ne olduğunu bilen sunucu diğer iki kapıdan içinde keçi olanı açar. "Seçimini değiştirmek ister misin?" diye sorar. Matematiksel olarak değiştirmeli misiniz?
+
+Akademik Arka Plan: Koşullu olasılık ve Bayes Teoremi. İnsan sezgilerinin matematiğe nasıl yenildiğini gösteren, web sitenizin yorumlar kısmında kesin tartışma yaratacak bir problemdir.
+
+100 Mahkum ve 100 Kutu Problemi:
+
+Hikaye: 100 mahkum, bir odadaki 100 kutu içine rastgele konmuş kendi numaralarını bulmaya çalışır. Her birinin 50 kutu açma hakkı vardır. Biri bile bulamazsa hepsi idam edilecektir. Rastgele seçimle kurtulma şansları %0.0000000000000000000000000000008 iken, hangi matematiksel stratejiyle şanslarını %31'in üzerine çıkarırlar?
+
+Akademik Arka Plan: Permütasyon döngüleri (cycles in permutations). Son yılların akla en zarar, en büyüleyici matematik bulmacalarından biridir.
+
+Siteniz İçin Tavsiye Edilen Sayfa Tasarımı:
+Bu makaleleri oluştururken şu 4 adımlı formatı kullanmanız, ziyaretçilerin sitede geçirdiği süreyi çok artıracaktır:
+
+Hikaye (Giriş): Problemi tamamen gündelik bir dille, formüllerden uzak bir hikaye gibi anlatın (Örn: Çölde kalan araç, gece müzeye giren hırsız).
+
+Düşünme Molası: Araya bir "Çözümü Görmek İçin Tıklayın" butonu koyun veya büyükçe bir boşluk bırakıp "Siz olsaydınız ne yapardınız? Çözümü okumadan önce biraz düşünün..." yazın.
+
+Çözüm: Adım adım, anlaşılır, gerekirse basit tablolarla çözümü verin.
+
+Akademisyenin Notu (Sizin İmzanız): En sona kısa bir paragraf ekleyin: "Biz bu problemi Sayısal Yöntemler alanında X teorisi adıyla inceleriz. Aslında bu sadece bir bulmaca değil; günümüzde kargo şirketlerinin rota planlamasında veya yapay zekanın karar algoritmalarında tam olarak bu matematik yatıyor." diyerek konuyu doğrudan uzmanlığınıza bağlayın. En sona ufak bir Python çözüm kodu bile ekleyebilirsiniz.
