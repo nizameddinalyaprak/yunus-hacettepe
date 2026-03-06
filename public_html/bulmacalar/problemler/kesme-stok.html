@@ -8,16 +8,101 @@
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="../assets/js/interactions.js" defer></script>
     <style>
-        .roll-container {
-            width: 100%;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
+        .factory-dashboard {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
             margin-bottom: 2rem;
+            border: 1px inset rgba(255, 255, 255, 0.1);
+        }
+
+        .order-panel {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .order-item {
+            text-align: center;
+        }
+
+        .order-btn {
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px solid #3b82f6;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-btn:hover:not(:disabled) {
+            background: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .order-btn.type-45 {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: #8b5cf6;
+        }
+        .order-btn.type-45:hover:not(:disabled) {
+            background: #8b5cf6;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .order-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            border-style: dashed;
+        }
+
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 900;
+            border: 2px solid #0f172a;
+        }
+
+        .rolls-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            min-height: 80px;
+        }
+
+        .roll {
+            width: 100%;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid #475569;
+            border-radius: 8px;
             position: relative;
             display: flex;
             overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .roll.active-roll {
+            border-color: #10b981;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
         }
 
         .cut-piece {
@@ -27,7 +112,33 @@
             justify-content: center;
             font-weight: 700;
             color: #fff;
-            border-right: 2px dashed rgba(255, 255, 255, 0.5);
+            border-right: 2px dashed rgba(255, 255, 255, 0.3);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .piece-40 { background: #3b82f6; }
+        .piece-35 { background: #8b5cf6; }
+        .piece-25 { background: #eab308; } /* Yellow */
+        
+        .order-btn.type-35 {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: #8b5cf6;
+        }
+        .order-btn.type-35:hover:not(:disabled) {
+            background: #8b5cf6;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .order-btn.type-25 {
+            background: rgba(234, 179, 8, 0.2);
+            border-color: #eab308;
+        }
+        .order-btn.type-25:hover:not(:disabled) {
+            background: #eab308;
+            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4);
+            color: #1e293b;
         }
 
         .cut-waste {
@@ -37,31 +148,70 @@
                     rgba(239, 68, 68, 0.2) 10px,
                     rgba(239, 68, 68, 0.4) 10px,
                     rgba(239, 68, 68, 0.4) 20px);
-            flex-grow: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ef4444;
+            color: #fca5a5;
             font-weight: 700;
+            font-size: 0.85rem;
+            transition: width 0.3s ease;
         }
 
-        .pattern-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--accent);
+        .factory-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .stats-display {
+            display: flex;
+            gap: 2rem;
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+        }
+
+        .stat-val {
+            font-weight: 800;
+            color: #10b981;
+        }
+
+        .stat-val.waste-val {
+            color: #ef4444;
+        }
+        
+        .toast {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(239, 68, 68, 0.9);
             color: white;
-            padding: 0.8rem 1.5rem;
+            padding: 1rem 2rem;
             border-radius: 8px;
-            cursor: pointer;
-            margin: 0.5rem;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
+            font-weight: 700;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 50;
         }
 
-        .pattern-btn:hover,
-        .pattern-btn.active {
-            background: var(--accent);
-            box-shadow: 0 0 15px var(--primary-glow);
+        @keyframes popIn {
+            0% { transform: scaleX(0); transform-origin: left; }
+            100% { transform: scaleX(1); transform-origin: left; }
         }
+        
+        #victory-screen {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid #10b981;
+            border-radius: 12px;
+            margin-top: 1rem;
+            animation: popIn 0.5s;
+        }
+
     </style>
     <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 </head>
@@ -98,36 +248,65 @@
             <div class="story-section">
                 <p>Devasa bir kağıt üretim fabrikasının yöneticisisiniz. Fabrikada üretilen standart kağıt (veya
                     metal/kumaş) rulolarının uzunluğu standart <strong>100 metredir</strong>.</p>
-                <p>Bir matbaa şirketinden sipariş aldınız. Matbaa sizden farklı ölçülerde rulolar istiyor: 35 metrelik
-                    rulolardan 5 adet, 45 metrelik rulolardan 3 adet vb.</p>
-                <p>Sorun şurada: 100 metrelik dev ruloyu keserken geriye kalan ufak parçalar işe yaramamakta ve doğrudan
-                    çöpe (fireye / zayiata) gitmektedir. Fabrika müdürü olarak siparişleri karşılarken <strong>fire
-                        miktarını minimuma indirmeniz</strong> gerekmektedir.</p>
+                <p>Bir matbaa şirketinden büyük bir sipariş aldınız. Matbaa sizden farklı ölçülerde parçalar istiyor. Dev ruloları bu ölçülere göre keseceksiniz.</p>
+                <p>Sorun şurada: 100 metrelik dev ruloyu keserken artan (bir siparişe sığmayacak kadar küçük) parçalar işe yaramamakta ve doğrudan çöpe (fireye / zayiata) gitmektedir. Amacınız siparişleri karşılarken <strong>fire miktarını olabilecek en düşük seviyeye (0'a) indirmektir.</strong></p>
             </div>
 
-            <!-- Interactive Component -->
-            <div class="interactive-widget">
-                <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Kesim Şablonunu Seçin (Standart Rulo: 100m)</h3>
-                <p style="color: var(--text-muted); text-align: center; margin-bottom: 2rem;">Müşterinin 35m ve 45m
-                    rulolara ihtiyacı var. Bir adet 100m ruloyu nasıl keserseniz en az kağıdı çöpe atmış olursunuz?</p>
+            <!-- Interaktif Oyun Bleseni -->
+            <div class="interactive-widget" style="position: relative;">
+                <h3 style="margin-bottom: 1rem; color: #e2e8f0; text-align: center;">Üretim Bandı (Görev: Fabrika Yöneticisi)</h3>
+                <p style="color: var(--text-muted); text-align: center; margin-bottom: 2rem;">Siparişi tamamlamak için üstteki butonlara tıklayarak standart 100 metrelik aktif rulolara kesim yapın.</p>
 
-                <div class="roll-container" id="visual-roll">
-                    <!-- Default state -->
-                    <div
-                        style="width: 100%; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
-                        Henüz bir kesim şablonu seçilmedi (100m Bütün Rulo)</div>
+                <div class="factory-dashboard">
+                    <div class="order-panel">
+                        <div class="order-item">
+                            <div style="margin-bottom: 0.5rem; color:#94a3b8; font-size:0.9rem;">Bekleyen: <span id="lbl-40" style="color:#fff; font-weight:bold;">4</span> Adet</div>
+                            <button class="order-btn" id="btn-40" onclick="cutPiece(40)">
+                                40m Kes ✂️
+                                <div class="badge" id="bdg-40">4</div>
+                            </button>
+                        </div>
+                        <div class="order-item">
+                            <div style="margin-bottom: 0.5rem; color:#94a3b8; font-size:0.9rem;">Bekleyen: <span id="lbl-35" style="color:#fff; font-weight:bold;">4</span> Adet</div>
+                            <button class="order-btn type-35" id="btn-35" onclick="cutPiece(35)">
+                                35m Kes ✂️
+                                <div class="badge" id="bdg-35">4</div>
+                            </button>
+                        </div>
+                        <div class="order-item">
+                            <div style="margin-bottom: 0.5rem; color:#94a3b8; font-size:0.9rem;">Bekleyen: <span id="lbl-25" style="color:#fff; font-weight:bold;">4</span> Adet</div>
+                            <button class="order-btn type-25" id="btn-25" onclick="cutPiece(25)">
+                                25m Kes ✂️
+                                <div class="badge" id="bdg-25">4</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="rolls-area" id="rolls-container">
+                        <!-- Rulolar buraya JS ile eklenecek -->
+                    </div>
+
+                    <div class="factory-controls">
+                        <button class="filter-btn" style="border-color:#10b981; color:#10b981;" onclick="addRoll()">+ Yeni Rulo Aç (100m)</button>
+                        
+                        <div class="stats-display">
+                            <div>Rulo: <span class="stat-val" id="stat-rolls">0</span></div>
+                            <div>Çöp(Fire): <span class="stat-val waste-val" id="stat-waste">0</span>m</div>
+                        </div>
+                        
+                        <button class="filter-btn" style="background:rgba(255,255,255,0.05); color:#94a3b8; border:none;" onclick="undoLast()">↶ Geri Al</button>
+                    </div>
                 </div>
 
-                <div style="text-align: center;">
-                    <button class="pattern-btn" onclick="applyPattern([45, 45], 10)">Şablon 1 (45m + 45m)</button>
-                    <button class="pattern-btn" onclick="applyPattern([35, 35, 35], -5)"
-                        style="background: rgba(239, 68, 68, 0.2); border-color: #ef4444;">Şablon 2 (35m + 35m + 35m) ❌
-                        Sığmaz!</button>
-                    <button class="pattern-btn" onclick="applyPattern([45, 35], 20)">Şablon 3 (45m + 35m)</button>
-                    <button class="pattern-btn" onclick="applyPattern([35, 35], 30)">Şablon 4 (35m + 35m)</button>
+                <div class="toast" id="error-toast">⚠️ Ruloya Sığmıyor! Yeni Rulo Açın.</div>
+                
+                <div id="victory-screen">
+                    <h2 id="victory-title" style="color: #10b981; margin-bottom: 1rem;">🎉 Sipariş Tamamlandı!</h2>
+                    <p>Toplam <strong><span id="final-rolls"></span></strong> rulo kullandınız ve toplam <strong><span id="final-waste"></span> metre</strong> fire verdiniz.</p>
+                    <p id="victory-message" style="color: #cbd5e1; font-size: 0.9rem; margin-top: 1rem;">Mükemmel! Tıpkı bir yapay zeka gibi matematiksel yaklaşarak 0 fire verdiniz!</p>
+                    <button class="filter-btn" style="margin-top: 1rem;" onclick="initGame()">Tekrar Oyna 🔄</button>
                 </div>
-                <div id="waste-display"
-                    style="margin-top: 1.5rem; font-size: 1.2rem; font-weight: 700; color: #10b981;"></div>
+                
             </div>
 
 
@@ -141,34 +320,30 @@
                     <p id="poll-stat"></p>
                 </div>
             </div>
+            
             <div class="think-section">
                 <h2 style="font-size: 2rem;">Binlerce Rulo Olunca Ne Olacak?</h2>
                 <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">Elde edilen fire (çöp)
-                    miktarını ekranda gördünüz. Sadece iyi bir kesim planıyla bile milyonlarca lira kâr edebilirsiniz.
-                    Tek bir rulo için en az fireyi veren şablonu bulmak çok kolayken, yüzlerce farklı sipariş ölçüsünü
-                    binlerce rulo içerisine sığdırmak insan zekasının sınırlarını zorlar.</p>
+                    miktarını ekranda kendiniz deneyimlediniz. Sadece iyi bir kesim planıyla bile milyonlarca lira kâr edebilirsiniz.
+                    Yukarıdaki minik siparişi bile optimum fireyle (90m) bitirmek zorlarken, yüzlerce farklı sipariş ölçüsünü
+                    binlerce dev rulonun içerisine sığdırmak insan zekasının sınırlarını aşar.</p>
                 <button class="btn" id="reveal-btn">Çözümü ve Algoritmayı Göster ↓</button>
             </div>
 
             <div class="solution-section blurred" id="solution-section">
                 <h3>Çözüm: Kolon Üretimi Algoritması (Column Generation)</h3>
-                <p>Elinizdeki iki-üç siparişi bir ruloya sığdırmak elbette kolaydır (Örn: 45m + 45m = 90m yapar ve
-                    sadece 10m çöpe gider). Ancak büyük fabrikalarda yüzlerce farklı sipariş çeşidi gelir. O zaman tüm
+                <p>Büyük fabrikalarda yüzlerce farklı sipariş ölçüsü binlerce rulo talebiyle gelir. O zaman tüm
                     olası "Kesim Şablonlarını" listelememiz ve hangi şablondan kaç tane kesmemiz gerektiğini
-                    hesaplamamız gerekir.</p>
-                <p>Tüm şablonları listelemek milyarlarca kombinasyon demektir ve bilgisayarlar patlar. Rus matematikçi
-                    Kantorovich tarafından 1939'da temelleri atılan ve Gilmore-Gomory tarafından geliştirilen
-                    <strong>Sütun/Kolon Üretimi (Column Generation)</strong> tekniği, sadece kârlı/işe yarar şablonları
-                    (kolonları) sıfırdan üreterek problemi çözer. Aksi halde fabrika her gün onlarca ton demiri veya
-                    kağıdı çöpe atıyor olurdu!</p>
+                    hesaplamamız gerekir. Ancak tüm şablonları listelemek milyarlarca kombinasyon demektir ve bilgisayarların hafızası dolar.</p>
+                <p>Rus matematikçi Leonid Kantorovich tarafından 1939'da temelleri atılan ve Gilmore-Gomory tarafından 1961'de kağıt endüstrisi için geliştirilen <strong>Sütun/Kolon Üretimi (Column Generation)</strong> tekniği, sadece kârlı/işe yarar şablonları (kolonları) sıfırdan "yapay zeka / matematiksel alt ağaçlar" vasıtasıyla üreterek problemi devasa bellek patlaması yaşamadan çözer.</p>
+                <p>Aksi halde modern endüstri her gün dünyanın çevresini saracak kadar kağıdı, demiri veya kumaşı çöpe atıyor olurdu!</p>
             </div>
 
             <div class="academic-note">
                 <p><strong>Buna literatürde "Kesme-Stok Problemi (Cutting Stock Problem - CSP)" diyoruz.</strong></p>
-                <p>Doğrusal ve Tamsayılı programlamanın endüstriye doğrudan 1'e 1 katkı sağladığı en somut örnektir.
-                    Kağıt üreticilerinden, tekstil fabrikalarındaki kalıp kesimlerine (2D Bin Packing), hatta bilgisayar
-                    hafıza yönetim birimlerine kadar her yerde inanılmaz bir israftan kaçınmamızı sağlar. Bazen %1'lik
-                    bir iyileşme bile yıllık milyarlarca dolara tekabül eder.</p>
+                <p>Doğrusal ve Tamsayılı programlamanın (Yöneylem Araştırması) endüstriye doğrudan 1'e 1 katkı sağladığı en somut örnektir.
+                    Kağıt üreticilerinden, tekstil fabrikalarındaki kalıp kesimlerine (2D Bin Packing), bulut bilişimdeki sunucu kiralama optimizasyonlarına kadar her yerde inanılmaz bir israftan kaçınmamızı sağlar. Bazen fire miktarında yapılacak sadece %1'lik
+                    bir iyileşme bile yıllık yüz milyonlarca dolara tekabül eder.</p>
             </div>
 
 
@@ -178,46 +353,216 @@
             </div>
         </div>
 
-        <footer
-            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
-            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
-                    Bulmacalarına Dön</a></p>
+        <footer style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri Bulmacalarına Dön</a></p>
         </footer>
     </div>
 
     <script>
-        function applyPattern(pieces, waste) {
-            const container = document.getElementById('visual-roll');
-            const wasteText = document.getElementById('waste-display');
+        // Game State
+        const INITIAL_ORDERS = { 40: 4, 35: 4, 25: 4 };
+        const ROLL_SIZE = 100;
+        
+        let orders = { ...INITIAL_ORDERS };
+        let rolls = []; // Array of objects: { id: int, pieces: [int, int...], waste: int }
+        let history = []; // To support undo [{type: 'add_roll' | 'cut', data: ...}]
 
-            // Highlight active button
-            document.querySelectorAll('.pattern-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        // DOM Elements
+        const rollsContainer = document.getElementById('rolls-container');
+        const statRolls = document.getElementById('stat-rolls');
+        const statWaste = document.getElementById('stat-waste');
+        const errorToast = document.getElementById('error-toast');
+        const victoryScreen = document.getElementById('victory-screen');
+        const victoryTitle = document.getElementById('victory-title');
+        const victoryMessage = document.getElementById('victory-message');
+        
+        const btn40 = document.getElementById('btn-40');
+        const btn35 = document.getElementById('btn-35');
+        const btn25 = document.getElementById('btn-25');
+        
+        const lbl40 = document.getElementById('lbl-40');
+        const lbl35 = document.getElementById('lbl-35');
+        const lbl25 = document.getElementById('lbl-25');
+        
+        const bdg40 = document.getElementById('bdg-40');
+        const bdg35 = document.getElementById('bdg-35');
+        const bdg25 = document.getElementById('bdg-25');
 
-            if (waste < 0) {
-                container.innerHTML = `<div style="width: 100%; display: flex; align-items: center; justify-content: center; color: #ef4444; font-weight:700;">HATA! ${Math.abs(waste)}m Taştı. Ruloya Sığmaz!</div>`;
-                container.style.borderColor = '#ef4444';
-                wasteText.innerHTML = "Geçersiz Şablon Seçimi ⛔";
-                wasteText.style.color = "#ef4444";
+        function initGame() {
+            orders = { ...INITIAL_ORDERS };
+            rolls = [];
+            history = [];
+            victoryScreen.style.display = 'none';
+            addRoll(true); // create first roll, isInit = true
+            updateUI();
+        }
+
+        function addRoll(isInit = false) {
+            // Automatically make the last roll's remaining space as 'waste'
+            if (rolls.length > 0) {
+                const lastRoll = rolls[rolls.length - 1];
+                const used = lastRoll.pieces.reduce((a, b) => a + b, 0);
+                lastRoll.waste = ROLL_SIZE - used;
+            }
+
+            const newRoll = { id: Date.now(), pieces: [], waste: 0 };
+            rolls.push(newRoll);
+            
+            if(!isInit) {
+                history.push({ type: 'add_roll', rollId: newRoll.id });
+            }
+            updateUI();
+        }
+
+        function cutPiece(size) {
+            if (orders[size] <= 0) return;
+
+            const currentRoll = rolls[rolls.length - 1];
+            const usedSpace = currentRoll.pieces.reduce((a, b) => a + b, 0);
+            const remainingSpace = ROLL_SIZE - usedSpace;
+
+            if (size > remainingSpace) {
+                // Taştı
+                showError();
                 return;
             }
 
-            container.style.borderColor = 'rgba(255,255,255,0.2)';
-            let html = '';
-            const colors = ['#3b82f6', '#8b5cf6', '#ec4899'];
+            // Başarılı kesim
+            currentRoll.pieces.push(size);
+            orders[size]--;
+            
+            history.push({ type: 'cut', rollId: currentRoll.id, size: size });
+            
+            updateUI();
+            checkVictory();
+        }
 
-            pieces.forEach((piece, index) => {
-                html += `<div class="cut-piece" style="width: ${piece}%; background: ${colors[index % colors.length]};">${piece}m Müşteri</div>`;
+        function undoLast() {
+            if (history.length === 0) return;
+            
+            const lastAction = history.pop();
+            
+            if (lastAction.type === 'add_roll') {
+                rolls.pop();
+                // Reset waste of the previous roll since it's active again
+                if (rolls.length > 0) {
+                    rolls[rolls.length - 1].waste = 0;
+                }
+            } else if (lastAction.type === 'cut') {
+                // Find roll and remove the last piece
+                const roll = rolls.find(r => r.id === lastAction.rollId);
+                const size = lastAction.size;
+                const idx = roll.pieces.lastIndexOf(size);
+                if (idx > -1) {
+                    roll.pieces.splice(idx, 1);
+                    orders[size]++;
+                }
+            }
+            
+            victoryScreen.style.display = 'none'; // in case they undo after winning
+            updateUI();
+        }
+
+        function showError() {
+            errorToast.style.opacity = '1';
+            setTimeout(() => {
+                errorToast.style.opacity = '0';
+            }, 2000);
+        }
+
+        function checkVictory() {
+            if (orders[40] === 0 && orders[35] === 0 && orders[25] === 0) {
+                // Sona erdi. Fireleri hesapla.
+                const lastRoll = rolls[rolls.length - 1];
+                const used = lastRoll.pieces.reduce((a, b) => a + b, 0);
+                lastRoll.waste = ROLL_SIZE - used;
+                updateUI(); // Final state render
+                
+                let totWaste = rolls.reduce((sum, r) => sum + r.waste, 0);
+                document.getElementById('final-rolls').innerText = rolls.length;
+                document.getElementById('final-waste').innerText = totWaste;
+                
+                if (totWaste === 0 && rolls.length === 4) {
+                    victoryTitle.innerText = "🏆 Kusursuz Çözüm Bulundu!";
+                    victoryTitle.style.color = "#10b981";
+                    victoryMessage.innerText = "Tebrikler! Açgözlü (Greedy) davranmadınız ve büyük parçaları tek ruloya yığmadınız. (40+35+25) mantığıyla optimum olan 0 fire ve 4 rulo hedefine ulaştınız!";
+                } else {
+                    victoryTitle.innerText = "Sipariş Bitti Ama... Zarar Ettiniz 📉";
+                    victoryTitle.style.color = "#f59e0b";
+                    victoryMessage.innerText = `İlk bakışta büyükleri (40+40=80) olarak aynı ruloya basıp kalanı 20 çöp yapmak insani bir "Açgözlü" sezgidir. Ancak optimum olan 4 rulo ve SIFIR ÇÖP olmalıydı! Geri tuşuna basıp veya "Tekrar Oyna" diyerek optimumu bulun!`;
+                }
+
+                victoryScreen.style.display = 'block';
+            }
+        }
+
+        function updateUI() {
+            // Update Headers
+            lbl40.innerText = orders[40];
+            bdg40.innerText = orders[40];
+            btn40.disabled = orders[40] === 0;
+
+            lbl35.innerText = orders[35];
+            bdg35.innerText = orders[35];
+            btn35.disabled = orders[35] === 0;
+            
+            lbl25.innerText = orders[25];
+            bdg25.innerText = orders[25];
+            btn25.disabled = orders[25] === 0;
+
+            // Render Rolls
+            rollsContainer.innerHTML = '';
+            let totalWasteAcc = 0;
+
+            rolls.forEach((roll, index) => {
+                const isLast = (index === rolls.length - 1);
+                const rollDiv = document.createElement('div');
+                rollDiv.className = `roll ${isLast ? 'active-roll' : ''}`;
+                
+                let usedSpace = 0;
+                
+                // Draw pieces
+                roll.pieces.forEach(p => {
+                    const pieceDiv = document.createElement('div');
+                    pieceDiv.className = `cut-piece piece-${p}`;
+                    pieceDiv.style.width = `${p}%`;
+                    pieceDiv.innerText = `${p}m`;
+                    rollDiv.appendChild(pieceDiv);
+                    usedSpace += p;
+                });
+                
+                // Draw Waste (for non-active rolls, or active roll on victory)
+                if (roll.waste > 0) {
+                    const fw = document.createElement('div');
+                    fw.className = 'cut-waste';
+                    fw.style.width = `${roll.waste}%`;
+                    fw.innerText = `${roll.waste}m Çöp`;
+                    rollDiv.appendChild(fw);
+                    totalWasteAcc += roll.waste;
+                } else if (isLast && usedSpace < 100) {
+                    // Empty space visualization for active roll
+                    const empty = document.createElement('div');
+                    empty.style.flexGrow = '1';
+                    empty.style.display = 'flex';
+                    empty.style.alignItems = 'center';
+                    empty.style.color = '#475569';
+                    empty.style.paddingLeft = '10px';
+                    empty.style.fontSize = '0.8rem';
+                    empty.innerText = `... (Kalan Yer: ${100 - usedSpace}m)`;
+                    rollDiv.appendChild(empty);
+                }
+
+                rollsContainer.appendChild(rollDiv);
             });
 
-            if (waste > 0) {
-                html += `<div class="cut-waste" style="width: ${waste}%;">${waste}m Fire</div>`;
-            }
-
-            container.innerHTML = html;
-            wasteText.innerHTML = `Sadece ${waste} Metre Kağıt Çöpe Gitti!`;
-            wasteText.style.color = waste === 10 ? "#10b981" : "#fbbf24";
+            // Update Stats
+            statRolls.innerText = rolls.length;
+            statWaste.innerText = totalWasteAcc;
         }
+
+        // Start game
+        document.addEventListener('DOMContentLoaded', initGame);
+        
     </script>
 </body>
 
