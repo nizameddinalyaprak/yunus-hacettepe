@@ -119,9 +119,10 @@
 
                 <div class="hud-distance">Toplam Mesafe: <span id="dist-display">0</span> birim</div>
                 <div class="tsp-controls">
-                    <button class="filter-btn active" id="reset-tsp">Rotayı Sıfırla</button>
+                    <button class="filter-btn active" id="reset-tsp">Rotayı Sıfırla (Harita Kalır)</button>
                     <button class="filter-btn" id="solve-tsp" style="border-color: #10b981; color: #10b981;">Bilgisayar
                         Çözsün (Greedy)</button>
+                    <button class="filter-btn" id="new-map-tsp" style="border-color: #f59e0b; color: #f59e0b;">Yeni Harita Oluştur 🎲</button>
                 </div>
             </div>
 
@@ -193,14 +194,23 @@
         let totalDistance = 0;
         const numNodes = 12;
 
-        // Generate Random Nodes
-        function initNodes() {
-            container.innerHTML = '<svg id="tsp-svg"></svg>';
-            nodes = [];
+        // Clear only the routes, keep nodes intact
+        function clearRoute() {
             route = [];
             totalDistance = 0;
             distDisplay.innerText = 0;
+            document.getElementById('tsp-svg').innerHTML = ''; // clear lines
+            
+            // clear visited highlights from HTML nodes
+            const elements = document.querySelectorAll('.tsp-node');
+            elements.forEach(node => node.classList.remove('visited'));
+        }
 
+        // Generate Random Nodes
+        function generateNewMap() {
+            container.innerHTML = '<svg id="tsp-svg"></svg>';
+            nodes = [];
+            
             const w = container.clientWidth;
             const h = container.clientHeight;
 
@@ -218,6 +228,7 @@
                 el.addEventListener('click', () => handleNodeClick(i, el));
                 container.appendChild(el);
             }
+            clearRoute();
         }
 
         function handleNodeClick(id, element) {
@@ -258,10 +269,12 @@
             distDisplay.innerText = Math.round(totalDistance);
         }
 
-        document.getElementById('reset-tsp').addEventListener('click', initNodes);
+        document.getElementById('reset-tsp').addEventListener('click', clearRoute);
+
+        document.getElementById('new-map-tsp').addEventListener('click', generateNewMap);
 
         document.getElementById('solve-tsp').addEventListener('click', () => {
-            initNodes();
+            clearRoute(); // Only clear route, don't generate new nodes
             // Simple Nearest Neighbor Greedy Approach
             let unvisited = [...Array(numNodes).keys()];
             let current = unvisited[0]; // Start freely from 0
@@ -297,8 +310,8 @@
         });
 
         // Initialize on load
-        setTimeout(initNodes, 100);
-        window.addEventListener('resize', initNodes);
+        setTimeout(generateNewMap, 100);
+        window.addEventListener('resize', generateNewMap);
     </script>
 </body>
 
