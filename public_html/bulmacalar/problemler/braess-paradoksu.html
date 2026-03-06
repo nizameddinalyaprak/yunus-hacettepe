@@ -8,139 +8,166 @@
     <link rel="stylesheet" href="../assets/css/main.css">
     <script src="../assets/js/interactions.js" defer></script>
     <style>
-        .network-container {
-            position: relative;
+        .braess-container {
             width: 100%;
-            height: 350px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
+            height: 480px;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 16px;
             margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px inset rgba(255, 255, 255, 0.1);
         }
 
-        .node {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background: var(--bg-dark);
-            border: 2px solid var(--accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            color: #fff;
-            z-index: 10;
+        .braess-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
         }
 
-        .node-start {
-            left: 10%;
-            top: 50%;
-            transform: translateY(-50%);
+        /* SVG Paths */
+        .road {
+            fill: none;
+            stroke: #334155;
+            stroke-width: 12;
+            stroke-linecap: round;
+            transition: stroke 0.4s ease;
         }
 
-        .node-a {
-            left: 50%;
-            top: 20%;
-            transform: translateX(-50%);
+        .road-shortcut {
+            stroke: transparent;
+            stroke-width: 8;
+            stroke-dasharray: 8 8;
+            transition: all 0.4s ease;
         }
 
-        .node-b {
-            left: 50%;
-            bottom: 20%;
-            transform: translateX(-50%);
+        .road-shortcut.active {
+            stroke: #ef4444;
         }
 
-        .node-end {
-            right: 10%;
-            top: 50%;
-            transform: translateY(-50%);
+        .road.heavy {
+            stroke: #991b1b;
         }
 
-        .edge {
-            position: absolute;
-            height: 8px;
-            background: #334155;
-            transform-origin: left center;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .road.empty {
+            stroke: #1e293b;
         }
 
-        .edge-label {
-            position: absolute;
-            background: var(--bg-dark);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            color: #cbd5e1;
-            top: -25px;
-            white-space: nowrap;
+        .road.medium {
+            stroke: #3b82f6;
+        }
+        
+        .road-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.03);
+            stroke-width: 30;
+            stroke-linecap: round;
         }
 
-        .edge-start-a {
-            left: calc(10% + 25px);
-            top: 50%;
-            width: 230px;
-            transform: rotate(-35deg);
+        /* Cars */
+        .car-group {
+            pointer-events: none;
         }
 
-        .edge-start-b {
-            left: calc(10% + 25px);
-            top: 50%;
-            width: 230px;
-            transform: rotate(35deg);
+        .car {
+            fill: #60a5fa;
+            filter: drop-shadow(0 0 2px rgba(96, 165, 250, 0.8));
         }
 
-        .edge-a-end {
-            left: 50%;
-            top: calc(20% + 25px);
-            width: 230px;
-            transform: rotate(35deg);
+        .car.heavy {
+            fill: #f87171;
+            filter: drop-shadow(0 0 3px rgba(248, 113, 113, 1));
         }
 
-        .edge-b-end {
-            left: 50%;
-            top: calc(80% - 25px);
-            width: 230px;
-            transform: rotate(-35deg);
+        /* Nodes */
+        .node-circle {
+            fill: #0f172a;
+            stroke: #8b5cf6;
+            stroke-width: 3;
+            transition: stroke 0.3s ease;
         }
 
-        .edge-shortcut {
-            left: 50%;
-            top: calc(20% + 25px);
-            width: 8px;
-            height: 160px;
-            background: transparent;
-            border-left: 4px dashed #ef4444;
-            transform-origin: top center;
-            z-index: 2;
-            display: none;
-            /* hidden initially */
-            justify-content: center;
+        .node-text {
+            fill: #f8fafc;
+            font-family: var(--font-heading), sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+
+        /* Labels */
+        .label-bg {
+            fill: rgba(15, 23, 42, 0.9);
+            rx: 6;
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 1;
+        }
+
+        .label-text {
+            fill: #cbd5e1;
+            font-size: 12px;
+            font-family: sans-serif;
+            text-anchor: middle;
+            dominant-baseline: central;
+            font-weight: 500;
         }
 
         .toggle-btn {
             margin-top: 1rem;
-            padding: 0.75rem 2rem;
+            padding: 0.8rem 2.5rem;
             border-color: #ef4444;
             color: #ef4444;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .toggle-btn.active {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.15);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        
+        .dashboard {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-around;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .travel-time {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            color: #fbbf24;
+        .metric {
             text-align: center;
         }
+        
+        .metric-label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .metric-value {
+            font-size: 1.8rem;
+            font-family: var(--font-heading);
+            font-weight: 800;
+            color: #10b981;
+            transition: color 0.4s ease;
+        }
+        
+        .metric-value.danger {
+            color: #ef4444;
+        }
+
     </style>
+    <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
 </head>
 
 <body>
@@ -171,53 +198,116 @@
         <div class="content-body">
 
             <div class="story-section">
-                <p>Bir şehrin (Başlangıç) noktasından (Bitiş) noktasına her gün işe giden <strong>4000 sürücü</strong>
-                    var. Şehirde Başlangıç'tan Bitiş'e giden iki farklı güzergah bulunuyor: Üst yol (A üzerinden) ve Alt
-                    yol (B üzerinden).</p>
-                <p>Dar olan köprü yollarında seyahat süresi <strong>Trafik Yoğunluğu (X)/100</strong> formülüyle
-                    hesaplanıyor. Yani ne kadar çok araba girerse süre o kadar uzuyor. Geniş otobanlarda ise sabit
-                    <strong>45 dakika</strong> sürüyor.</p>
-                <p>Şehrin belediye başkanı, trafiği rahatlatmak için çok radikal bir karar alıyor ve A ile B arasına
-                    uçtan uca anında bağlanan <strong>1 dakikalık dev, genis bir Kestirme Yol</strong> inşa ediyor.
-                    Kestirme yol açılınca sürücüler sevinç çığlıkları atıyor. Ama ertesi gün işler hiç beklemedikleri
-                    bir şekilde ters gidiyor!</p>
+                <p>Bir şehrin (A) Başlangıç noktasından (D) Bitiş noktasına her gün işe giden <strong>4000 sürücü</strong>
+                    var. Şehirde A'dan D'ye giden iki farklı ana güzergah bulunuyor: Üst rotada (B'den geçerek) ve Alt
+                    rotada (C'den geçerek).</p>
+                <p>Ağdaki dar olan eski yollarda (Örn: A-B ve C-D) seyahat süresi <strong>Araç Sayısı (N)/100</strong> formülüyle hesaplanıyor. Geniş otobanlarda (B-D ve A-C arası) ise süre, araç sayısından bağımsız olarak <strong>sabit 45 dakika</strong>.</p>
+                <p>Şehrin belediye başkanı, trafiği rahatlatmak için B ile C arasına uçtan uca anında bağlanan <strong>T=0 dakikalık teknolojik bir Kestirme Yol</strong> inşa ediyor. İnsanlar önce seviniyor fakat ertesi gün işler hiç beklemedikleri bir şekilde ters gidiyor!</p>
             </div>
 
             <div class="interactive-widget">
-                <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Yol Ağı Animasyonu (4000 Araç)</h3>
+                <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Dinamik Yol Ağı Analizi (4000 Araç İçin Nash Dengesi)</h3>
 
-                <div class="network-container">
-                    <div class="node node-start">Başla</div>
-                    <div class="node node-a">A</div>
-                    <div class="node node-b">B</div>
-                    <div class="node node-end">Bitir</div>
+                <div class="braess-container">
+                    <!-- SVG Network -->
+                    <svg class="braess-svg" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet" id="braess-svg">
+                        <defs>
+                            <marker id="arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                                <polygon points="0 0, 6 3, 0 6" fill="#475569" />
+                            </marker>
+                            <marker id="arrow-heavy" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                                <polygon points="0 0, 6 3, 0 6" fill="#991b1b" />
+                            </marker>
+                            <marker id="arrow-shortcut" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                                <polygon points="0 0, 6 3, 0 6" fill="#ef4444" id="marker-shortcut-polygon"/>
+                            </marker>
+                        </defs>
 
-                    <div class="edge edge-start-a" id="e-sa">
-                        <div class="edge-label" id="l-sa">Köprü (x/100 dk)</div>
-                    </div>
-                    <div class="edge edge-a-end" id="e-ae">
-                        <div class="edge-label" id="l-ae">Otoban (Sabit 45 dk)</div>
-                    </div>
+                        <!-- Invisible thick paths for easier hovering/background -->
+                        <path class="road-bg" d="M 100 200 L 400 80" />
+                        <path class="road-bg" d="M 400 80 L 700 200" />
+                        <path class="road-bg" d="M 100 200 L 400 320" />
+                        <path class="road-bg" d="M 400 320 L 700 200" />
 
-                    <div class="edge edge-start-b" id="e-sb">
-                        <div class="edge-label" id="l-sb">Otoban (Sabit 45 dk)</div>
-                    </div>
-                    <div class="edge edge-b-end" id="e-be">
-                        <div class="edge-label" id="l-be">Köprü (x/100 dk)</div>
-                    </div>
+                        <!-- Visible paths -->
+                        <!-- A to B -->
+                        <path id="path-AB" class="road medium" d="M 100 200 L 400 80" marker-end="url(#arrow)" />
+                        <!-- B to D -->
+                        <path id="path-BD" class="road medium" d="M 400 80 L 700 200" marker-end="url(#arrow)" />
+                        <!-- A to C -->
+                        <path id="path-AC" class="road medium" d="M 100 200 L 400 320" marker-end="url(#arrow)" />
+                        <!-- C to D -->
+                        <path id="path-CD" class="road medium" d="M 400 320 L 700 200" marker-end="url(#arrow)" />
+                        <!-- B to C (Shortcut) -->
+                        <path id="path-shortcut" class="road-shortcut" d="M 400 80 L 400 320" />
 
-                    <div class="edge-shortcut" id="e-shortcut">
-                        <div class="edge-label"
-                            style="top: 50%; transform: translateY(-50%); left: 10px; color:#ef4444;">Yeni Kestirme (1
-                            dk)</div>
+                        <!-- Cars Group -->
+                        <g id="cars-layer" class="car-group"></g>
+
+                        <!-- Edge Labels (Cost Functions) -->
+                        <g transform="translate(250, 120)">
+                            <rect class="label-bg" x="-60" y="-12" width="120" height="24" />
+                            <text class="label-text" y="1">T(N) = N / 100</text>
+                        </g>
+
+                        <g transform="translate(550, 120)">
+                            <rect class="label-bg" x="-50" y="-12" width="100" height="24" />
+                            <text class="label-text" y="1">T(N) = 45</text>
+                        </g>
+
+                        <g transform="translate(250, 280)">
+                            <rect class="label-bg" x="-50" y="-12" width="100" height="24" />
+                            <text class="label-text" y="1">T(N) = 45</text>
+                        </g>
+
+                        <g transform="translate(550, 280)">
+                            <rect class="label-bg" x="-60" y="-12" width="120" height="24" />
+                            <text class="label-text" y="1">T(N) = N / 100</text>
+                        </g>
+
+                        <g transform="translate(480, 200)" id="label-shortcut" style="opacity: 0; transition: opacity 0.3s ease;">
+                            <rect class="label-bg" x="-45" y="-12" width="90" height="24" style="stroke: #ef4444;" />
+                            <text class="label-text" style="fill: #fca5a5;" y="1">T(N) = 0</text>
+                        </g>
+
+                        <!-- Nodes -->
+                        <g transform="translate(100, 200)">
+                            <circle class="node-circle" r="24" />
+                            <text class="node-text">A</text>
+                        </g>
+                        <g transform="translate(400, 80)">
+                            <circle class="node-circle" r="24" />
+                            <text class="node-text">B</text>
+                        </g>
+                        <g transform="translate(400, 320)">
+                            <circle class="node-circle" r="24" />
+                            <text class="node-text">C</text>
+                        </g>
+                        <g transform="translate(700, 200)">
+                            <circle class="node-circle" r="24" />
+                            <text class="node-text">D</text>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="dashboard">
+                    <div class="metric">
+                        <div class="metric-label">Üst Rota Trafik (A→B→D)</div>
+                        <div class="metric-value" id="val-up" style="color:#60a5fa">2000 Araç</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Alt Rota Trafik (A→C→D)</div>
+                        <div class="metric-value" id="val-down" style="color:#60a5fa">2000 Araç</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">Ortalama Seyahat Süresi</div>
+                        <div class="metric-value" id="val-time">65 Dakika</div>
                     </div>
                 </div>
 
-                <div class="travel-time" id="travel-display">Herkesin İşe Varış Süresi: 65 Dakika</div>
-
                 <div style="text-align: center;">
-                    <button class="filter-btn toggle-btn" id="shortcut-btn" onclick="toggleShortcut()">A'dan B'ye Yeni
-                        Kestirme Yolu İnşa Et 🚧</button>
+                    <button class="filter-btn toggle-btn" id="shortcut-btn">B'den C'ye Kestirme Aç 🚧</button>
+                    <p style="margin-top: 10px; font-size: 0.85rem; color: var(--text-muted);">Nash dengesine göre sürücülerin %100 rasyonel bencil tercih yapacağı varsayılmıştır.</p>
                 </div>
             </div>
 
@@ -232,45 +322,33 @@
                     <p id="poll-stat"></p>
                 </div>
             </div>
+            
             <div class="think-section">
                 <h2 style="font-size: 2rem;">Yeni Yol Yapmak Trafiği Neden Kötüleştirir?</h2>
-                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">Mantıken daha çok yol
-                    demek, trafiğin daha çok dağılması ve hızlanması anlamına gelmez mi? Yukarıdaki animasyonda
-                    "Kestirme Yolu İnşa Et" butonuna basarak paradoksu bizzat test edin. 65 dakikalık sürenin bir anda
-                    daha uzun bir süreye nasıl fırladığını görün!</p>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 1rem auto 2rem;">İnsan sezgisi, "daha fazla yol = yayılan trafik = daha hızlı akış" der. Yukarıdaki simülasyonda "Kestirme Aç" butonuna basarak paradoksu bizzat test edin. 65 dakikalık sürenin bir anda nasıl 80 dakikaya fırladığını kendi gözlerinizle görün!</p>
                 <button class="btn" id="reveal-btn">Çözümü ve Nash Dengesini Göster ↓</button>
             </div>
 
             <div class="solution-section blurred" id="solution-section">
                 <h3>Çözüm: Bencil Rasyonelliğin Çöküşü (Nash Equilibrium)</h3>
-                <p><strong>Eski Durum (Kestirme Yokken):</strong> 4000 aracın 2000'i üst yolu, 2000'i alt yolu seçer.
-                    Kimse diğer yola geçerse kâr edemez. <br>Üstteki aracın süresi: 2000/100 + 45 = <strong>65
-                        dakika.</strong></p>
+                <p><strong>Eski Durum (Kestirme Yokken):</strong> 4000 aracın 2000'i üst yolu (A→B→D), 2000'i alt yolu (A→C→D) seçerek sistemi dengede tutar. Biri rotasını değiştirirse kârlı çıkmaz, hatta zararlı çıkar.<br>Herkesin süresi: <code>(2000/100) + 45 = 65 dakika</code>.</p>
 
-                <p><strong>Yeni Durum (Kestirme Açıldığında):</strong> A ile B arasına kestirme eklendiğinde yepyeni bir
-                    "Başlat -> A -> Kestirme -> B -> Bitir" rotası çıkar. Bu yol o kadar caziptir ki herkes bu yeni,
-                    hızlı kestirmeyi kullanmak ister. Bencil (rasyonel) her sürücü diğer yolları bırakıp bu rotaya
-                    yığılır.</p>
-                <p>Sonuçta 4000 aracın <strong>hepsi</strong> bu rotayı kullanır. Yeni süre hesaplayalım:<br>
-                    Başlat-A köprüsü: Bütün arabalar (4000/100) = 40 dakika.<br>
-                    Kestirme yol: 1 dakika.<br>
-                    B-Bitir köprüsü: Bütün arabalar (4000/100) = 40 dakika.<br>
-                    Genel Toplam = 40 + 1 + 40 = <strong>81 Dakika!</strong></p>
-                <p>Herkes bencilce kendi çıkarı (en kısa yolu seçeceği) için hareket ettiğinde, sistemi 65 dakikalık
-                    <strong>Sosyal Optimum</strong>'dan 81 dakikalık berbat bir <strong>Nash Dengesi</strong>'ne
-                    çektiler. Kimse rotasını değiştirip 45 dakikalık otobana girmek istemez çünkü o zaman süresi 86
-                    dakikaya çıkacaktır.</p>
+                <p><strong>Yeni Durum (Kestirme Açıldığında):</strong> B ile C arası maliyetsizleştirilince (T=0) süper cazip yeni bir "Z" rotası ortaya çıkar: <code>A → B → C → D</code>. Bu yola ilk girenlerin süresi (eğer yollar boşsa) sadece 40 dakikadır! Bunu gören tamamen bencil ve rasyonel sürücüler tek tek bu yeni yola kaymaya başlarlar. Kimse otobanları (45dk) kullanmak istemez çünkü diğer yolun maliyeti 40 iken, otobana girmek aptallık gibi görünür.</p>
+                
+                <p>Fakat herkes aynı bencil mantıkla hareket ettiği için, 4000 aracın <strong>hepsi</strong> bu yeni rotaya akın eder!</p>
+                <p>Yeni ve kalıcı süre hesaplanırsa:<br>
+                    A-B Dar Yolu: Herkes buradadır -> <code>4000/100 = 40 dakika</code>.<br>
+                    B-C Kestirme: Hızlı geçiş -> <code>0 dakika</code>.<br>
+                    C-D Dar Yolu: Herkes buradadır -> <code>4000/100 = 40 dakika</code>.<br>
+                    Genel Toplam = 40 + 0 + 40 = <strong style="color:#ef4444; font-size:1.2rem;">80 Dakika!</strong></p>
+                    
+                <p>İşte paradoks tam olarak buradadır: Herkes bireysel olarak en kârlı rotayı seçerken, sistemi 65 dakikalık <strong>Sosyal Optimum</strong>'dan 80 dakikalık berbat bir <strong>Nash Dengesi</strong>'ne çektiler. Kimse rotasını değiştirip A-C otobanına geri girmek istemez; çünkü o yola girerse genel maliyetler gereği yolculuğu 85 dakika sürecektir.</p>
             </div>
 
             <div class="academic-note">
                 <p><strong>Matematikçi Dietrich Braess Tarafından 1968'de Kanıtlandı</strong></p>
-                <p>Bu sadece kağıt üzerinde bir teori değildir. 1990'da Stuttgart, Almanya'da ve 1969'da Stuttgart'ta
-                    yapılan milyarlarca dolarlık devasa tünel/yol projeleri trafiği öyle kötü vurdu ki, belediye
-                    sonradan bu yepyeni yolları tekrar mühürlemek zorunda kaldı. Yol ağlarına kapasite eklemenin ağın
-                    performansını düşürebileceğini gösteren, Oyun Teorisi literatürünün en saygın paradokslarından
-                    biridir.</p>
+                <p>Bu sadece kağıt üzerinde teorik bir matematik bulmacası değildir. 1990'da Stuttgart, Almanya'da devasa tünel projeleri yapıldı. Ancak trafik öyle kötü vurdu ki, belediye milyarlarca lira harcadığı bu yepyeni yolları sonradan <strong>tekrar mühürlemek</strong> zorunda kaldı! Benzer durumlar Seul (Cheonggyecheon) ve New York'ta da (42. Cadde kapatılınca trafiğin açılması) görülmüştür.</p>
             </div>
-
 
             <div class="next-problem-container">
                 <div></div>
@@ -278,53 +356,178 @@
             </div>
         </div>
 
-        <footer
-            style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
-            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri
-                    Bulmacalarına Dön</a></p>
+        <footer style="text-align: center; margin-top: 5rem; color: var(--text-muted); padding-top: 2rem; border-top: 1px solid var(--card-border);">
+            <p><a href="../index.html" style="color: var(--text-muted); text-decoration: none;">← Karar Bilimleri Bulmacalarına Dön</a></p>
         </footer>
     </div>
 
     <script>
-        let isShortcutBuilt = false;
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnShortcut = document.getElementById('shortcut-btn');
+            const pathShortcut = document.getElementById('path-shortcut');
+            const markerShortcut = document.getElementById('marker-shortcut-polygon');
+            const labelShortcut = document.getElementById('label-shortcut');
+            const carsLayer = document.getElementById('cars-layer');
+            
+            const valUp = document.getElementById('val-up');
+            const valDown = document.getElementById('val-down');
+            const valTime = document.getElementById('val-time');
+            
+            const pathAB = document.getElementById('path-AB');
+            const pathBD = document.getElementById('path-BD');
+            const pathAC = document.getElementById('path-AC');
+            const pathCD = document.getElementById('path-CD');
 
-        function toggleShortcut() {
-            const sc = document.getElementById('e-shortcut');
-            const btn = document.getElementById('shortcut-btn');
-            const display = document.getElementById('travel-display');
-            const e_sa = document.getElementById('e-sa');
-            const e_be = document.getElementById('e-be');
+            let isShortcutActive = false;
+            let animationFrameId;
+            let cars = [];
 
-            isShortcutBuilt = !isShortcutBuilt;
+            const routes = {
+                r1: [ {id: 'path-AB', len: 0}, {id: 'path-BD', len: 0} ],
+                r2: [ {id: 'path-AC', len: 0}, {id: 'path-CD', len: 0} ],
+                r3: [ {id: 'path-AB', len: 0}, {id: 'path-shortcut', len: 0}, {id: 'path-CD', len: 0} ]
+            };
 
-            if (isShortcutBuilt) {
-                sc.style.display = 'flex';
-                btn.innerHTML = "Kestirme Yolu İptal Et / Kapat 🚫";
-                btn.classList.add('active');
+            ['path-AB', 'path-BD', 'path-AC', 'path-CD', 'path-shortcut'].forEach(id => {
+                const p = document.getElementById(id);
+                if (!p) return;
+                const len = p.getTotalLength();
+                Object.values(routes).forEach(route => {
+                    route.forEach(segment => {
+                        if(segment.id === id) segment.len = len;
+                        segment.pathElem = document.getElementById(segment.id);
+                    });
+                });
+            });
 
-                // Traffic highlights
-                e_sa.style.background = '#ef4444'; // Heavy traffic
-                e_sa.style.height = '12px';
-
-                e_be.style.background = '#ef4444';
-                e_be.style.height = '12px';
-
-                display.innerHTML = 'Herkesin İşe Varış Süresi: <span style="color:#ef4444;">81 Dakika! 😱</span>';
-            } else {
-                sc.style.display = 'none';
-                btn.innerHTML = "A'dan B'ye Yeni Kestirme Yolu İnşa Et 🚧";
-                btn.classList.remove('active');
-
-                // Normal traffic
-                e_sa.style.background = '#334155';
-                e_sa.style.height = '8px';
-
-                e_be.style.background = '#334155';
-                e_be.style.height = '8px';
-
-                display.innerHTML = 'Herkesin İşe Varış Süresi: <span style="color:#10b981;">65 Dakika 😊</span>';
+            function spawnCar(routeKey) {
+                const carEl = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                carEl.setAttribute("r", isShortcutActive ? "6" : "4"); 
+                carEl.setAttribute("class", isShortcutActive ? "car heavy" : "car");
+                carsLayer.appendChild(carEl);
+                
+                cars.push({
+                    el: carEl,
+                    route: routeKey,
+                    segmentIdx: 0,
+                    progress: 0,
+                    speed: isShortcutActive ? 0.3 + Math.random()*0.2 : 1.2 + Math.random()*0.5 
+                });
             }
-        }
+
+            function animateCars() {
+                for (let i = cars.length - 1; i >= 0; i--) {
+                    let car = cars[i];
+                    let currentSegment = routes[car.route][car.segmentIdx];
+                    
+                    car.progress += car.speed;
+                    
+                    if (car.progress >= currentSegment.len) {
+                        car.segmentIdx++;
+                        car.progress = 0;
+                        
+                        if (car.segmentIdx >= routes[car.route].length) {
+                            car.el.remove();
+                            cars.splice(i, 1);
+                            
+                            spawnCar(isShortcutActive ? 'r3' : (Math.random() > 0.5 ? 'r1' : 'r2'));
+                            continue;
+                        }
+                        currentSegment = routes[car.route][car.segmentIdx];
+                    }
+                    
+                    try {
+                        const pt = currentSegment.pathElem.getPointAtLength(car.progress);
+                        car.el.setAttribute("cx", pt.x);
+                        car.el.setAttribute("cy", pt.y);
+                    } catch(e) {}
+                }
+                
+                animationFrameId = requestAnimationFrame(animateCars);
+            }
+
+            function initState() {
+                carsLayer.innerHTML = '';
+                cars = [];
+                for(let i=0; i<30; i++) {
+                    spawnCar(Math.random() > 0.5 ? 'r1' : 'r2');
+                    cars[i].progress = Math.random() * 200;
+                }
+                animateCars();
+            }
+
+            if(btnShortcut){
+                btnShortcut.addEventListener('click', () => {
+                    isShortcutActive = !isShortcutActive;
+                    
+                    cancelAnimationFrame(animationFrameId);
+                    carsLayer.innerHTML = '';
+                    cars = [];
+                    
+                    if (isShortcutActive) {
+                        btnShortcut.innerHTML = "B'den C'ye Kapanışı Geri Al 🚫";
+                        btnShortcut.classList.add('active');
+                        
+                        pathShortcut.classList.add('active');
+                        pathShortcut.setAttribute('marker-end', 'url(#arrow-shortcut)');
+                        labelShortcut.style.opacity = '1';
+
+                        pathAB.className.baseVal = "road heavy";
+                        pathBD.className.baseVal = "road empty"; 
+                        pathAC.className.baseVal = "road empty"; 
+                        pathCD.className.baseVal = "road heavy";
+                        
+                        pathAB.setAttribute('marker-end', 'url(#arrow-heavy)');
+                        pathCD.setAttribute('marker-end', 'url(#arrow-heavy)');
+                        pathBD.removeAttribute('marker-end');
+                        pathAC.removeAttribute('marker-end');
+
+                        valUp.innerText = "0 Araç (Terkedildi)";
+                        valUp.style.color = "#475569";
+                        valDown.innerText = "Kestirme Üzerinden Akıyor";
+                        valDown.style.color = "#f87171";
+                        
+                        valTime.innerText = "80 Dakika!";
+                        valTime.classList.add('danger');
+
+                        for(let i=0; i<50; i++) {
+                            spawnCar('r3');
+                            cars[i].progress = Math.random() * 300;
+                        }
+                        
+                    } else {
+                        btnShortcut.innerHTML = "B'den C'ye Kestirme Aç 🚧";
+                        btnShortcut.classList.remove('active');
+                        
+                        pathShortcut.classList.remove('active');
+                        pathShortcut.removeAttribute('marker-end');
+                        labelShortcut.style.opacity = '0';
+
+                        [pathAB, pathBD, pathAC, pathCD].forEach(p => {
+                            p.className.baseVal = "road medium";
+                            p.setAttribute('marker-end', 'url(#arrow)');
+                        });
+
+                        valUp.innerText = "2000 Araç";
+                        valUp.style.color = "#60a5fa";
+                        valDown.innerText = "2000 Araç";
+                        valDown.style.color = "#60a5fa";
+                        
+                        valTime.innerText = "65 Dakika";
+                        valTime.classList.remove('danger');
+
+                        for(let i=0; i<30; i++) {
+                            spawnCar(Math.random() > 0.5 ? 'r1' : 'r2');
+                            cars[i].progress = Math.random() * 200;
+                        }
+                    }
+                    
+                    animateCars();
+                });
+            }
+
+            initState();
+        });
     </script>
 </body>
 
