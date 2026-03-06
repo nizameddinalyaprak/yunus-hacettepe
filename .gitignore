@@ -1,0 +1,10 @@
+# Güvenlik ve Gizlilik İçin Yoksayılanlar
+/veritabani_sirlari_ve_rehberi.md
+/public_html/information_schema_dump.json
+/public_html/db_info.php
+.env
+/.vscode/
+.DS_Store
+
+# Ignore tools directory completely
+tools/yunus_hacettepe_db_fetch.php
